@@ -1,4 +1,4 @@
-# 🧾 Intelligent Invoice Header Extraction System
+#  Intelligent Invoice Header Extraction System
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -6,7 +6,7 @@
 
 A production-ready, company-grade system for extracting header-level information from invoices using OCR and pre-trained layout-aware Transformer models.
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Overview](#-overview)
 - [Features](#-features)
@@ -22,7 +22,7 @@ A production-ready, company-grade system for extracting header-level information
 - [Contributing](#-contributing)
 - [License](#-license)
 
-## 🎯 Overview
+##  Overview
 
 This system automates the extraction of key invoice header fields from various document formats (PDF, JPG, PNG). It uses a combination of OCR (Optical Character Recognition) and pre-trained layout-aware Transformer models to accurately identify and extract structured data.
 
@@ -37,7 +37,7 @@ This system automates the extraction of key invoice header fields from various d
 | **Total Amount** | Total amount due |
 | **Payment Due Date** | Date by which payment is expected |
 
-## ✨ Features
+##  Features
 
 - **Multi-format Support**: Process PDFs (digital and scanned) and images (JPG, PNG, TIFF)
 - **Layout-aware Extraction**: Uses LayoutLMv3 for context-aware field extraction
@@ -49,7 +49,7 @@ This system automates the extraction of key invoice header fields from various d
 - **Modular Design**: Easy to extend, maintain, and customize
 - **Production-ready**: Comprehensive logging, error handling, and configuration
 
-## 🏗 Architecture
+##  Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
@@ -83,7 +83,7 @@ This system automates the extraction of key invoice header fields from various d
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-## 🚀 Installation
+##  Installation
 
 ### Prerequisites
 
@@ -128,7 +128,7 @@ sudo apt-get install tesseract-ocr poppler-utils
 brew install tesseract poppler
 ```
 
-## ⚡ Quick Start
+##  Quick Start
 
 ```python
 from src.pipeline import InvoiceExtractionPipeline
@@ -147,7 +147,7 @@ results = pipeline.process_batch("path/to/invoice/folder/")
 pipeline.export_to_excel(results, "output.xlsx")
 ```
 
-## ⚙️ Configuration
+##  Configuration
 
 Configuration is managed through `config/settings.yaml`. Key settings:
 
@@ -173,7 +173,7 @@ output:
     type: "sqlite"
 ```
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 invoice-extraction/
@@ -212,7 +212,7 @@ invoice-extraction/
 └── README.md                 # This file
 ```
 
-## 📖 Usage
+##  Usage
 
 ### Command Line Interface
 
@@ -254,7 +254,7 @@ output.to_excel(clean_data, "output.xlsx")
 output.to_database(clean_data)
 ```
 
-## 📊 Evaluation
+##  Evaluation
 
 The system includes built-in evaluation capabilities:
 
@@ -271,7 +271,7 @@ print(f"Field Accuracy: {metrics['field_accuracy']:.2%}")
 print(f"Missing Rate: {metrics['missing_rate']:.2%}")
 ```
 
-## 🔧 Troubleshooting
+##  Troubleshooting
 
 ### Common Issues
 
@@ -290,17 +290,17 @@ logging:
   level: "DEBUG"
 ```
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Commit changes with clear messages
 4. Submit a pull request
 
-## 📄 License
+##  License
 
 MIT License - see LICENSE file for details.
 
 ---
 
-**Built with ❤️ by ML Engineering Team**
+
