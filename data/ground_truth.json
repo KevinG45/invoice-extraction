@@ -1,0 +1,29 @@
+{
+    "_description": "Ground truth data for invoice extraction evaluation",
+    "_format": "Each entry contains filename and expected field values",
+    "_last_updated": "2026-01-21",
+    "invoices": [
+        {
+            "filename": "sample_invoice_001.pdf",
+            "fields": {
+                "invoice_number": "INV-2026-001",
+                "invoice_date": "2026-01-15",
+                "vendor_name": "ABC Supplies Ltd.",
+                "customer_name": "XYZ Corporation",
+                "total_amount": "1250.00",
+                "payment_due_date": "2026-02-15"
+            }
+        },
+        {
+            "filename": "sample_invoice_002.jpg",
+            "fields": {
+                "invoice_number": "INV-2026-002",
+                "invoice_date": "2026-01-18",
+                "vendor_name": "Global Services Inc.",
+                "customer_name": "Local Business Co.",
+                "total_amount": "3500.00",
+                "payment_due_date": "2026-02-18"
+            }
+        }
+    ]
+}

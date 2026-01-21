@@ -1,0 +1,204 @@
+# ============================================================================
+# INTELLIGENT INVOICE HEADER EXTRACTION SYSTEM - CONFIGURATION
+# ============================================================================
+# This configuration file controls all system behavior.
+# Modify settings here instead of hard-coding values in source code.
+# ============================================================================
+
+# -----------------------------------------------------------------------------
+# PROJECT METADATA
+# -----------------------------------------------------------------------------
+project:
+  name: "Intelligent Invoice Header Extraction System"
+  version: "1.0.0"
+  description: "Production-ready invoice header extraction using OCR and layout-aware Transformers"
+  author: "ML Engineering Team"
+
+# -----------------------------------------------------------------------------
+# INPUT HANDLING CONFIGURATION
+# -----------------------------------------------------------------------------
+input:
+  # Supported file extensions
+  supported_extensions:
+    - ".pdf"
+    - ".jpg"
+    - ".jpeg"
+    - ".png"
+    - ".tiff"
+    - ".bmp"
+  
+  # PDF processing settings
+  pdf:
+    dpi: 300                    # Resolution for PDF to image conversion
+    first_page_only: true       # Process only the first page
+    max_pages: 10               # Maximum pages to process if first_page_only is false
+  
+  # Image normalization settings
+  image:
+    target_dpi: 300             # Target DPI for normalization
+    max_width: 2480             # Maximum width in pixels (A4 at 300 DPI)
+    max_height: 3508            # Maximum height in pixels (A4 at 300 DPI)
+    min_width: 500              # Minimum width for quality check
+    min_height: 500             # Minimum height for quality check
+    auto_orient: true           # Auto-correct orientation
+    enhance_contrast: true      # Apply contrast enhancement
+
+# -----------------------------------------------------------------------------
+# OCR CONFIGURATION
+# -----------------------------------------------------------------------------
+ocr:
+  engine: "pytesseract"         # OCR engine: pytesseract, easyocr, paddleocr
+  
+  # Tesseract specific settings
+  tesseract:
+    lang: "eng"                 # Language code
+    psm: 3                      # Page segmentation mode (3 = fully automatic)
+    oem: 3                      # OCR Engine Mode (3 = default)
+    config: "--dpi 300"         # Additional config
+  
+  # EasyOCR settings (alternative)
+  easyocr:
+    languages: ["en"]
+    gpu: false
+    detail: 1                   # 0 = simple, 1 = detailed with boxes
+  
+  # Bounding box normalization
+  bbox:
+    normalize: true             # Normalize to 0-1000 range for model input
+    scale_factor: 1000          # Normalization scale
+
+# -----------------------------------------------------------------------------
+# TRANSFORMER MODEL CONFIGURATION
+# -----------------------------------------------------------------------------
+model:
+  # Model selection
+  name: "microsoft/layoutlmv3-base"  # Pre-trained model
+  task: "question-answering"         # Task type for inference
+  
+  # Alternative models (commented for reference)
+  # alternatives:
+  #   - "microsoft/layoutlm-base-uncased"
+  #   - "microsoft/layoutlmv2-base-uncased"
+  #   - "impira/layoutlm-document-qa"
+  
+  # Inference settings
+  inference:
+    device: "cpu"               # Device: cpu, cuda, mps
+    max_length: 512             # Maximum sequence length
+    batch_size: 1               # Batch size for inference
+    use_fast_tokenizer: true    # Use fast tokenizer
+  
+  # Fields to extract (questions for QA model)
+  extraction_fields:
+    invoice_number:
+      question: "What is the invoice number?"
+      aliases: ["Invoice No", "Invoice #", "Inv No", "Bill No", "Reference"]
+    invoice_date:
+      question: "What is the invoice date?"
+      aliases: ["Date", "Invoice Date", "Bill Date", "Dated"]
+    vendor_name:
+      question: "What is the vendor or seller name?"
+      aliases: ["Vendor", "Seller", "From", "Company", "Supplier"]
+    customer_name:
+      question: "What is the customer or buyer name?"
+      aliases: ["Customer", "Buyer", "Bill To", "Ship To", "Client"]
+    total_amount:
+      question: "What is the total amount?"
+      aliases: ["Total", "Grand Total", "Amount Due", "Total Due", "Net Amount"]
+    payment_due_date:
+      question: "What is the payment due date?"
+      aliases: ["Due Date", "Payment Due", "Pay By", "Due By"]
+
+# -----------------------------------------------------------------------------
+# POST-PROCESSING CONFIGURATION
+# -----------------------------------------------------------------------------
+postprocessing:
+  # Date normalization
+  date:
+    output_format: "%Y-%m-%d"   # ISO format output
+    input_formats:              # Recognized input formats
+      - "%m/%d/%Y"
+      - "%d/%m/%Y"
+      - "%Y-%m-%d"
+      - "%B %d, %Y"
+      - "%b %d, %Y"
+      - "%d %B %Y"
+      - "%d-%m-%Y"
+      - "%m-%d-%Y"
+      - "%d.%m.%Y"
+  
+  # Amount normalization
+  amount:
+    currencies: ["$", "€", "£", "¥", "₹", "USD", "EUR", "GBP"]
+    decimal_separator: "."
+    thousands_separator: ","
+    output_format: "float"      # float or string
+  
+  # Validation rules
+  validation:
+    required_fields: ["invoice_number", "total_amount"]
+    flag_missing: true
+    confidence_threshold: 0.5   # Minimum confidence score
+
+# -----------------------------------------------------------------------------
+# OUTPUT CONFIGURATION
+# -----------------------------------------------------------------------------
+output:
+  # Excel output
+  excel:
+    enabled: true
+    filename_pattern: "invoice_extractions_{timestamp}.xlsx"
+    sheet_name: "Extracted Data"
+    include_metadata: true      # Include processing metadata
+    include_confidence: true    # Include confidence scores
+  
+  # Database output
+  database:
+    enabled: true
+    type: "sqlite"              # sqlite, postgresql, mysql
+    name: "invoice_extractions.db"
+    table_name: "invoice_headers"
+    create_if_not_exists: true
+    avoid_duplicates: true      # Check for duplicate invoice numbers
+
+# -----------------------------------------------------------------------------
+# LOGGING CONFIGURATION
+# -----------------------------------------------------------------------------
+logging:
+  level: "INFO"                 # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s | %(levelname)-8s | %(name)s | %(message)s"
+  date_format: "%Y-%m-%d %H:%M:%S"
+  
+  # File logging
+  file:
+    enabled: true
+    path: "logs/extraction.log"
+    max_bytes: 10485760         # 10 MB
+    backup_count: 5             # Keep 5 backup files
+  
+  # Console logging
+  console:
+    enabled: true
+    colorize: true
+
+# -----------------------------------------------------------------------------
+# PATHS CONFIGURATION
+# -----------------------------------------------------------------------------
+paths:
+  input_dir: "data/input"
+  output_dir: "outputs"
+  temp_dir: "data/temp"
+  logs_dir: "logs"
+  models_cache: "models"
+
+# -----------------------------------------------------------------------------
+# EVALUATION CONFIGURATION
+# -----------------------------------------------------------------------------
+evaluation:
+  enabled: true
+  ground_truth_path: "data/ground_truth.json"
+  metrics:
+    - "field_accuracy"
+    - "missing_field_rate"
+    - "exact_match"
+  report_path: "outputs/evaluation_report.json"

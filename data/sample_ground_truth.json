@@ -1,0 +1,63 @@
+{
+    "records": [
+        {
+            "source_file": "sample_invoice_001.pdf",
+            "invoice_number": "INV-2024-001",
+            "invoice_date": "2024-01-15",
+            "vendor_name": "Acme Corporation",
+            "customer_name": "XYZ Industries Ltd.",
+            "total_amount": "1250.00",
+            "payment_due_date": "2024-02-15"
+        },
+        {
+            "source_file": "sample_invoice_002.pdf",
+            "invoice_number": "INV-2024-002",
+            "invoice_date": "2024-01-20",
+            "vendor_name": "Best Supplies Inc.",
+            "customer_name": "ABC Company",
+            "total_amount": "3500.50",
+            "payment_due_date": "2024-02-20"
+        },
+        {
+            "source_file": "sample_invoice_003.pdf",
+            "invoice_number": "2024/001/ABC",
+            "invoice_date": "2024-01-25",
+            "vendor_name": "Global Services LLC",
+            "customer_name": "Tech Solutions Corp",
+            "total_amount": "7890.00",
+            "payment_due_date": "2024-02-25"
+        },
+        {
+            "source_file": "sample_invoice_004.jpg",
+            "invoice_number": "SI-2024-0456",
+            "invoice_date": "2024-02-01",
+            "vendor_name": "Office Essentials Co.",
+            "customer_name": "Modern Enterprises",
+            "total_amount": "456.78",
+            "payment_due_date": "2024-03-01"
+        },
+        {
+            "source_file": "sample_invoice_005.png",
+            "invoice_number": "INV20240205",
+            "invoice_date": "2024-02-05",
+            "vendor_name": "Digital Solutions Ltd",
+            "customer_name": "Innovation Labs Inc",
+            "total_amount": "12500.00",
+            "payment_due_date": "2024-03-05"
+        }
+    ],
+    "metadata": {
+        "created_date": "2024-01-01",
+        "description": "Sample ground truth file for invoice extraction evaluation",
+        "version": "1.0",
+        "fields": [
+            "invoice_number",
+            "invoice_date",
+            "vendor_name",
+            "customer_name",
+            "total_amount",
+            "payment_due_date"
+        ],
+        "notes": "All dates in ISO format (YYYY-MM-DD), amounts without currency symbols"
+    }
+}
