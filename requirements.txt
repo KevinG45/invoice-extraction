@@ -49,7 +49,7 @@ torch>=2.1.0
 # Layout-aware document understanding
 # LayoutLMv3 dependencies
 timm>=0.9.0
-detectron2  # May require separate installation on Windows
+# detectron2  # Optional - Not needed for core functionality, problematic on Windows
 
 # -----------------------------------------------------------------------------
 # OUTPUT HANDLING

@@ -277,9 +277,7 @@ def run_extraction(
             document = input_handler.load(str(file_path))
             
             # Process each page (for multi-page documents)
-            images = document.get('images', [document.get('image')])
-            if images[0] is None:
-                images = [document.get('image')]
+            images = document.images if hasattr(document, 'images') else []
             
             for page_idx, image in enumerate(images):
                 if image is None:
@@ -288,7 +286,7 @@ def run_extraction(
                 logger.debug(f"Processing page {page_idx + 1}")
                 
                 # Phase 2: OCR processing
-                ocr_result = ocr_engine.process(image)
+                ocr_result = ocr_engine.extract(image)
                 
                 # Phase 3: Model inference - extract fields
                 extraction = extractor.extract(
