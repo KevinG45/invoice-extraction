@@ -1,0 +1,8 @@
+﻿invoice_number,item_code,description,quantity,unit,unit_price,total,tax_rate,tax_amount,discount,row_index,confidence
+TAX INVOICE,,TAX INVOICE,{'nm': 'SESNA Divyasree Elan. Besides Fire StationSariadur Road. Kaikondahalli'},,,,,,,0,0.8
+TAX INVOICE,,,,,560035.0,,,,,1,0.8
+TAX INVOICE,,GST Tin No: - 07PDUJS4678K124,,,500.0,,,,,2,0.8
+TAX INVOICE,,LED LIGHTS,85013420.0,,2300.0,195530866000.0,,,,3,0.8
+TAX INVOICE,,Bulbs,20.0,,23000.0,460000.0,,,,4,0.8
+TAX INVOICE,,DESCRIPTION,85013410.0,,25000.0,2125335250000.0,,,,5,0.8
+TAX INVOICE,,LED LIGHTS,85013420.0,,2300.0,195530866000.0,,,,6,0.8
