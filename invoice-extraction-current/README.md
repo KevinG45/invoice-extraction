@@ -55,14 +55,15 @@ This single command will:
 1. ✅ Check prerequisites (Tesseract, Ollama)
 2. 📊 Initialize database if needed
 3. 📇 Build indexes if needed
-4. 🚀 Launch the Streamlit frontend at `http://localhost:8501`
+4. 🚀 Launch API server at `http://localhost:8000` (background)
+5. 🖥️ Launch Streamlit frontend at `http://localhost:8501`
 
 **Upload an invoice via the frontend to see extraction in action!**
 
 ### Other Options
 
 ```bash
-python main.py --api        # Launch API server instead (http://localhost:8000)
+python main.py --api        # Launch API server only (no frontend)
 python main.py --batch      # Process all invoices in data/input/ first
 python main.py --setup      # Setup only (no launch)
 ```

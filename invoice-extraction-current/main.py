@@ -5,11 +5,12 @@ Invoice Extraction System - Unified Entry Point
 Run this file to:
 1. Check prerequisites (Ollama, Tesseract)
 2. Initialize database and indexes if needed
-3. Launch the Streamlit frontend
+3. Launch API server in background
+4. Launch Streamlit frontend
 
 Usage:
-    python main.py              # Launch frontend (default)
-    python main.py --api        # Launch API server instead
+    python main.py              # Launch frontend + API (default)
+    python main.py --api        # Launch API server only
     python main.py --setup      # Run setup only (no launch)
     python main.py --batch      # Process all invoices + launch frontend
 """
@@ -155,11 +156,25 @@ def run_batch_extraction():
 
 
 def launch_frontend():
-    """Launch Streamlit frontend."""
+    """Launch API server in background, then Streamlit frontend."""
+    logger.info("🚀 Starting API server in background...")
+
+    # Start API server as background process
+    api_process = subprocess.Popen(
+        [sys.executable, "run_api.py"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+
+    # Wait a bit for API to start
+    import time
+    time.sleep(3)
+
+    logger.info("✅ API server running at http://localhost:8000")
     logger.info("🚀 Launching frontend...")
     logger.info("   Opening http://localhost:8501 in your browser...\n")
     logger.info("=" * 60)
-    logger.info("📌 Frontend running. Press Ctrl+C to stop.")
+    logger.info("📌 Frontend + API running. Press Ctrl+C to stop both.")
     logger.info("=" * 60)
     logger.info("")
 
@@ -172,6 +187,14 @@ def launch_frontend():
         logger.info("\n👋 Shutting down...")
     except Exception as e:
         logger.error(f"❌ Failed to launch frontend: {e}")
+    finally:
+        # Stop API server
+        logger.info("🛑 Stopping API server...")
+        api_process.terminate()
+        try:
+            api_process.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            api_process.kill()
 
 
 def launch_api():
@@ -203,8 +226,8 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python main.py              # Launch frontend (default)
-  python main.py --api        # Launch API server
+  python main.py              # Launch frontend + API (default)
+  python main.py --api        # Launch API server only
   python main.py --batch      # Process all invoices first
   python main.py --setup      # Setup only (no launch)
         """,
@@ -212,7 +235,7 @@ Examples:
     parser.add_argument(
         "--api",
         action="store_true",
-        help="Launch API server instead of frontend",
+        help="Launch API server only (no frontend)",
     )
     parser.add_argument(
         "--batch",
