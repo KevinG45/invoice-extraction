@@ -45,26 +45,36 @@ Copy `.env.example` to `.env` and fill in values as needed. See `core/config.py`
 
 ## Running
 
-### API Server
+### Quick Start (One Command)
 
 ```bash
-python run_api.py
+python main.py
 ```
 
-Starts FastAPI on `http://localhost:8000`. Interactive docs at `/docs`.
+This single command will:
+1. ✅ Check prerequisites (Tesseract, Ollama)
+2. 📊 Initialize database if needed
+3. 📇 Build indexes if needed
+4. 🚀 Launch the Streamlit frontend at `http://localhost:8501`
 
-### Frontend
+**Upload an invoice via the frontend to see extraction in action!**
+
+### Other Options
 
 ```bash
-python run_frontend.py
+python main.py --api        # Launch API server instead (http://localhost:8000)
+python main.py --batch      # Process all invoices in data/input/ first
+python main.py --setup      # Setup only (no launch)
 ```
 
-Opens Streamlit on `http://localhost:8501` with two tabs: invoice extraction and Q&A.
+### Individual Components (Advanced)
 
-### Other Entry Points
+If you need to run components separately:
 
 | Script | Purpose |
 |--------|---------|
+| `run_api.py` | Launch FastAPI server on port 8000 |
+| `run_frontend.py` | Launch Streamlit frontend on port 8501 |
 | `run_batch_extract.py` | Batch process all invoices in `data/input/` |
 | `run_db_ingest.py` | Ingest all JSON outputs into SQLite |
 | `run_bm25_index.py` | Rebuild the BM25 keyword index |

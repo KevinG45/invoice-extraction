@@ -299,3 +299,21 @@ def source_file_exists(source_file: str) -> bool:
         return session.query(Invoice.id).filter_by(source_file=source_file).first() is not None
     finally:
         session.close()
+
+
+def get_db():
+    """
+    Get a database session (generator for FastAPI dependency injection).
+
+    Usage:
+        db = next(get_db())
+        try:
+            result = db.query(Invoice).all()
+        finally:
+            db.close()
+    """
+    session = _get_session()
+    try:
+        yield session
+    finally:
+        session.close()
