@@ -1,115 +1,44 @@
-# =============================================================================
-# INTELLIGENT INVOICE HEADER EXTRACTION SYSTEM
-# Python Dependencies
-# =============================================================================
-# Install with: pip install -r requirements.txt
-# =============================================================================
-
-# -----------------------------------------------------------------------------
-# CORE DEPENDENCIES
-# -----------------------------------------------------------------------------
-# Configuration management
+python-dotenv>=1.0.0
 PyYAML>=6.0.1
 
-# Data manipulation
-pandas>=2.0.0
 numpy>=1.24.0
-
-# Image processing
+pandas>=2.0.0
 Pillow>=10.0.0
-opencv-python>=4.8.0
+opencv-python-headless>=4.8.0
 
-# -----------------------------------------------------------------------------
-# PDF PROCESSING
-# -----------------------------------------------------------------------------
-# PDF to image conversion
 pdf2image>=1.16.3
-PyMuPDF>=1.23.0  # Alternative: faster PDF handling
-
-# PDF text extraction (for digital PDFs)
+PyMuPDF>=1.23.0
 pdfplumber>=0.10.0
 
-# -----------------------------------------------------------------------------
-# OCR ENGINES
-# -----------------------------------------------------------------------------
-# Primary OCR engine
 pytesseract>=0.3.10
+# paddleocr>=2.7.0
+# OPTIONAL: improves image table extraction
+# Large install ~2GB. Install manually if needed.
+# Command: pip install paddleocr>=2.7.0
+# IMPORTANT: requires paddlepaddle backend (Python <=3.12 only).
+#   CPU:  pip install paddlepaddle
+#   GPU:  pip install paddlepaddle-gpu
+# paddlepaddle has NO wheel for Python 3.13+ as of 2026-03.
+easyocr>=1.7.0  # logo-based vendor name fallback
 
-# Alternative OCR engines (optional)
-# easyocr>=1.7.0  # Uncomment if needed
-# paddleocr>=2.7.0  # Uncomment if needed
+requests>=2.31.0
+ollama>=0.4.0
 
-# -----------------------------------------------------------------------------
-# MACHINE LEARNING / TRANSFORMERS
-# -----------------------------------------------------------------------------
-# Hugging Face Transformers
-transformers>=4.35.0
-torch>=2.1.0
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+python-multipart>=0.0.6
+pydantic>=2.5.0
 
-# Layout-aware document understanding
-# LayoutLMv3 dependencies
-timm>=0.9.0
-# detectron2  # Optional - Not needed for core functionality, problematic on Windows
-
-# Donut (OCR-free document understanding)
-# Used for line item extraction
-sentencepiece>=0.1.99
-
-# -----------------------------------------------------------------------------
-# HYBRID MODEL SUPPORT
-# -----------------------------------------------------------------------------
-# For parallel model execution
-# concurrent.futures is built-in, no extra install needed
-
-# Decimal precision for financial calculations
-# decimal is built-in, no extra install needed
-
-# -----------------------------------------------------------------------------
-# OUTPUT HANDLING
-# -----------------------------------------------------------------------------
-# Excel file generation
+streamlit>=1.30.0
 openpyxl>=3.1.0
-xlsxwriter>=3.1.0
 
-# Database
-sqlalchemy>=2.0.0
+SQLAlchemy>=2.0.0
 
-# -----------------------------------------------------------------------------
-# EVALUATION & REPORTING
-# -----------------------------------------------------------------------------
-# Metrics computation
-scikit-learn>=1.3.0
+chromadb>=1.0.0
+sentence-transformers>=3.0.0
+rank_bm25>=0.2.2
 
-# Progress bars
-tqdm>=4.66.0
-
-# -----------------------------------------------------------------------------
-# UTILITIES
-# -----------------------------------------------------------------------------
-# Colored console output
-colorama>=0.4.6
-
-# Date parsing
-python-dateutil>=2.8.2
-
-# Type hints
-typing-extensions>=4.8.0
-
-# -----------------------------------------------------------------------------
-# DEVELOPMENT DEPENDENCIES (optional)
-# -----------------------------------------------------------------------------
-# Testing
-# pytest>=7.4.0
-# pytest-cov>=4.1.0
-
-# Code formatting
-# black>=23.0.0
-# isort>=5.12.0
-
-# Linting
-# flake8>=6.1.0
-# pylint>=3.0.0
-
-# Documentation
-# sphinx>=7.0.0
-# sphinx-rtd-theme>=1.3.0
+# Optional: table extraction & OCR fallback (install individually as needed)
+# camelot-py[cv]>=0.11.0
+# tabula-py>=2.9.0
+# python-doctr[torch]>=0.8.0

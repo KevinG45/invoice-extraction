@@ -1,306 +1,116 @@
-#  Intelligent Invoice Header Extraction System
+# Invoice Extraction + RAG System
 
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+Automated invoice data extraction using OCR and LLMs, with a multi-strategy RAG pipeline for querying extracted data.
 
-A production-ready, company-grade system for extracting header-level information from invoices using OCR and pre-trained layout-aware Transformer models.
+**Stack**: PaddleOCR + Tesseract | pdfplumber + PyMuPDF | Ollama (local LLM) | ChromaDB + BM25 | FastAPI + Streamlit
 
-## Table of Contents
-
-- [Overview](#-overview)
-- [Features](#-features)
-- [Architecture](#-architecture)
-- [Installation](#-installation)
-- [Quick Start](#-quick-start)
-- [Configuration](#-configuration)
-- [Project Structure](#-project-structure)
-- [Usage](#-usage)
-- [API Reference](#-api-reference)
-- [Evaluation](#-evaluation)
-- [Troubleshooting](#-troubleshooting)
-- [Contributing](#-contributing)
-- [License](#-license)
-
-##  Overview
-
-This system automates the extraction of key invoice header fields from various document formats (PDF, JPG, PNG). It uses a combination of OCR (Optical Character Recognition) and pre-trained layout-aware Transformer models to accurately identify and extract structured data.
-
-### Extracted Fields
-
-| Field | Description |
-|-------|-------------|
-| **Invoice Number** | Unique identifier for the invoice |
-| **Invoice Date** | Date when the invoice was issued |
-| **Vendor Name** | Name of the seller/supplier |
-| **Customer Name** | Name of the buyer/recipient |
-| **Total Amount** | Total amount due |
-| **Payment Due Date** | Date by which payment is expected |
-
-##  Features
-
-- **Multi-format Support**: Process PDFs (digital and scanned) and images (JPG, PNG, TIFF)
-- **Layout-aware Extraction**: Uses LayoutLMv3 for context-aware field extraction
-- **Robust OCR**: Configurable OCR engine with multiple backend support
-- **Data Validation**: Automatic date/currency normalization and validation
-- **Dual Output**: Export to Excel and SQLite database
-- **Confidence Scores**: Model confidence for each extracted field
-- **Evaluation Metrics**: Built-in accuracy computation and reporting
-- **Modular Design**: Easy to extend, maintain, and customize
-- **Production-ready**: Comprehensive logging, error handling, and configuration
-
-##  Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                        INVOICE EXTRACTION PIPELINE                       │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                          │
-│  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐          │
-│  │  INPUT   │───▶│   OCR    │───▶│  MODEL   │───▶│   POST   │          │
-│  │ HANDLER  │    │  ENGINE  │    │INFERENCE │    │PROCESSOR │          │
-│  └──────────┘    └──────────┘    └──────────┘    └──────────┘          │
-│       │                                                │                │
-│       │         PDF/Image          Text +             │                │
-│       │         Processing         Bounding           │                │
-│       ▼                            Boxes              ▼                │
-│  ┌──────────┐                                   ┌──────────┐          │
-│  │  FILE    │                                   │  OUTPUT  │          │
-│  │DETECTION │                                   │ HANDLER  │          │
-│  └──────────┘                                   └──────────┘          │
-│                                                       │                │
-│                                              ┌────────┴────────┐      │
-│                                              ▼                 ▼      │
-│                                         ┌────────┐       ┌────────┐  │
-│                                         │ EXCEL  │       │DATABASE│  │
-│                                         └────────┘       └────────┘  │
-│                                                                        │
-│  ┌─────────────────────────────────────────────────────────────────┐  │
-│  │                        EVALUATION MODULE                         │  │
-│  │            Field Accuracy • Missing Rate • Exact Match           │  │
-│  └─────────────────────────────────────────────────────────────────┘  │
-│                                                                        │
-└─────────────────────────────────────────────────────────────────────────┘
-```
-
-##  Installation
+## Setup
 
 ### Prerequisites
 
-- Python 3.9 or higher
-- Tesseract OCR installed on system
-- Poppler (for PDF processing)
+- Python 3.10+
+- [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) installed and on PATH
+- [Ollama](https://ollama.com) installed and running
 
-### Windows Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd invoice-extraction
-   ```
-
-2. **Create virtual environment**
-   ```bash
-   python -m venv venv
-   venv\Scripts\activate
-   ```
-
-3. **Install Python dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Install Tesseract OCR**
-   - Download from: https://github.com/UB-Mannheim/tesseract/wiki
-   - Add to PATH: `C:\Program Files\Tesseract-OCR`
-
-5. **Install Poppler** (for PDF processing)
-   - Download from: https://github.com/oschwartz10612/poppler-windows/releases
-   - Add `bin` folder to PATH
-
-### Linux/macOS Installation
+### Installation
 
 ```bash
-# Ubuntu/Debian
-sudo apt-get install tesseract-ocr poppler-utils
+# Install Python dependencies
+pip install -r requirements.txt
 
-# macOS
-brew install tesseract poppler
+# Install and start Ollama, then pull the model
+ollama serve
+ollama pull qwen2.5:3b
 ```
 
-##  Quick Start
+Tesseract install (if not already present):
 
-```python
-from src.pipeline import InvoiceExtractionPipeline
+- **Ubuntu/Debian**: `sudo apt install tesseract-ocr`
+- **macOS**: `brew install tesseract`
+- **Windows**: download installer from [UB-Mannheim/tesseract](https://github.com/UB-Mannheim/tesseract/wiki) and add to PATH
 
-# Initialize pipeline
-pipeline = InvoiceExtractionPipeline()
+### Environment Variables
 
-# Process a single invoice
-result = pipeline.process("path/to/invoice.pdf")
-print(result)
+Copy `.env.example` to `.env` and fill in values as needed. See `core/config.py` for all supported variables:
 
-# Process multiple invoices
-results = pipeline.process_batch("path/to/invoice/folder/")
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `OCR_ENGINE` | `paddleocr` | Primary OCR engine (`paddleocr` or `tesseract`) |
+| `LLM_MODEL` | `qwen2.5:3b` | Ollama model name |
+| `LLM_BASE_URL` | `http://localhost:11434` | Ollama endpoint |
+| `API_HOST` | `0.0.0.0` | API listen address |
+| `API_PORT` | `8000` | API listen port |
+| `CHROMA_COLLECTION` | `invoices` | ChromaDB collection name |
+| `EMBEDDING_MODEL` | `all-MiniLM-L6-v2` | Sentence-transformer model |
 
-# Export to Excel
-pipeline.export_to_excel(results, "output.xlsx")
-```
+## Running
 
-##  Configuration
-
-Configuration is managed through `config/settings.yaml`. Key settings:
-
-```yaml
-# OCR Configuration
-ocr:
-  engine: "pytesseract"
-  tesseract:
-    lang: "eng"
-    psm: 3
-
-# Model Configuration
-model:
-  name: "microsoft/layoutlmv3-base"
-  device: "cpu"  # or "cuda" for GPU
-
-# Output Configuration
-output:
-  excel:
-    enabled: true
-  database:
-    enabled: true
-    type: "sqlite"
-```
-
-##  Project Structure
-
-```
-invoice-extraction/
-├── config/
-│   ├── __init__.py          # Configuration manager
-│   └── settings.yaml         # Main configuration file
-├── src/
-│   ├── __init__.py           # Package initialization
-│   ├── input_handler.py      # PDF/Image input processing
-│   ├── ocr_engine.py         # OCR text extraction
-│   ├── model_inference.py    # Transformer model inference
-│   ├── postprocessor.py      # Validation & normalization
-│   ├── output_handler.py     # Excel & database output
-│   ├── evaluation.py         # Accuracy metrics
-│   ├── pipeline.py           # Main orchestration
-│   └── utils/
-│       ├── __init__.py
-│       ├── logger.py         # Logging configuration
-│       ├── helpers.py        # Utility functions
-│       └── exceptions.py     # Custom exceptions
-├── data/
-│   ├── input/                # Input invoices
-│   ├── temp/                 # Temporary processing files
-│   └── ground_truth.json     # Evaluation ground truth
-├── outputs/
-│   ├── extractions/          # Extracted data
-│   └── reports/              # Evaluation reports
-├── logs/                     # Application logs
-├── docs/                     # Documentation
-│   ├── architecture.md
-│   ├── api_reference.md
-│   └── user_guide.md
-├── tests/                    # Unit tests
-├── requirements.txt          # Python dependencies
-├── main.py                   # Entry point
-└── README.md                 # This file
-```
-
-##  Usage
-
-### Command Line Interface
+### API Server
 
 ```bash
-# Process a single file
-python main.py --input invoice.pdf --output results.xlsx
-
-# Process a directory
-python main.py --input ./invoices/ --output ./results/
-
-# Run with evaluation
-python main.py --input ./invoices/ --evaluate --ground-truth data/ground_truth.json
+python run_api.py
 ```
 
-### Python API
+Starts FastAPI on `http://localhost:8000`. Interactive docs at `/docs`.
 
-```python
-from src.input_handler import InputHandler
-from src.ocr_engine import OCREngine
-from src.model_inference import InvoiceExtractor
-from src.postprocessor import PostProcessor
-from src.output_handler import OutputHandler
+### Frontend
 
-# Step-by-step processing
-input_handler = InputHandler()
-image = input_handler.load("invoice.pdf")
-
-ocr = OCREngine()
-ocr_result = ocr.extract(image)
-
-extractor = InvoiceExtractor()
-raw_data = extractor.extract(ocr_result)
-
-postprocessor = PostProcessor()
-clean_data = postprocessor.process(raw_data)
-
-output = OutputHandler()
-output.to_excel(clean_data, "output.xlsx")
-output.to_database(clean_data)
+```bash
+python run_frontend.py
 ```
 
-##  Evaluation
+Opens Streamlit on `http://localhost:8501` with two tabs: invoice extraction and Q&A.
 
-The system includes built-in evaluation capabilities:
+### Other Entry Points
 
-```python
-from src.evaluation import Evaluator
+| Script | Purpose |
+|--------|---------|
+| `run_batch_extract.py` | Batch process all invoices in `data/input/` |
+| `run_db_ingest.py` | Ingest all JSON outputs into SQLite |
+| `run_bm25_index.py` | Rebuild the BM25 keyword index |
+| `run_rag_agent.py` | CLI RAG agent (index + ask) |
 
-evaluator = Evaluator()
-metrics = evaluator.compute_metrics(
-    predictions=extracted_data,
-    ground_truth="data/ground_truth.json"
-)
+## API Endpoints
 
-print(f"Field Accuracy: {metrics['field_accuracy']:.2%}")
-print(f"Missing Rate: {metrics['missing_rate']:.2%}")
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/health` | Health check. Returns `{"status": "ok", "version": "2.0.0"}` |
+| `POST` | `/extract` | Upload a single PDF or image. Runs the full 6-stage pipeline, saves JSON, inserts into SQLite, indexes into ChromaDB, rebuilds BM25. Returns the extraction result. |
+| `POST` | `/extract/batch` | Upload a `.zip` of invoices. Processes each file and returns an array of results. |
+| `POST` | `/rag/index` | Rebuild ChromaDB and BM25 indexes from all JSON files in `outputs/extractions/`. |
+| `POST` | `/ask` | Send `{"question": "..."}`. Routes through the multi-strategy RAG pipeline and returns an answer with strategy, sources, and context. |
+
+## RAG Strategies
+
+The query router (`rag/router.py`) classifies each question and selects one of four retrieval strategies:
+
+| Strategy | Trigger | How It Works |
+|----------|---------|--------------|
+| **SQL** | Aggregation words like "how many", "total", "average", "highest" | Translates the question to SQL via Ollama, executes against SQLite |
+| **BM25** | Specific invoice numbers, GSTINs, quoted terms, vendor names | Keyword search using BM25Okapi over tokenised invoice text |
+| **Vector** | Semantic words like "similar to", "describe", "explain", "related" | Cosine similarity search over ChromaDB embeddings (all-MiniLM-L6-v2) |
+| **Hybrid** | Default fallback when no clear signal is detected | Runs both BM25 and vector search, merges and deduplicates results |
+
+After retrieval, the context is sent to Ollama for final answer generation.
+
+## Project Structure
+
+```
+api/            FastAPI application and endpoints
+core/           Extraction pipeline (OCR, PDF, LLM, validation)
+frontend/       Streamlit web interface
+rag/            RAG pipeline (indexing, retrieval, QA)
+schemas/        Pydantic data models
+data/           Input invoices and SQLite database
+outputs/        JSON extraction results (see outputs/README.md)
+chroma_db/      ChromaDB persistent vector store
 ```
 
-##  Troubleshooting
+## Docker
 
-### Common Issues
-
-| Issue | Solution |
-|-------|----------|
-| Tesseract not found | Add Tesseract to system PATH |
-| PDF conversion fails | Install Poppler and add to PATH |
-| CUDA out of memory | Set `device: "cpu"` in config |
-| Low accuracy | Try different OCR settings or PSM mode |
-
-### Debug Mode
-
-Enable debug logging in `config/settings.yaml`:
-```yaml
-logging:
-  level: "DEBUG"
+```bash
+docker build -t invoice-extraction .
+docker run -p 8000:8000 invoice-extraction
 ```
 
-##  Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit changes with clear messages
-4. Submit a pull request
-
-##  License
-
-MIT License - see LICENSE file for details.
-
----
-
-
+Requires Ollama accessible from inside the container (set `LLM_BASE_URL` to host address).
