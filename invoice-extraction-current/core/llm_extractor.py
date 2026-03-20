@@ -18,82 +18,28 @@ import logging
 import re
 from typing import Any, Dict, Optional
 
-from core.config import LLM_MODEL, LLM_BASE_URL, LLM_TEMPERATURE, LLM_MAX_RETRIES
+from core.config import LLM_MODEL, LLM_BASE_URL, LLM_TEMPERATURE, LLM_MAX_RETRIES, LLM_TIMEOUT
 
 logger = logging.getLogger(__name__)
 
 # ── Invoice extraction JSON schema prompt ──────────────────────────────────
-EXTRACTION_PROMPT = """You are a precise invoice data extraction engine. Extract ALL available fields from the invoice text below.
+EXTRACTION_PROMPT = """Extract all invoice fields from the text below. Return ONLY a JSON object — no markdown, no code blocks, no explanations. Start with {{ and end with }}.
 
-CRITICAL RULES:
-- Return ONLY a raw JSON object. No markdown, no backticks, no explanation.
-- If a field is not present in the invoice, use null (not empty string, not "N/A").
-- All monetary values must be numbers (float), not strings. Example: 1500.00 not "1,500.00"
-- Dates must be in YYYY-MM-DD format where possible.
-- line_items must be an array even if there is only one item.
-- Do not invent or guess values that are not explicitly in the text.
+RULES:
+- Use null for any missing field — never omit fields
+- currency: use "INR" if you see ₹, Rs, GSTIN, or any GST%; otherwise match the symbol found
+- bill_to.name: the buyer company or person name ONLY — never include the address in this field
+- All string values must be on a single line (no newlines inside strings)
+- line_items[].total is the line's total amount (qty × unit_price before or after tax)
+- For Indian GST invoices: tax_rate is typically 5, 12, 18, or 28 (percent)
 
-CUSTOMER / BILL-TO NAME RULES:
-- "bill_to.name" is the customer or buyer who RECEIVES the invoice.
-- Look for labels like: "Bill To", "Buyer", "Sold To", "Billed To", "Customer", "Consignee", "M/s", "Name of the Party", "Details of Receiver".
-- If the invoice has TWO company names and TWO GSTINs, the vendor/seller is typically at the TOP or identified by "for <name>" at the bottom. The OTHER name (often near the second GSTIN) is the customer — put it in bill_to.name.
-- The vendor is the issuer/seller of the invoice; the bill_to is who pays it. Do NOT confuse them.
-
-OUTPUT SCHEMA (return exactly this structure):
-{{
-  "invoice_number": "string or null",
-  "invoice_date": "string or null",
-  "due_date": "string or null",
-  "purchase_order_number": "string or null",
-  "vendor": {{
-    "name": "string or null",
-    "address": "string or null",
-    "email": "string or null",
-    "phone": "string or null",
-    "tax_id": "string or null",
-    "website": "string or null"
-  }},
-  "bill_to": {{
-    "name": "string or null",
-    "address": "string or null",
-    "email": "string or null",
-    "tax_id": "string or null"
-  }},
-  "ship_to": {{
-    "name": "string or null",
-    "address": "string or null"
-  }},
-  "line_items": [
-    {{
-      "line_number": "integer or null",
-      "description": "string or null",
-      "quantity": "number or null",
-      "unit": "string or null",
-      "unit_price": "number or null",
-      "discount": "number or null",
-      "tax_rate": "number or null",
-      "total": "number or null"
-    }}
-  ],
-  "subtotal": "number or null",
-  "discount": "number or null",
-  "tax_rate": "number or null",
-  "tax_amount": "number or null",
-  "shipping": "number or null",
-  "total_amount": "number or null",
-  "amount_paid": "number or null",
-  "amount_due": "number or null",
-  "currency": "string or null",
-  "payment_terms": "string or null",
-  "payment_method": "string or null",
-  "bank_details": "string or null",
-  "notes": "string or null"
-}}
+OUTPUT this exact structure (replace values, keep all keys, use null for missing):
+{{"invoice_number":null,"invoice_date":null,"due_date":null,"purchase_order_number":null,"currency":"INR","subtotal":null,"discount":null,"tax_amount":null,"shipping":null,"total_amount":null,"amount_paid":null,"amount_due":null,"tax_rate":null,"payment_terms":null,"payment_method":null,"bank_details":null,"notes":null,"vendor":{{"name":null,"address":null,"email":null,"phone":null,"tax_id":null,"website":null}},"bill_to":{{"name":null,"address":null,"email":null,"tax_id":null}},"ship_to":{{"name":null,"address":null}},"line_items":[{{"description":null,"hsn_sac":null,"quantity":null,"unit":null,"unit_price":null,"discount":null,"tax_rate":null,"total":null}}]}}
 
 INVOICE TEXT:
 {ocr_text}
 
-JSON OUTPUT:"""
+JSON:"""
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -121,7 +67,7 @@ def extract_invoice_fields(text: str) -> dict:
     for attempt in range(1, LLM_MAX_RETRIES + 1):
         logger.info("[llm_extractor] Extraction attempt %d/%d", attempt, LLM_MAX_RETRIES)
         try:
-            raw = _call_ollama(prompt)
+            raw = _call_ollama(prompt, json_mode=True)
             cleaned = _clean_llm_response(raw)
             data = json.loads(cleaned, strict=False)
             data = _normalize_numeric_fields(data)
@@ -238,8 +184,14 @@ def extract_fields_with_llm(ocr_text: str, max_retries: int = 2) -> Optional[Dic
 # PRIVATE — OLLAMA COMMUNICATION
 # ═══════════════════════════════════════════════════════════════════════════
 
-def _call_ollama(prompt: str) -> str:
-    """Make a request to the local Ollama API."""
+def _call_ollama(prompt: str, json_mode: bool = False) -> str:
+    """Make a request to the local Ollama API.
+
+    Args:
+        prompt: The prompt to send.
+        json_mode: If True, add format='json' to force grammar-constrained JSON output.
+                   Only use for calls that must return JSON (not plain-text calls).
+    """
     import requests as req
 
     url = f"{LLM_BASE_URL}/api/generate"
@@ -252,9 +204,11 @@ def _call_ollama(prompt: str) -> str:
             "num_predict": 2048,
         },
     }
+    if json_mode:
+        payload["format"] = "json"
 
     try:
-        response = req.post(url, json=payload, timeout=120)
+        response = req.post(url, json=payload, timeout=LLM_TIMEOUT)
         response.raise_for_status()
         return response.json().get("response", "")
     except req.exceptions.ConnectionError:
@@ -263,7 +217,7 @@ def _call_ollama(prompt: str) -> str:
             "Is it running? Try: ollama serve"
         )
     except req.exceptions.Timeout:
-        raise TimeoutError("Ollama request timed out after 120 seconds")
+        raise TimeoutError(f"Ollama request timed out after {LLM_TIMEOUT} seconds")
 
 
 def _check_ollama_available() -> bool:
@@ -283,95 +237,33 @@ def _check_ollama_available() -> bool:
 
 def _clean_llm_response(raw: str) -> str:
     """Strip markdown fences, control characters, and extract JSON from LLM response."""
-    # Remove control characters (except newline, carriage return, tab)
-    raw = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', raw)
-    raw = raw.strip()
+    text = raw
 
-    # Remove ```json ... ``` fences
-    if "```" in raw:
-        parts = raw.split("```")
-        for part in parts:
-            part = part.strip()
-            if part.startswith("json"):
-                part = part[4:].strip()
-            if part.startswith("{"):
-                extracted = _extract_balanced_json(part)
-                if extracted:
-                    raw = extracted
-                    break
+    # Step 1: Remove markdown code fences
+    text = re.sub(r'```json', '', text)
+    text = re.sub(r'```', '', text)
+    text = text.strip()
 
-    # Find the first balanced {...} block using brace counting
-    if not raw.startswith("{"):
-        first_brace = raw.find("{")
-        if first_brace != -1:
-            extracted = _extract_balanced_json(raw[first_brace:])
-            if extracted:
-                raw = extracted
-    else:
-        extracted = _extract_balanced_json(raw)
-        if extracted:
-            raw = extracted
+    # Step 2: Find the first { and last } and extract only what is between them.
+    # This handles any text before or after JSON.
+    start_idx = text.find('{')
+    end_idx = text.rfind('}')
+    if start_idx != -1 and end_idx != -1:
+        text = text[start_idx:end_idx + 1]
 
-    # Fix common LLM JSON mistakes
-    raw = re.sub(r'\("[^"]*",\s*[^)]*\)', 'null', raw)   # Python tuples → null
-    # Fix unquoted arithmetic/percentage expressions like: 13.6% + 6.8%  →  null
-    raw = re.sub(r':\s*(\d[\d.]*\s*%\s*[+\-]\s*\d[\d.]*\s*%)', ': null', raw)
-    # Fix bare arithmetic expressions like: 13.6 + 6.8  →  null
-    raw = re.sub(r':\s*(\d[\d.]*\s*[+\-]\s*\d[\d.]*)\s*([,\n}])', r': null\2', raw)
-    # Fix bare percentage values like: 12%  →  12  (strip the %)
-    raw = re.sub(r':\s*(\d+\.?\d*)\s*%', r': \1', raw)
-    # Remove stray lines that aren't valid JSON (e.g. hallucinated "0.45)," fragments)
-    lines = raw.split("\n")
-    cleaned_lines = []
-    for line in lines:
-        stripped = line.strip()
-        if stripped and not stripped[0] in ('"', '{', '}', '[', ']', ','):
-            # Keep lines that are part of a value continuation (inside strings)
-            if cleaned_lines and not cleaned_lines[-1].rstrip().endswith(","):
-                cleaned_lines.append(line)
-            # else: skip stray lines like "0.45),"
-        else:
-            cleaned_lines.append(line)
-    raw = "\n".join(cleaned_lines)
-    raw = re.sub(r',\s*([}\]])', r'\1', raw)              # trailing commas
-    raw = raw.replace("'", '"')                            # single → double quotes
+    # Step 3: Remove control characters.
+    # These are the characters causing the "Invalid control character" parse error.
+    # Keeps newlines (\n = \x0a) and tabs (\t = \x09) which are valid in JSON
+    # between fields, removes everything else in the control range.
+    text = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', text)
 
-    # Fix multi-line string values with unescaped quotes (LLM wraps notes etc.
-    # across lines with unescaped " inside).  Strategy: detect continuation lines
-    # and drop them, closing any open string on the previous line.
-    fixed_lines = []
-    for line in raw.split("\n"):
-        stripped = line.strip()
-        # Detect continuation lines: not a key-value, not structural, not empty
-        if (stripped and fixed_lines
-            and not re.match(r'^\s*[{}\[\]]', stripped)
-            and not re.match(r'^\s*"[^"]*"\s*:', stripped)
-            and not stripped.startswith('"')
-            and not stripped == ','
-        ):
-            # Drop continuation. Close the open string on the previous line.
-            prev = fixed_lines[-1].rstrip()
-            # If previous line has an open string (ends with escaped quote or text mid-string)
-            # Close it by appending a closing quote (and comma if needed before } or ])
-            if not prev.endswith(',') and not prev.endswith('{') and not prev.endswith('['):
-                # Check if we need to close the string — find if the string is unterminated
-                # Count unescaped quotes after the ":"
-                colon_pos = prev.find(':')
-                if colon_pos >= 0:
-                    after_colon = prev[colon_pos+1:]
-                    # Count unescaped quotes
-                    n_quotes = len(re.findall(r'(?<!\\)"', after_colon))
-                    if n_quotes % 2 == 1:
-                        # Odd quotes = open string. Close it.
-                        fixed_lines[-1] = prev + '",'
-            continue
-        fixed_lines.append(line)
-    raw = "\n".join(fixed_lines)
+    # Step 4: Replace any literal newline that appears inside a quoted string value
+    # with a space. Safe approach: replace \n with space only when preceded by a
+    # non-whitespace character and followed by a non-whitespace character
+    # (i.e. in the middle of content, not between JSON fields).
+    text = re.sub(r'(?<=\S)\n(?=\S)', ' ', text)
 
-    # Second pass: trailing comma cleanup (multi-line fix may have introduced new ones)
-    raw = re.sub(r',\s*([}\]])', r'\1', raw)
-
-    return raw.strip()
+    return text
 
 
 def _extract_balanced_json(text: str) -> Optional[str]:
@@ -455,6 +347,30 @@ def _clean_extracted_fields(data: dict) -> dict:
             gstin_match = re.search(r'\b(\d{2}[A-Z]{5}\d{4}[A-Z]\d[A-Z\d]{2})\b', tid)
             if gstin_match:
                 vendor["tax_id"] = gstin_match.group(1)
+
+    # Fix bill_to.name: LLM sometimes stuffs the full address block into name.
+    # Heuristics: split on first newline, or strip if too long, or contains PIN code / state.
+    bill_to = data.get("bill_to") or {}
+    if isinstance(bill_to, dict) and bill_to.get("name"):
+        name = str(bill_to["name"]).strip()
+        # If it contains a newline, the first line is the name, rest is address
+        if '\n' in name:
+            parts = name.split('\n', 1)
+            name = parts[0].strip()
+            if not bill_to.get("address"):
+                bill_to["address"] = parts[1].strip()
+        # Strip trailing 6-digit Indian PIN codes from name
+        name = re.sub(r'\s*[-,]?\s*\d{6}\s*$', '', name).strip()
+        # If name still looks like it contains an address (comma + digits pattern), truncate
+        addr_match = re.match(r'^([A-Za-z][A-Za-z &.\-\']{2,80?}?)(?:,\s*\d|\s+\d{6})', name)
+        if addr_match:
+            name = addr_match.group(1).strip()
+        # Reject if over 80 chars after cleanup — likely still an address blob
+        if len(name) > 80:
+            logger.warning("[llm_extractor] bill_to.name too long (%d chars), clearing: %r", len(name), name[:80])
+            name = None
+        bill_to["name"] = name
+        data["bill_to"] = bill_to
 
     return data
 
@@ -815,8 +731,9 @@ def extract_fields_with_regex(text: str) -> Dict[str, Any]:
             if amounts:
                 result["total_amount"] = max(amounts)
 
-    # Currency detection
-    if '₹' in text or 'INR' in text or 'Rs' in text:
+    # Currency detection — GSTIN is India-only, so any invoice with one must be INR
+    gstin_found = bool(re.search(r'\b\d{2}[A-Z]{5}\d{4}[A-Z]\d[A-Z\d]{2}\b', text))
+    if gstin_found or '₹' in text or 'INR' in text or re.search(r'\bRs\.?\b', text):
         result["currency"] = "INR"
     elif '$' in text or 'USD' in text:
         result["currency"] = "USD"

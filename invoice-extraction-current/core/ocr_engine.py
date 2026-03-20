@@ -90,9 +90,14 @@ def preprocess_image(image: Image.Image) -> Image.Image:
     if image.mode != "RGB":
         image = image.convert("RGB")
 
-    # Scale up 2x — improves OCR accuracy on low-resolution or small-text images
+    # Scale up only if image is below target width — avoids 4x pixel-count blowup
+    # on already high-resolution scans (300+ DPI A4 = 2480px wide)
+    TARGET_WIDTH = 1800  # px optimal for Tesseract on A4 invoices
     w, h = image.size
-    image = image.resize((w * 2, h * 2), Image.LANCZOS)
+    if w < TARGET_WIDTH:
+        scale = TARGET_WIDTH / w
+        image = image.resize((int(w * scale), int(h * scale)), Image.LANCZOS)
+        w, h = image.size
     # Autocontrast — normalises pixel range before further processing
     image = ImageOps.autocontrast(image)
 

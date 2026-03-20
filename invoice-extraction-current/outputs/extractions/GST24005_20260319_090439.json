@@ -1,0 +1,212 @@
+{
+  "invoice_number": "GST/24/005",
+  "invoice_date": "29-04-2024",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "NIREL DIGITALS",
+    "address": "Plot No. G1, H.No. 6-264/13/A/5, HAL Raghvendra Colony, Quthubullapur, Mandal Medchal Dist - Hyderabad- Telangana- 500055",
+    "email": "nireldigitals@gmail.com",
+    "phone": "9866272837",
+    "tax_id": "36ARKPC6820F1ZZ",
+    "website": null
+  },
+  "bill_to": {
+    "name": "ARTIS ANIMAL HEALTH CARE INDIA PVT.LTD",
+    "address": "Olpad Karanj Road Plot No. 1 to 7 Block No. 181 Beside Astha Bunglows, Olpad Surat - 394540",
+    "email": null,
+    "tax_id": "24AAQCA3914N1ZC"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "Sticker With Lamination - Bac Gaurd",
+      "quantity": 500.0,
+      "unit": "NOS",
+      "unit_price": 5.9,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 2950.0
+    },
+    {
+      "line_number": 2,
+      "description": "Sticker With Lamination - Bento Lite 10kg",
+      "quantity": 500.0,
+      "unit": "NOS",
+      "unit_price": 9.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 4500.0
+    },
+    {
+      "line_number": 3,
+      "description": "Sticker With Lamination - Gaso Rol Stikar",
+      "quantity": 500.0,
+      "unit": "NOS",
+      "unit_price": 4.5,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 2250.0
+    },
+    {
+      "line_number": 4,
+      "description": "Sticker With Lamination - Pro Con",
+      "quantity": 500.0,
+      "unit": "NOS",
+      "unit_price": 5.9,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 2950.0
+    },
+    {
+      "line_number": 5,
+      "description": "Sticker With Lamination - Super Bac Ps",
+      "quantity": 500.0,
+      "unit": "NOS",
+      "unit_price": 4.5,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 2250.0
+    },
+    {
+      "line_number": 6,
+      "description": "Sticker With Lamination - Tristatar Min 10kg",
+      "quantity": 500.0,
+      "unit": "NOS",
+      "unit_price": 18.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 9000.0
+    },
+    {
+      "line_number": 7,
+      "description": "Sticker With Lamination - Yeast Pro Plus 1Kg",
+      "quantity": 500.0,
+      "unit": "NOS",
+      "unit_price": 4.5,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 2250.0
+    }
+  ],
+  "subtotal": 26150.0,
+  "discount": null,
+  "tax_rate": 18.0,
+  "tax_amount": 4707.0,
+  "shipping": null,
+  "total_amount": 30857.0,
+  "amount_paid": null,
+  "amount_due": 30857.0,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": "NIREL DIGITALS\nBank A/C: 5267528699\nFor, NIREL DIGITALS\nBank IFSC: CBIN0285113\nBank Name: CENTRAL BANK OF INDIA\nBranch: BALA NAGAR Branch",
+  "notes": null,
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 3,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 4,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 5,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 6,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 7,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": true,
+      "totals_consistent": true
+    },
+    "line_item_count": 7
+  },
+  "metadata": {
+    "source_file": "GST24005.pdf",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\PDF\\GST24005.pdf",
+    "extraction_time": "2026-03-19T09:04:39.056500",
+    "processing_seconds": 29.24,
+    "pdf_type": "digital",
+    "page_count": 1,
+    "ocr_engine": "none",
+    "tables_found": 1,
+    "text_length": 1544,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 3,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 4,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 5,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 6,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 7,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": true,
+        "totals_consistent": true
+      },
+      "line_item_count": 7
+    }
+  }
+}

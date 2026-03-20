@@ -1,0 +1,112 @@
+{
+  "invoice_number": "GST/25/035",
+  "invoice_date": "2025-01-16",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "NIREL DIGITALS",
+    "address": "Plot No. G1, H.No. 6-264/13/A/5, HAL Raghvendra Colony, Quthubullapur, Mandal Medchal Dist - Hyderabad- Telangana- 500055",
+    "email": "nireldigitals@gmail.com",
+    "phone": "9866272837",
+    "tax_id": "36ARKPC6820F1ZZ",
+    "website": null
+  },
+  "bill_to": {
+    "name": "SRIAN INFRASTRUCTURES PRIVATE LIMITED",
+    "address": "VARUNA TOWERS, SRI VENSAI3-64/VB/401/402 KOMPALLY",
+    "email": null,
+    "tax_id": "36AASCS9292F1ZL"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "Booklet - A5 Booklet, Page 18, Printed on 300gsm Mulite Colour, - Binding wiro",
+      "quantity": 50.0,
+      "unit": "NOS",
+      "unit_price": 75.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 3750.0
+    },
+    {
+      "line_number": 2,
+      "description": "Designing Charges",
+      "quantity": 1.0,
+      "unit": "NOS",
+      "unit_price": 500.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 500.0
+    }
+  ],
+  "subtotal": 4250.0,
+  "discount": null,
+  "tax_rate": 9.0,
+  "tax_amount": 765.0,
+  "shipping": null,
+  "total_amount": 5015.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": "NIREL DIGITALS\nBank A/C: 5267528699\nFor, NIREL DIGITALS\nBank IFSC: CBIN0285113\nBank Name: CENTRAL BANK OF INDIA\nBranch: BALA NAGAR",
+  "notes": null,
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": true,
+      "totals_consistent": true
+    },
+    "line_item_count": 2
+  },
+  "metadata": {
+    "source_file": "GST25035.pdf",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\PDF\\GST25035.pdf",
+    "extraction_time": "2026-03-19T09:14:03.918482",
+    "processing_seconds": 20.35,
+    "pdf_type": "digital",
+    "page_count": 1,
+    "ocr_engine": "none",
+    "tables_found": 1,
+    "text_length": 1159,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": true,
+        "totals_consistent": true
+      },
+      "line_item_count": 2
+    }
+  }
+}

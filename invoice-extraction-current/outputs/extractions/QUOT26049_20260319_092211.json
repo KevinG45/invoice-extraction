@@ -1,0 +1,160 @@
+{
+  "invoice_number": null,
+  "invoice_date": "2025-11-17",
+  "due_date": "2025-11-30",
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "NIREL DIGITALS",
+    "address": "Plot No. G1, H.No. 6-264/13/A/5, HAL Raghvendra Colony, Quthubullapur, Mandal Medchal Dist - Hyderabad- Telangana- 500055",
+    "email": "nireldigitals@gmail.com",
+    "phone": "9866272837",
+    "tax_id": "36ARKPC6820F1ZZ",
+    "website": null
+  },
+  "bill_to": {
+    "name": "AZISTA COMPOSITES PRIVATE LIMITED",
+    "address": "Melange TowersSY NO.80-844th Floor, C wing, Patrika Nagar, Madhapur, Hyderabad 500081",
+    "email": null,
+    "tax_id": "36AAVCA3438N1ZZ"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "VINYL - Air & Water Environmental Data Board Size 4ft X 6ft",
+      "quantity": 24.0,
+      "unit": "SQF",
+      "unit_price": 80.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 1920.0,
+      "hsn_sac": "9989"
+    },
+    {
+      "line_number": 2,
+      "description": "VINYL - Hazardous Waste Authorization Board Size 4ft X 6ft",
+      "quantity": 24.0,
+      "unit": "SQF",
+      "unit_price": 80.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 1920.0,
+      "hsn_sac": "9989"
+    },
+    {
+      "line_number": 3,
+      "description": "VINYL - Daily Head Count - ACPL Board Size 3ft X 2ft",
+      "quantity": 6.0,
+      "unit": "SQF",
+      "unit_price": 80.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 480.0,
+      "hsn_sac": "9989"
+    },
+    {
+      "line_number": 4,
+      "description": "Stciker - First Aid Box Details Stciker Size A4",
+      "quantity": 16.0,
+      "unit": "NOS",
+      "unit_price": 15.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 240.0,
+      "hsn_sac": "9989"
+    }
+  ],
+  "subtotal": 4560.0,
+  "discount": null,
+  "tax_rate": 9.0,
+  "tax_amount": 820.8,
+  "shipping": null,
+  "total_amount": 5380.8,
+  "amount_paid": null,
+  "amount_due": 5380.8,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": null,
+  "notes": "Goods ones sold will not be accepted\nSubject of Hyderabad Jurisdiction only",
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "MISSING_REQUIRED_FIELD: 'invoice_number' is null"
+    ],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 3,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 4,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": true,
+      "totals_consistent": true
+    },
+    "line_item_count": 4
+  },
+  "metadata": {
+    "source_file": "QUOT26049.pdf",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\PDF\\QUOT26049.pdf",
+    "extraction_time": "2026-03-19T09:22:11.717875",
+    "processing_seconds": 26.11,
+    "pdf_type": "digital",
+    "page_count": 1,
+    "ocr_engine": "none",
+    "tables_found": 1,
+    "text_length": 1301,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "MISSING_REQUIRED_FIELD: 'invoice_number' is null"
+      ],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 3,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 4,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": true,
+        "totals_consistent": true
+      },
+      "line_item_count": 4
+    }
+  }
+}

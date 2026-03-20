@@ -1,0 +1,192 @@
+{
+  "invoice_number": "ASI/25-26",
+  "invoice_date": "13.01.2026",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "Shree cement Limited-Raipur",
+    "address": "Shree cement Limited-Raipur\nSRMC SERIKHERI RAIPUR, Plot No 377/4 & 383/1,Selkheri pirda Road opposite Dam,Seri District - Raipur ,Chhattisgarh",
+    "email": null,
+    "phone": null,
+    "tax_id": "22AACC8796G1Z1 State Name :Chhattishgarh, Code :22",
+    "website": null
+  },
+  "bill_to": {
+    "name": "Shree cement Limited-Raipur",
+    "address": "Shree cement Limited-Raipur\nSRMC SERIKHERI RAIPUR, Plot No 377/4 & 383/1,Selkheri pirda Road opposite Dam,Seri District - Raipur ,Chhattisgarh",
+    "email": null,
+    "tax_id": "22AACC8796G1Z1 State Name :Chhattishgarh, Code :22"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "995416 - Compouned wall Cladding works - P&F:GI SHEETS 0.5MM -150GSM Compouned",
+      "quantity": 15.91,
+      "unit": "MT",
+      "unit_price": 80000.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 1272800.0
+    },
+    {
+      "line_number": 2,
+      "description": "995416 - wall cladding work - P&F:TUBULAR STRUCTURAL STEEL:AT ALL HEIGHTS",
+      "quantity": 1501.8,
+      "unit": "SQ MTR",
+      "unit_price": 530.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 795954.0
+    },
+    {
+      "line_number": 3,
+      "description": "995416 - Mixer ,Hopper and compressor - P&F:GI SHEETS 0.5MM -150GSM Mixer ,Hopper",
+      "quantity": 5.51,
+      "unit": "MT",
+      "unit_price": 80000.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 440800.0
+    },
+    {
+      "line_number": 4,
+      "description": "995416 - and compressor - P&F:TUBULAR STRUCTURAL STEEL:AT ALL HEIGHTS RM",
+      "quantity": 688.98,
+      "unit": "SA MTR",
+      "unit_price": 530.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 365159.4
+    },
+    {
+      "line_number": 5,
+      "description": "995416 - Bin covering works - P&F:GI SHEETS 0.5MM -150GSM RM",
+      "quantity": 13.275,
+      "unit": "MT",
+      "unit_price": 80000.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 1062000.0
+    },
+    {
+      "line_number": 6,
+      "description": "995416 - Bins sheeting work",
+      "quantity": 1022.5,
+      "unit": "SQ MTR",
+      "unit_price": 530.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 541925.0
+    }
+  ],
+  "subtotal": 4478638.4,
+  "discount": null,
+  "tax_rate": 18.0,
+  "tax_amount": 806154.91,
+  "shipping": null,
+  "total_amount": 5284793.31,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": "Bank A/C: 0888102000019947\nBank IFSC: IBKL0000888",
+  "notes": null,
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 3,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 4,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 5,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 6,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": true,
+      "totals_consistent": true
+    },
+    "line_item_count": 6
+  },
+  "metadata": {
+    "source_file": "shree_cement_final _report.pdf",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\PDF\\shree_cement_final _report.pdf",
+    "extraction_time": "2026-03-19T09:22:44.705920",
+    "processing_seconds": 32.99,
+    "pdf_type": "digital",
+    "page_count": 1,
+    "ocr_engine": "none",
+    "tables_found": 1,
+    "text_length": 1734,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 3,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 4,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 5,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 6,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": true,
+        "totals_consistent": true
+      },
+      "line_item_count": 6
+    }
+  }
+}

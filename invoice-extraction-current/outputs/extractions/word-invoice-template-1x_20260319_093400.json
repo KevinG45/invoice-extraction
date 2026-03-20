@@ -1,0 +1,132 @@
+{
+  "invoice_number": "INV-000004",
+  "invoice_date": "2023-05-18",
+  "due_date": "2023-05-18",
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "Shlp To",
+    "address": null,
+    "email": null,
+    "phone": null,
+    "tax_id": null,
+    "website": null
+  },
+  "bill_to": {
+    "name": "Ms. Joanne L. Fisher",
+    "address": null,
+    "email": null,
+    "tax_id": null
+  },
+  "ship_to": {
+    "name": null,
+    "address": "4507 Lake Floyd Circle, Chevy Chase, 20815 Maryland"
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "BALANCE DUE - Ms. Joanne L. Fisher Invoices INV-000004 - Chevy Chase Terms Due Receipt - Due Date 18 May 2023",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 99.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 359.7
+    },
+    {
+      "line_number": 2,
+      "description": "Parable",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 149.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 343.35
+    },
+    {
+      "line_number": 3,
+      "description": "Wireless Webcam",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 79.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 79.0
+    }
+  ],
+  "subtotal": 327.0,
+  "discount": null,
+  "tax_rate": 5.0,
+  "tax_amount": 16.365,
+  "shipping": null,
+  "total_amount": 343.365,
+  "amount_paid": null,
+  "amount_due": 343.365,
+  "currency": "USD",
+  "payment_terms": "Full payment Is due upon receipt of this invorce. Late payments may incur addinonal charges of interest as per (he applicable jaws.",
+  "payment_method": null,
+  "bank_details": null,
+  "notes": null,
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 3,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": null,
+      "totals_consistent": true
+    },
+    "line_item_count": 3
+  },
+  "metadata": {
+    "source_file": "word-invoice-template-1x.jpg",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\IMAGES\\word-invoice-template-1x.jpg",
+    "extraction_time": "2026-03-19T09:34:00.524761",
+    "processing_seconds": 31.52,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 601,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 3,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": null,
+        "totals_consistent": true
+      },
+      "line_item_count": 3
+    }
+  }
+}

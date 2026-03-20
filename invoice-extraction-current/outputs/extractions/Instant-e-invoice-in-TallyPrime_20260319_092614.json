@@ -1,0 +1,96 @@
+{
+  "invoice_number": null,
+  "invoice_date": "20-Dec-20",
+  "due_date": null,
+  "purchase_order_number": "12th Cross",
+  "vendor": {
+    "name": "Surabhi Hardwares, Bangalore",
+    "address": "HSR Layout SHB/456/20, Bangalore",
+    "email": null,
+    "phone": null,
+    "tax_id": "29AACCT3705E000",
+    "website": null
+  },
+  "bill_to": {
+    "name": "Kiran Enterprises",
+    "address": "12th Cross, Bangalore",
+    "email": null,
+    "tax_id": "29AAFFC8126N1ZZ"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "42MM** 1005",
+      "quantity": 7.0,
+      "unit": "No",
+      "unit_price": 500.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 3500.0
+    }
+  ],
+  "subtotal": 3500.0,
+  "discount": null,
+  "tax_rate": 18.0,
+  "tax_amount": 630.0,
+  "shipping": null,
+  "total_amount": 4130.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": null,
+  "notes": null,
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "MISSING_REQUIRED_FIELD: 'invoice_number' is null"
+    ],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": true,
+      "totals_consistent": true
+    },
+    "line_item_count": 1
+  },
+  "metadata": {
+    "source_file": "Instant-e-invoice-in-TallyPrime.jpg",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\IMAGES\\Instant-e-invoice-in-TallyPrime.jpg",
+    "extraction_time": "2026-03-19T09:26:14.440782",
+    "processing_seconds": 17.2,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 1336,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "MISSING_REQUIRED_FIELD: 'invoice_number' is null"
+      ],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": true,
+        "totals_consistent": true
+      },
+      "line_item_count": 1
+    }
+  }
+}

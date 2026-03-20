@@ -1,0 +1,116 @@
+{
+  "invoice_number": "INV26",
+  "invoice_date": null,
+  "due_date": "2020-03-31",
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "Raga Pvt Ltd",
+    "address": "$ Usman Road, T. Nagar, Chennai 600027, Tamil Nadu, India",
+    "email": "ragacheggmail.com",
+    "phone": "0446 258636222",
+    "tax_id": "33AAAGPO685F2ZH",
+    "website": null
+  },
+  "bill_to": {
+    "name": "Anu Labs",
+    "address": "Adyar, Tamil Nadu Chennai - 600077, Tamil Nadu, India",
+    "email": "anuggmail.com",
+    "tax_id": "33AQZPS2365E22E"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "Mtg.Date Exp.Date UNRD GST 28%",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 20000.0,
+      "discount": null,
+      "tax_rate": 28.0,
+      "total": 20000.0
+    },
+    {
+      "line_number": 2,
+      "description": "Mtg.Date Exp.Date UNRD GST 5%",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 40600.0,
+      "discount": null,
+      "tax_rate": 5.0,
+      "total": 40600.0
+    }
+  ],
+  "subtotal": 60600.0,
+  "discount": null,
+  "tax_rate": null,
+  "tax_amount": 121200.0,
+  "shipping": null,
+  "total_amount": 78368.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": null,
+  "notes": "Goods once sold will not he taken back or exchange.\nProduct supplied In Cryo Shipper has to be written same day immediatety.\nSubject to Bengaluru jurisdiction",
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "TOTAL_MISMATCH: Expected total 181800.00 (subtotal+tax-discount+shipping), but got 78368.00 (diff: 103432.00)"
+    ],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": null,
+      "totals_consistent": false
+    },
+    "line_item_count": 2
+  },
+  "metadata": {
+    "source_file": "oub_GST_Invoice_Format.png",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\IMAGES\\oub_GST_Invoice_Format.png",
+    "extraction_time": "2026-03-19T09:31:32.060546",
+    "processing_seconds": 20.03,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 1026,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "TOTAL_MISMATCH: Expected total 181800.00 (subtotal+tax-discount+shipping), but got 78368.00 (diff: 103432.00)"
+      ],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": null,
+        "totals_consistent": false
+      },
+      "line_item_count": 2
+    }
+  }
+}

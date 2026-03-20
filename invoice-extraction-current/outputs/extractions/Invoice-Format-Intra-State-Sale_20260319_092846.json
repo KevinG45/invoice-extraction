@@ -1,0 +1,96 @@
+{
+  "invoice_number": null,
+  "invoice_date": "02 Oct 2024",
+  "due_date": "2024-10-02",
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "V K Control System Private Limited",
+    "address": null,
+    "email": "sales@sleekbill.in",
+    "phone": null,
+    "tax_id": "27AAFCV2449G1Z7",
+    "website": "www.sleekbill.in"
+  },
+  "bill_to": {
+    "name": "Hinjewadi - Wakad Road, Hinjewadi Pune, MH (27) 444602, IN",
+    "address": null,
+    "email": null,
+    "tax_id": "27AAFCV2449G127"
+  },
+  "ship_to": {
+    "name": "Kovid Kovid, Delhi Address, New Dethi, DL (07) 100100, IN",
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "Hard Rubber 18% Item - scrap; - hard rubber",
+      "quantity": 4017.0,
+      "unit": null,
+      "unit_price": 24.89,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 100000.0
+    }
+  ],
+  "subtotal": 100000.0,
+  "discount": null,
+  "tax_rate": 18.0,
+  "tax_amount": 18000.0,
+  "shipping": null,
+  "total_amount": 118000.0,
+  "amount_paid": null,
+  "amount_due": 118000.0,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": "ICICI LTD., Account Number: 696905600545, Branch Name: JAY STHAMBH, AMRAVATI, IFSC Code: ICIC0006969",
+  "notes": "1. Check the invoice amount and confirm.\n2. Payment should be made to the mentioned account only.\n3. The 30-day return policy is applicable to non-broken products only.",
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "MISSING_REQUIRED_FIELD: 'invoice_number' is null"
+    ],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": true,
+      "totals_consistent": true
+    },
+    "line_item_count": 1
+  },
+  "metadata": {
+    "source_file": "Invoice-Format-Intra-State-Sale.png",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\IMAGES\\Invoice-Format-Intra-State-Sale.png",
+    "extraction_time": "2026-03-19T09:28:46.236358",
+    "processing_seconds": 26.21,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 1802,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "MISSING_REQUIRED_FIELD: 'invoice_number' is null"
+      ],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": true,
+        "totals_consistent": true
+      },
+      "line_item_count": 1
+    }
+  }
+}

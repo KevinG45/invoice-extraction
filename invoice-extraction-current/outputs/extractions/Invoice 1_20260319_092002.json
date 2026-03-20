@@ -1,0 +1,92 @@
+{
+  "invoice_number": "PC-90-0175/GRP",
+  "invoice_date": "2025-11-10",
+  "due_date": "2025-11-15",
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "Percepta Consulting",
+    "address": "B-302, Patels Brightview, Kowkoor, Secunderabad, Telangana - 500010",
+    "email": "BrigInderSethi@gmail.com",
+    "phone": null,
+    "tax_id": "36AEDPB7140R2Z9",
+    "website": "www.BrigInderSethi.com"
+  },
+  "bill_to": {
+    "name": "GRP Leadership Catalyst Program - First Payment",
+    "address": null,
+    "email": null,
+    "tax_id": null
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "GRP Leadership Catalyst Program - First Payment",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 572500.0,
+      "discount": null,
+      "tax_rate": 0.0,
+      "total": 572500.0
+    }
+  ],
+  "subtotal": 572500.0,
+  "discount": null,
+  "tax_rate": 0.0,
+  "tax_amount": null,
+  "shipping": null,
+  "total_amount": 572500.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": "Account Name - Percepta Consulting\nType - Current\nAccount Number - 9404922195\nMICR Code - 500485038 ₹ 5,72,500.00\nIFSC Code - KKBK0007531\nBranch - Trimulgherry\nAddress - Plot No.9, Chandragiri Colony, Trimulgherry,\nSecunderabad, Hyderabad, Telangana - 500009",
+  "notes": null,
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": null,
+      "totals_consistent": true
+    },
+    "line_item_count": 1
+  },
+  "metadata": {
+    "source_file": "Invoice 1.pdf",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\PDF\\Invoice 1.pdf",
+    "extraction_time": "2026-03-19T09:20:02.512119",
+    "processing_seconds": 30.92,
+    "pdf_type": "digital",
+    "page_count": 1,
+    "ocr_engine": "none",
+    "tables_found": 1,
+    "text_length": 627,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": null,
+        "totals_consistent": true
+      },
+      "line_item_count": 1
+    }
+  }
+}

@@ -1,0 +1,335 @@
+{
+  "invoice_number": "36000010866",
+  "invoice_date": "2025-11-22",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "KEVENTER AGRO LIMITED",
+    "address": "KEVENTER AGRO LTD C/O COLD STAR, PLOT NO 1, BLOCK NO PAN :AABCK1716D35, AUTO NAGAR, Insurance Policy No : DUPLICATE FOR TRANSPORTER City :HYDERABAD-500070 IEC No: 0288036387 State :Telangana State Code :36 FSSAI No: 13621012000953 TRIPLICATE FOR SUPPLIER",
+    "email": null,
+    "phone": "+913371056200",
+    "tax_id": "36AABCK1716D1Z1",
+    "website": null
+  },
+  "bill_to": {
+    "name": "INNOVATIVE RETAIL CONCEPTS PVT . LTD.-HYDERABAD",
+    "address": "SURVEY NO: 60/1 , GUNDLAPOCHAMPALLY BEHIND HYDERABAD Pin : 500043 State : Telangana State Code :36 Transport Vendor Code: V000780 GSTIN : 36AACCI2053A1Z8 PAN : AACCI2053A",
+    "email": null,
+    "tax_id": "36AACCI2053A1Z8"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "Keventer French Fries 720 20041000 6.00 0.00 PKT - GM (F25)",
+      "hsn_sac": null,
+      "quantity": 4.32,
+      "unit_price": 221.29,
+      "tax_rate": 0.0,
+      "line_total": 955.98,
+      "item_code": null,
+      "discount": null,
+      "tax_amount": null,
+      "unit": "PKT"
+    },
+    {
+      "line_number": 2,
+      "description": "KEVENTER DARJEELING 16010000 8.00 0.00 PKT - CHICKEN MOMO 8 PCS - (F25)",
+      "hsn_sac": null,
+      "quantity": 1.4,
+      "unit_price": 533.31,
+      "tax_rate": 0.0,
+      "line_total": 746.64,
+      "item_code": null,
+      "discount": null,
+      "tax_amount": null,
+      "unit": "PKT"
+    },
+    {
+      "line_number": 3,
+      "description": "KEVENTER CHICKEN 16010000 6.00 0.00 PKT - FINGER 400 GM (F25A)",
+      "hsn_sac": null,
+      "quantity": 2.4,
+      "unit_price": 491.68,
+      "tax_rate": 0.0,
+      "line_total": 1180.02,
+      "item_code": null,
+      "discount": null,
+      "tax_amount": null,
+      "unit": "PKT"
+    },
+    {
+      "line_number": 4,
+      "description": "KEVENTER CHICKEN 16010000 42.00 0.00 PKT - SAUSAGES BREAKFAST 500 - GM (F25B)",
+      "hsn_sac": null,
+      "quantity": 21.0,
+      "unit_price": 430.66,
+      "tax_rate": 0.0,
+      "line_total": 9043.86,
+      "item_code": null,
+      "discount": null,
+      "tax_amount": null,
+      "unit": "PKT"
+    },
+    {
+      "line_number": 5,
+      "description": "KEVENTER CHICKEN 16010000 42.00 0.00 PKT - NUGGET 400 GM (F25B)",
+      "hsn_sac": null,
+      "quantity": 16.8,
+      "unit_price": 500.0,
+      "tax_rate": 0.0,
+      "line_total": 8400.0,
+      "item_code": null,
+      "discount": null,
+      "tax_amount": null,
+      "unit": "PKT"
+    },
+    {
+      "line_number": 6,
+      "description": "KEVENTER MOZZARELLA 21069099 12.00 0.00 PKT - CHEESE STICK 300 GM - (F25B)",
+      "hsn_sac": null,
+      "quantity": 3.6,
+      "unit_price": 662.23,
+      "tax_rate": 0.0,
+      "line_total": 2384.04,
+      "item_code": null,
+      "discount": null,
+      "tax_amount": null,
+      "unit": "PKT"
+    },
+    {
+      "line_number": 7,
+      "description": "KEVENTER CRISPY ONION 20049000 6.00 0.00 PKT - RING 400 GM (F25B)",
+      "hsn_sac": null,
+      "quantity": 2.4,
+      "unit_price": 413.33,
+      "tax_rate": 0.0,
+      "line_total": 991.98,
+      "item_code": null,
+      "discount": null,
+      "tax_amount": null,
+      "unit": "PKT"
+    },
+    {
+      "line_number": 8,
+      "description": "2.5",
+      "quantity": 23.9,
+      "unit_price": 2.5,
+      "line_total": 23.9,
+      "item_code": null,
+      "hsn_sac": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null
+    },
+    {
+      "line_number": 9,
+      "description": "2.5",
+      "quantity": 484.27,
+      "unit_price": 2.5,
+      "line_total": 484.27,
+      "item_code": null,
+      "hsn_sac": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null
+    },
+    {
+      "line_number": 10,
+      "description": "2.5",
+      "quantity": 59.6,
+      "unit_price": 2.5,
+      "line_total": 59.6,
+      "item_code": null,
+      "hsn_sac": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null
+    },
+    {
+      "line_number": 11,
+      "description": "2.5",
+      "quantity": 24.8,
+      "unit_price": 2.5,
+      "line_total": 24.8,
+      "item_code": null,
+      "hsn_sac": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null
+    }
+  ],
+  "subtotal": 5192.0,
+  "discount": null,
+  "tax_rate": 2.5,
+  "tax_amount": 24887.66,
+  "shipping": null,
+  "total_amount": 24887.66,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": null,
+  "notes": "GST is not payable on Reverse Charge",
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "LINE_ITEM_MATH_ERROR: Line 8 qty×price mismatch — Expected 59.75, got 23.9 (diff: 35.85)",
+      "LINE_ITEM_MATH_ERROR: Line 9 qty×price mismatch — Expected 1210.67, got 484.27 (diff: 726.40)",
+      "LINE_ITEM_MATH_ERROR: Line 10 qty×price mismatch — Expected 149.0, got 59.6 (diff: 89.40)",
+      "LINE_ITEM_MATH_ERROR: Line 11 qty×price mismatch — Expected 62.0, got 24.8 (diff: 37.20)",
+      "SUBTOTAL_MISMATCH: Sum of line items is 24295.09, but subtotal is 5192.00 (diff: 19103.09)",
+      "TOTAL_MISMATCH: Expected total 30079.66 (subtotal+tax-discount+shipping), but got 24887.66 (diff: 5192.00)"
+    ],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 3,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 4,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 5,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 6,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 7,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 8,
+          "ok": false,
+          "note": "Expected 59.75, got 23.9 (diff: 35.85)"
+        },
+        {
+          "line_number": 9,
+          "ok": false,
+          "note": "Expected 1210.67, got 484.27 (diff: 726.40)"
+        },
+        {
+          "line_number": 10,
+          "ok": false,
+          "note": "Expected 149.0, got 59.6 (diff: 89.40)"
+        },
+        {
+          "line_number": 11,
+          "ok": false,
+          "note": "Expected 62.0, got 24.8 (diff: 37.20)"
+        }
+      ],
+      "line_items_sum_to_subtotal": false,
+      "totals_consistent": false
+    },
+    "line_item_count": 11
+  },
+  "metadata": {
+    "source_file": "Name INNOVATIVE RETAIL CONCEPTS PVT . LTD.-HYDERABAD.pdf",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\PDF\\Name INNOVATIVE RETAIL CONCEPTS PVT . LTD.-HYDERABAD.pdf",
+    "extraction_time": "2026-03-19T09:21:04.410894",
+    "processing_seconds": 41.88,
+    "pdf_type": "digital",
+    "page_count": 2,
+    "ocr_engine": "none",
+    "tables_found": 4,
+    "text_length": 3817,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "LINE_ITEM_MATH_ERROR: Line 8 qty×price mismatch — Expected 59.75, got 23.9 (diff: 35.85)",
+        "LINE_ITEM_MATH_ERROR: Line 9 qty×price mismatch — Expected 1210.67, got 484.27 (diff: 726.40)",
+        "LINE_ITEM_MATH_ERROR: Line 10 qty×price mismatch — Expected 149.0, got 59.6 (diff: 89.40)",
+        "LINE_ITEM_MATH_ERROR: Line 11 qty×price mismatch — Expected 62.0, got 24.8 (diff: 37.20)",
+        "SUBTOTAL_MISMATCH: Sum of line items is 24295.09, but subtotal is 5192.00 (diff: 19103.09)",
+        "TOTAL_MISMATCH: Expected total 30079.66 (subtotal+tax-discount+shipping), but got 24887.66 (diff: 5192.00)"
+      ],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 3,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 4,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 5,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 6,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 7,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 8,
+            "ok": false,
+            "note": "Expected 59.75, got 23.9 (diff: 35.85)"
+          },
+          {
+            "line_number": 9,
+            "ok": false,
+            "note": "Expected 1210.67, got 484.27 (diff: 726.40)"
+          },
+          {
+            "line_number": 10,
+            "ok": false,
+            "note": "Expected 149.0, got 59.6 (diff: 89.40)"
+          },
+          {
+            "line_number": 11,
+            "ok": false,
+            "note": "Expected 62.0, got 24.8 (diff: 37.20)"
+          }
+        ],
+        "line_items_sum_to_subtotal": false,
+        "totals_consistent": false
+      },
+      "line_item_count": 11
+    }
+  }
+}

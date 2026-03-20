@@ -1,0 +1,100 @@
+{
+  "invoice_number": null,
+  "invoice_date": "23/06/2025",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "PRR AQUA TECHNOLOGIES",
+    "address": "#15-5-351, Osman Shahi, Afzalgunj, Nampally, Hyderabad-500012, T.S.",
+    "email": "srikanth121397@gmail.com.",
+    "phone": null,
+    "tax_id": "36ATBPB2706L1ZZ",
+    "website": null
+  },
+  "bill_to": {
+    "name": "St. MICHAEL’s SCHOOL",
+    "address": null,
+    "email": null,
+    "tax_id": null
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "EG SOFT CHEMICAL - (6 can s)",
+      "quantity": 38249022.0,
+      "unit": "ltr",
+      "unit_price": 0.0,
+      "discount": null,
+      "tax_rate": 0.09,
+      "total": 11100.0
+    }
+  ],
+  "subtotal": 11100.0,
+  "discount": null,
+  "tax_rate": 0.09,
+  "tax_amount": 999.0,
+  "shipping": null,
+  "total_amount": 13098.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": "*No warranty.\n*No Return No Exchange.\n100%Advance Payment",
+  "payment_method": null,
+  "bank_details": "Bank Name : State Bank of India\nTelangana-500010,\nBank A/c. No: 42044293639\nIFSC Code : SBIN0020459",
+  "notes": "*Note: Above Price Including Transport Charges ,Iabour Charges",
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "MISSING_REQUIRED_FIELD: 'invoice_number' is null",
+      "LINE_ITEM_MATH_ERROR: Line 1 qty×price mismatch — Expected 0.0, got 11100.0 (diff: 11100.00)",
+      "TOTAL_MISMATCH: Expected total 12099.00 (subtotal+tax-discount+shipping), but got 13098.00 (diff: 999.00)"
+    ],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": false,
+          "note": "Expected 0.0, got 11100.0 (diff: 11100.00)"
+        }
+      ],
+      "line_items_sum_to_subtotal": true,
+      "totals_consistent": false
+    },
+    "line_item_count": 1
+  },
+  "metadata": {
+    "source_file": "St,Micheals Invoices.pdf",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\PDF\\St,Micheals Invoices.pdf",
+    "extraction_time": "2026-03-19T09:23:01.108166",
+    "processing_seconds": 16.4,
+    "pdf_type": "digital",
+    "page_count": 1,
+    "ocr_engine": "none",
+    "tables_found": 3,
+    "text_length": 1130,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "MISSING_REQUIRED_FIELD: 'invoice_number' is null",
+        "LINE_ITEM_MATH_ERROR: Line 1 qty×price mismatch — Expected 0.0, got 11100.0 (diff: 11100.00)",
+        "TOTAL_MISMATCH: Expected total 12099.00 (subtotal+tax-discount+shipping), but got 13098.00 (diff: 999.00)"
+      ],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": false,
+            "note": "Expected 0.0, got 11100.0 (diff: 11100.00)"
+          }
+        ],
+        "line_items_sum_to_subtotal": true,
+        "totals_consistent": false
+      },
+      "line_item_count": 1
+    }
+  }
+}

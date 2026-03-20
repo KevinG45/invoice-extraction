@@ -1,0 +1,92 @@
+{
+  "invoice_number": "GST/24/027",
+  "invoice_date": "2024-10-31",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "NIREL DIGITALS",
+    "address": "Plot No. G1, H.No. 6-264/13/A/5, HAL Raghvendra Colony, Quthubullapur, Mandal Medchal Dist - Hyderabad- Telangana- 500055",
+    "email": "nireldigitals@gmail.com",
+    "phone": "9866272837",
+    "tax_id": "36ARKPC6820F1ZZ",
+    "website": null
+  },
+  "bill_to": {
+    "name": "Shine Enterprises",
+    "address": "Plot No 66RAGHAVENDRA COLONY, QUTHBULLAPUR",
+    "email": null,
+    "tax_id": "36GRZPP5856D1ZV"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "Digital Print Out - with Lamination 13x19",
+      "quantity": 1500.0,
+      "unit": "NOS",
+      "unit_price": 26.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 39000.0
+    }
+  ],
+  "subtotal": 39000.0,
+  "discount": null,
+  "tax_rate": 18.0,
+  "tax_amount": 7020.0,
+  "shipping": null,
+  "total_amount": 46020.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": "NIREL DIGITALS\nBank A/C: 5267528699\nFor, NIREL DIGITALS\nBank IFSC: CBIN0285113\nBank Name: CENTRAL BANK OF INDIA\nBranch: BALA NAGAR",
+  "notes": null,
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": true,
+      "totals_consistent": true
+    },
+    "line_item_count": 1
+  },
+  "metadata": {
+    "source_file": "GST24027.pdf",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\PDF\\GST24027.pdf",
+    "extraction_time": "2026-03-19T09:11:19.008100",
+    "processing_seconds": 17.66,
+    "pdf_type": "digital",
+    "page_count": 1,
+    "ocr_engine": "none",
+    "tables_found": 1,
+    "text_length": 1065,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": true,
+        "totals_consistent": true
+      },
+      "line_item_count": 1
+    }
+  }
+}

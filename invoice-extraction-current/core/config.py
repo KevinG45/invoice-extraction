@@ -33,10 +33,11 @@ OCR_LANG = os.getenv("OCR_LANG", "en")
 IMAGE_DPI = int(os.getenv("IMAGE_DPI", "300"))
 
 # ── LLM Settings (Ollama) ─────────────────────────────────────────────────
-LLM_MODEL = os.getenv("LLM_MODEL", "qwen2.5:3b")    # Ollama model name
+LLM_MODEL = os.getenv("LLM_MODEL", "llama3")        # Ollama model name (llama3 recommended; qwen2.5:3b as lightweight alt)
 LLM_BASE_URL = os.getenv("LLM_BASE_URL", "http://localhost:11434")
 LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0"))
-LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "3"))
+LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "2"))
+LLM_TIMEOUT = int(os.getenv("LLM_TIMEOUT", "60"))   # seconds; llama3 on CPU: ~40-50s per call
 
 # ── Extraction Thresholds ─────────────────────────────────────────────────
 MIN_TEXT_CHARS = int(os.getenv("MIN_TEXT_CHARS", "50"))       # Digital vs scanned threshold

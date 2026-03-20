@@ -1,0 +1,92 @@
+{
+  "invoice_number": "GST-008",
+  "invoice_date": "2023-12-28",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "NIREL DIGITALS",
+    "address": "Plot No. G1, H.No. 6-264/13/A/5, HAL Raghvendra Colony, Quthubullapur, Mandal Medchal Dist - Hyderabad- Telangana- 500055",
+    "email": "nireldigitals@gmail.com",
+    "phone": "9866272837",
+    "tax_id": "36ARKPC6820F1ZZ",
+    "website": null
+  },
+  "bill_to": {
+    "name": "Shine Enterprises",
+    "address": "Plot No 66RAGHAVENDRA COLONY, QUTHBULLAPUR",
+    "email": null,
+    "tax_id": "36GRZPP5856D1ZV"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "Lamination",
+      "quantity": 2000.0,
+      "unit": "NOS",
+      "unit_price": 8.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 16000.0
+    }
+  ],
+  "subtotal": 16000.0,
+  "discount": null,
+  "tax_rate": 18.0,
+  "tax_amount": 2880.0,
+  "shipping": null,
+  "total_amount": 18880.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": "NIREL DIGITALS\nBank A/C: 5267528699\nFor, NIREL DIGITALS\nBank IFSC: CBIN0285113\nBank Name: CENTRAL BANK OF INDIA\nBranch: BALA NAGAR",
+  "notes": null,
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": true,
+      "totals_consistent": true
+    },
+    "line_item_count": 1
+  },
+  "metadata": {
+    "source_file": "GST008.pdf",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\PDF\\GST008.pdf",
+    "extraction_time": "2026-03-19T08:59:43.663564",
+    "processing_seconds": 16.82,
+    "pdf_type": "digital",
+    "page_count": 1,
+    "ocr_engine": "none",
+    "tables_found": 1,
+    "text_length": 1045,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": true,
+        "totals_consistent": true
+      },
+      "line_item_count": 1
+    }
+  }
+}

@@ -73,12 +73,16 @@ class InvoicePipeline:
         # ── Stage 1: Detect file type ─────────────────────────────────────
         t = time.time()
         from core.detector import detect_file_type
+        _t_stage = time.time()
         pdf_type = detect_file_type(path)
+        print(f"[TIMING] detect_file_type: {time.time()-_t_stage:.1f}s")
         logger.info("[pipeline] Stage 1 - Detection: '%s' (%.2fs)", pdf_type, time.time() - t)
 
         # ── Stage 2: Extract raw text ─────────────────────────────────────
         t = time.time()
+        _t_stage = time.time()
         raw_data = self._extract_text(path, pdf_type)
+        print(f"[TIMING] _extract_text: {time.time()-_t_stage:.1f}s")
         full_text = raw_data.get("full_text", "")
         page_count = raw_data.get("page_count", 1)
         logger.info(
@@ -88,25 +92,34 @@ class InvoicePipeline:
 
         # ── Stage 3: Extract tables ───────────────────────────────────────
         t = time.time()
+        _t_stage = time.time()
         tables = self._extract_tables(path, pdf_type)
+        print(f"[TIMING] _extract_tables: {time.time()-_t_stage:.1f}s")
         logger.info("[pipeline] Stage 3 - Tables: %d found (%.2fs)", len(tables), time.time() - t)
 
         # ── Stage 4: LLM Key Information Extraction ───────────────────────
         t = time.time()
+        _t_stage = time.time()
         invoice_fields = self._extract_with_llm(full_text)
+        print(f"[TIMING] _extract_with_llm: {time.time()-_t_stage:.1f}s")
         logger.info(
             "[pipeline] Stage 4 - LLM extraction: %d fields (%.2fs)",
             len(invoice_fields), time.time() - t,
         )
 
         # ── Stage 4b: Regex backfill for fields the LLM missed ────────────
+        _t_stage = time.time()
         invoice_fields = self._backfill_from_regex(invoice_fields, full_text)
+        print(f"[TIMING] _backfill_from_regex: {time.time()-_t_stage:.1f}s")
 
         # ── Stage 4c: Logo-based vendor name fallback ─────────────────────
         vendor_obj = invoice_fields.get("vendor") or {}
-        if not vendor_obj.get("name"):
+        if not vendor_obj.get("name") and pdf_type == "image":
+            # Only run on image files — EasyOCR cannot process PDFs directly
             from core.logo_extractor import extract_vendor_from_logo
+            _t_stage = time.time()
             logo_result = extract_vendor_from_logo(path)
+            print(f"[TIMING] extract_vendor_from_logo: {time.time()-_t_stage:.1f}s")
             if logo_result["vendor_name"] is not None:
                 vendor_obj["name"] = logo_result["vendor_name"]
                 invoice_fields.setdefault("vendor", vendor_obj)
@@ -120,7 +133,9 @@ class InvoicePipeline:
         if not bill_to_obj.get("name"):
             from core.llm_extractor import extract_customer_name
             known_vendor = (invoice_fields.get("vendor") or {}).get("name")
+            _t_stage = time.time()
             customer_name = extract_customer_name(full_text, vendor_name=known_vendor)
+            print(f"[TIMING] extract_customer_name: {time.time()-_t_stage:.1f}s")
             if customer_name:
                 bill_to_obj["name"] = customer_name
                 invoice_fields.setdefault("bill_to", bill_to_obj)
@@ -128,7 +143,9 @@ class InvoicePipeline:
 
         # ── Stage 5: Merge table data into line_items if needed ───────────
         t = time.time()
+        _t_stage = time.time()
         invoice_fields = self._merge_tables_into_line_items(invoice_fields, tables)
+        print(f"[TIMING] _merge_tables_into_line_items: {time.time()-_t_stage:.1f}s")
         logger.info(
             "[pipeline] Stage 5 - Merge: %d line items (%.2fs)",
             len(invoice_fields.get("line_items", [])), time.time() - t,
@@ -136,7 +153,9 @@ class InvoicePipeline:
 
         # ── Stage 5b: Enhance line items with text-based extraction ────
         t = time.time()
+        _t_stage = time.time()
         invoice_fields = self._enhance_line_items_from_text(invoice_fields, full_text)
+        print(f"[TIMING] _enhance_line_items_from_text: {time.time()-_t_stage:.1f}s")
         logger.info(
             "[pipeline] Stage 5b - Text enhancement: %d line items (%.2fs)",
             len(invoice_fields.get("line_items", [])), time.time() - t,
@@ -145,7 +164,9 @@ class InvoicePipeline:
         # ── Stage 6: Validate ─────────────────────────────────────────────
         t = time.time()
         from core.validator import validate_invoice
+        _t_stage = time.time()
         invoice_fields = validate_invoice(invoice_fields)
+        print(f"[TIMING] validate_invoice: {time.time()-_t_stage:.1f}s")
         validation = invoice_fields.get("validation", {})
         if validation.get("passed"):
             status = "PASSED"
@@ -202,6 +223,17 @@ class InvoicePipeline:
                     fields["subtotal"] = rx_sub
                     fields["total_amount"] = rx_tot
                     fields["tax_amount"] = rx_tax
+
+        # Currency override: if regex detects INR signals (₹, GSTIN, Rs), force INR
+        # regardless of what the LLM returned — GST invoices are always INR
+        rx_currency = regex_result.get("currency")
+        if rx_currency == "INR":
+            if fields.get("currency") != "INR":
+                logger.info("[pipeline] Currency override: %s → INR (GSTIN/₹ detected in text)",
+                            fields.get("currency"))
+            fields["currency"] = "INR"
+        elif fields.get("currency") is None and rx_currency:
+            fields["currency"] = rx_currency
 
         # Backfill null nested fields
         vendor = fields.get("vendor") or {}
@@ -440,8 +472,14 @@ class InvoicePipeline:
                 )
 
             # Fix unit_price using the corrected quantity
+            # Use tax_rate to strip GST before dividing (avoids 18%-inflated prices)
             if total and qty and qty > 0:
-                expected_price = round(total / qty, 2)
+                tax_rate = item.get("tax_rate")
+                if tax_rate and tax_rate > 0:
+                    taxable = total / (1 + tax_rate / 100.0)
+                else:
+                    taxable = total
+                expected_price = round(taxable / qty, 2)
                 current_price = item.get("unit_price")
                 if current_price is None or abs(qty * current_price - total) > 0.50:
                     item["unit_price"] = expected_price

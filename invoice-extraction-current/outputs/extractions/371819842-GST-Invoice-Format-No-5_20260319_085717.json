@@ -1,0 +1,123 @@
+{
+  "invoice_number": null,
+  "invoice_date": "14-Dec-17",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "TechGuruPlus",
+    "address": "OKHLA INDUSTRIAL AREA, PHASE-1\nNEW DELHI - 110020,\nCONTACT:- 9876543210",
+    "email": null,
+    "phone": "9876543210",
+    "tax_id": "07PTAFF9867H1Z4",
+    "website": null
+  },
+  "bill_to": {
+    "name": "NAZIM KHAN NAZIM KHAN No D-122, Lajpat Nagar",
+    "address": "New Delhi-110015",
+    "email": null,
+    "tax_id": "07PDUJS4678K1Z4"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "LED LIGHTS",
+      "hsn_sac": "85013410",
+      "quantity": 50.0,
+      "unit_price": 500.0,
+      "tax_rate": 28.0,
+      "line_total": 25000.0,
+      "item_code": null,
+      "discount": null,
+      "tax_amount": null,
+      "unit": "pcs"
+    },
+    {
+      "line_number": 2,
+      "description": "Bulbs",
+      "hsn_sac": "85013420",
+      "quantity": 20.0,
+      "unit_price": 2300.0,
+      "tax_rate": null,
+      "line_total": 46000.0,
+      "item_code": null,
+      "discount": null,
+      "tax_amount": null
+    }
+  ],
+  "subtotal": 56800.0,
+  "discount": 14200.0,
+  "tax_rate": 18.0,
+  "tax_amount": 10224.0,
+  "shipping": null,
+  "total_amount": 67024.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": null,
+  "notes": "Please make cheques in favor of \"TechGuruPlus\"",
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "MISSING_REQUIRED_FIELD: 'invoice_number' is null",
+      "SUBTOTAL_MISMATCH: Sum of line items is 71000.00, but subtotal is 56800.00 (diff: 14200.00)"
+    ],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": false,
+      "totals_consistent": true
+    },
+    "line_item_count": 2
+  },
+  "metadata": {
+    "source_file": "371819842-GST-Invoice-Format-No-5.pdf",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\PDF\\371819842-GST-Invoice-Format-No-5.pdf",
+    "extraction_time": "2026-03-19T08:57:17.814807",
+    "processing_seconds": 16.32,
+    "pdf_type": "digital",
+    "page_count": 1,
+    "ocr_engine": "none",
+    "tables_found": 1,
+    "text_length": 768,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "MISSING_REQUIRED_FIELD: 'invoice_number' is null",
+        "SUBTOTAL_MISMATCH: Sum of line items is 71000.00, but subtotal is 56800.00 (diff: 14200.00)"
+      ],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": false,
+        "totals_consistent": true
+      },
+      "line_item_count": 2
+    }
+  }
+}

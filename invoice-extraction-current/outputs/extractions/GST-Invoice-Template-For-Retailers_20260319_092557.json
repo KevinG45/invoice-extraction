@@ -1,0 +1,132 @@
+{
+  "invoice_number": "4",
+  "invoice_date": "2021-12-20",
+  "due_date": "2022-01-04",
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "Bright Traders",
+    "address": "123, ABC Building, DEF Street, GHI, Location: Maharastra",
+    "email": null,
+    "phone": "+919687858563",
+    "tax_id": "22-AAAAA0000A-1-Z-5",
+    "website": null
+  },
+  "bill_to": {
+    "name": "Flash Computers",
+    "address": "ABC, DEF Street 6",
+    "email": null,
+    "tax_id": "25-AAAAA0000A-1-2-2"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "Deil Inspiron 1050",
+      "quantity": null,
+      "unit": "%",
+      "unit_price": 25000.0,
+      "discount": null,
+      "tax_rate": 50000.0,
+      "total": 7627.12
+    },
+    {
+      "line_number": 2,
+      "description": "Lenovo 5125-1",
+      "quantity": null,
+      "unit": "%",
+      "unit_price": 28000.0,
+      "discount": null,
+      "tax_rate": 28000.0,
+      "total": 3000.0
+    },
+    {
+      "line_number": 3,
+      "description": "Logitech Mouse",
+      "quantity": null,
+      "unit": "%",
+      "unit_price": 500.0,
+      "discount": null,
+      "tax_rate": 67849.07,
+      "total": 23.81
+    }
+  ],
+  "subtotal": 67849.07,
+  "discount": null,
+  "tax_rate": 10650.93,
+  "tax_amount": 10650.93,
+  "shipping": null,
+  "total_amount": 78500.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": null,
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": null,
+  "notes": "Thank You. Visit Again.",
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 3,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": null,
+      "totals_consistent": true
+    },
+    "line_item_count": 3
+  },
+  "metadata": {
+    "source_file": "GST-Invoice-Template-For-Retailers.jpg",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\IMAGES\\GST-Invoice-Template-For-Retailers.jpg",
+    "extraction_time": "2026-03-19T09:25:57.237770",
+    "processing_seconds": 21.49,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 935,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 3,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": null,
+        "totals_consistent": true
+      },
+      "line_item_count": 3
+    }
+  }
+}

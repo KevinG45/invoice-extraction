@@ -1,0 +1,112 @@
+{
+  "invoice_number": "GST/24/001",
+  "invoice_date": "22-04-2024",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "NIREL DIGITALS",
+    "address": "Plot No. G1, H.No. 6-264/13/A/5, HAL Raghvendra Colony, Quthubullapur, Mandal Medchal Dist - Hyderabad- Telangana- 500055",
+    "email": "nireldigitals@gmail.com",
+    "phone": "9866272837",
+    "tax_id": "36ARKPC6820F1ZZ",
+    "website": null
+  },
+  "bill_to": {
+    "name": "ENVEDA THERAPEUTICS INDIA PRIVATE LIMITED",
+    "address": "Forest Range Office, 3rd floor E401 W401, Lalgadi Malakpet Village, Genome Valley, Unnamed Road, Shamirpet Mandal, Hyderabad, Medchal Malkajgiri, Telangana",
+    "email": null,
+    "tax_id": "36AAFCE5951N1Z5"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "ID Card Tag - Lanyard 16mm with Multi Colour Printing and Fish Hook",
+      "quantity": 100.0,
+      "unit": "Nos",
+      "unit_price": 37.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 3700.0
+    },
+    {
+      "line_number": 2,
+      "description": "ID Card - Printing and Supply of ID Cards",
+      "quantity": 10.0,
+      "unit": "Nos",
+      "unit_price": 55.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 550.0
+    }
+  ],
+  "subtotal": 4250.0,
+  "discount": null,
+  "tax_rate": 9.0,
+  "tax_amount": 765.0,
+  "shipping": null,
+  "total_amount": 5015.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": "NIREL DIGITALS\nBank A/C: 5267528699\nFor, NIREL DIGITALS\nBank IFSC: CBIN0285113\nBank Name: CENTRAL BANK OF INDIA\nBranch: BALA NAGAR",
+  "notes": null,
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": true,
+      "totals_consistent": true
+    },
+    "line_item_count": 2
+  },
+  "metadata": {
+    "source_file": "GST24001.pdf",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\PDF\\GST24001.pdf",
+    "extraction_time": "2026-03-19T09:03:29.941403",
+    "processing_seconds": 19.36,
+    "pdf_type": "digital",
+    "page_count": 1,
+    "ocr_engine": "none",
+    "tables_found": 1,
+    "text_length": 1285,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": true,
+        "totals_consistent": true
+      },
+      "line_item_count": 2
+    }
+  }
+}

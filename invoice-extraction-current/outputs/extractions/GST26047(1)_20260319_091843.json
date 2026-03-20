@@ -1,0 +1,198 @@
+{
+  "invoice_number": "GST/26/047",
+  "invoice_date": "2025-12-31",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "NIREL DIGITALS",
+    "address": "Plot No. G1, H.No. 6-264/13/A/5, HAL Raghvendra Colony, Quthubullapur, Mandal Medchal Dist - Hyderabad- Telangana- 500055",
+    "email": "nireldigitals@gmail.com",
+    "phone": "9866272837",
+    "tax_id": "36ARKPC6820F1ZZ",
+    "website": null
+  },
+  "bill_to": {
+    "name": "GREEN CARE BIO SCIENCES",
+    "address": "Sy.No.248, P.No.272&273, D.No.7-63/A/248/403, Sri Challa Heights, F.No. 403, 4th Floor. Pipeline Road, Jeedimetla, Hyderabad, Medchal Malkajgiri (Dist). Telangana",
+    "email": null,
+    "tax_id": "36ADMPC2012K1ZV"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "Digital Print Out",
+      "quantity": 936.0,
+      "unit": "NOS",
+      "unit_price": 14.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 13104.0,
+      "hsn_sac": "9989"
+    },
+    {
+      "line_number": 2,
+      "description": "Stciker",
+      "quantity": 178.0,
+      "unit": "NOS",
+      "unit_price": 15.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 2670.0,
+      "hsn_sac": "9989"
+    },
+    {
+      "line_number": 3,
+      "description": "Cutting",
+      "quantity": 35.0,
+      "unit": "NOS",
+      "unit_price": 50.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 1750.0,
+      "hsn_sac": "4707"
+    },
+    {
+      "line_number": 4,
+      "description": "A4 Printouts - A4 Colour",
+      "quantity": 31.0,
+      "unit": "NOS",
+      "unit_price": 20.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 620.0,
+      "hsn_sac": "9989"
+    },
+    {
+      "line_number": 5,
+      "description": "A4 Printouts - Colour F/B",
+      "quantity": 30.0,
+      "unit": "NOS",
+      "unit_price": 30.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 900.0,
+      "hsn_sac": "9989"
+    },
+    {
+      "line_number": 6,
+      "description": "Designing Charges",
+      "quantity": 1.0,
+      "unit": "NOS",
+      "unit_price": 600.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 600.0,
+      "hsn_sac": "9989"
+    }
+  ],
+  "subtotal": 19644.0,
+  "discount": null,
+  "tax_rate": 9.0,
+  "tax_amount": 3535.92,
+  "shipping": null,
+  "total_amount": 23179.92,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": "NIREL DIGITALS\nBank A/C: 0547073000000945\nFor, NIREL DIGITALS\nBank IFSC: SIBL0000547\nBank Name: South Indian Bank\nBranch: Suchitra Junction, Quthbullapur",
+  "notes": null,
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 3,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 4,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 5,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 6,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": true,
+      "totals_consistent": true
+    },
+    "line_item_count": 6
+  },
+  "metadata": {
+    "source_file": "GST26047(1).pdf",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\PDF\\GST26047(1).pdf",
+    "extraction_time": "2026-03-19T09:18:43.228436",
+    "processing_seconds": 29.67,
+    "pdf_type": "digital",
+    "page_count": 1,
+    "ocr_engine": "none",
+    "tables_found": 1,
+    "text_length": 1499,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 3,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 4,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 5,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 6,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": true,
+        "totals_consistent": true
+      },
+      "line_item_count": 6
+    }
+  }
+}

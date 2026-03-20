@@ -1,0 +1,116 @@
+{
+  "invoice_number": "003",
+  "invoice_date": "2021-11-20",
+  "due_date": "2021-11-30",
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "Foobar Labs",
+    "address": "52-59, HSR Layout, 3rd Floor Orion mall, e-803/ Atlanta Mall, Bengaluru, Karnataka, India 560055",
+    "email": "info@foobarlabs.com",
+    "phone": "+1234 423 3245",
+    "tax_id": null,
+    "website": null
+  },
+  "bill_to": {
+    "name": "Donald Clinton",
+    "address": "Bengaluru, Karnataka, India 560063",
+    "email": "29VGCED1234K2Z6",
+    "tax_id": "29VGCED1234K2Z6"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "Printing Circuit Board",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 100.0,
+      "discount": null,
+      "tax_rate": 10.0,
+      "total": 5500.0
+    },
+    {
+      "line_number": 2,
+      "description": "Laser Printer",
+      "quantity": null,
+      "unit": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "total": 140.0
+    }
+  ],
+  "subtotal": 5600.0,
+  "discount": null,
+  "tax_rate": 10.0,
+  "tax_amount": 560.0,
+  "shipping": 140.0,
+  "total_amount": 12000.0,
+  "amount_paid": null,
+  "amount_due": 12000.0,
+  "currency": "USD",
+  "payment_terms": "Please pay within 15 days from the date of invoice, overdue interest @ 14% will be charged on delayed payments.",
+  "payment_method": null,
+  "bank_details": "Account Holder Name: Foobar Labs\nAccount Number: 34745215203\nAuthorized Signature:\nIFSC SBINO018159\nAccount Type: Current\nBank Name: State Bank of India",
+  "notes": "Total Due Amount: Six Thousand Three Hundred Dollars Only",
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "TOTAL_MISMATCH: Expected total 6300.00 (subtotal+tax-discount+shipping), but got 12000.00 (diff: 5700.00)"
+    ],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": null,
+      "totals_consistent": false
+    },
+    "line_item_count": 2
+  },
+  "metadata": {
+    "source_file": "printable-invoice-with-gst-template-29.jpg",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\IMAGES\\printable-invoice-with-gst-template-29.jpg",
+    "extraction_time": "2026-03-19T09:32:00.346649",
+    "processing_seconds": 28.28,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 1687,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "TOTAL_MISMATCH: Expected total 6300.00 (subtotal+tax-discount+shipping), but got 12000.00 (diff: 5700.00)"
+      ],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": null,
+        "totals_consistent": false
+      },
+      "line_item_count": 2
+    }
+  }
+}

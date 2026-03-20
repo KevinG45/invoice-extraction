@@ -1,0 +1,160 @@
+{
+  "invoice_number": "654654",
+  "invoice_date": "08-03-2021",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "Due Amount",
+    "address": null,
+    "email": null,
+    "phone": "9999999999",
+    "tax_id": null,
+    "website": null
+  },
+  "bill_to": {
+    "name": "S.K.P.S DIGITAL",
+    "address": null,
+    "email": null,
+    "tax_id": null
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "ITEM NAME",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": 3.0,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 1316.0,
+      "item_code": null
+    },
+    {
+      "line_number": 2,
+      "description": "ITEMNAMES Rs. 485.00 Rs.",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 24250.0,
+      "item_code": null
+    },
+    {
+      "line_number": 3,
+      "description": "ITEM NAME 5 25 . Rs. 215.00 _ Rs.",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 3225.0,
+      "item_code": null
+    },
+    {
+      "line_number": 4,
+      "description": "Rs.",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 34914.52,
+      "item_code": null
+    }
+  ],
+  "subtotal": 34565.37,
+  "discount": null,
+  "tax_rate": null,
+  "tax_amount": 5184.81,
+  "shipping": null,
+  "total_amount": 39750.18,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": null,
+  "notes": null,
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 3,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 4,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": null,
+      "totals_consistent": true
+    },
+    "line_item_count": 4
+  },
+  "metadata": {
+    "source_file": "invoice.png",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\IMAGES\\invoice.png",
+    "extraction_time": "2026-03-19T09:30:43.373425",
+    "processing_seconds": 76.6,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 970,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 3,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 4,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": null,
+        "totals_consistent": true
+      },
+      "line_item_count": 4
+    }
+  }
+}

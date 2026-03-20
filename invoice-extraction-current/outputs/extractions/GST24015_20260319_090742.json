@@ -1,0 +1,112 @@
+{
+  "invoice_number": "GST/24/015",
+  "invoice_date": "2024-08-08",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "NIREL DIGITALS",
+    "address": "Plot No. G1, H.No. 6-264/13/A/5, HAL Raghvendra Colony, Quthubullapur, Mandal Medchal Dist - Hyderabad- Telangana- 500055",
+    "email": "nireldigitals@gmail.com",
+    "phone": "9866272837",
+    "tax_id": "36ARKPC6820F1ZZ",
+    "website": null
+  },
+  "bill_to": {
+    "name": "Star Fertility Pvt. Ltd.",
+    "address": "NCL PEARL H NO 10-3-162, 2 ND FLOOR S.D. ROAD, NEAR RAIL NILAYAM",
+    "email": null,
+    "tax_id": "36AAVCS4769G2ZJ"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "Invitation",
+      "quantity": 300.0,
+      "unit": "NOS",
+      "unit_price": 7.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 2100.0
+    },
+    {
+      "line_number": 2,
+      "description": "Envelope",
+      "quantity": 300.0,
+      "unit": "NOS",
+      "unit_price": 3.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 900.0
+    }
+  ],
+  "subtotal": 3000.0,
+  "discount": null,
+  "tax_rate": 18.0,
+  "tax_amount": 540.0,
+  "shipping": null,
+  "total_amount": 3540.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": "NIREL DIGITALS\nBank A/C: 5267528699\nFor, NIREL DIGITALS\nBank IFSC: CBIN0285113\nBank Name: CENTRAL BANK OF INDIA\nBranch: BALA NAGAR Branch",
+  "notes": null,
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": true,
+      "totals_consistent": true
+    },
+    "line_item_count": 2
+  },
+  "metadata": {
+    "source_file": "GST24015.pdf",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\PDF\\GST24015.pdf",
+    "extraction_time": "2026-03-19T09:07:42.391447",
+    "processing_seconds": 19.21,
+    "pdf_type": "digital",
+    "page_count": 1,
+    "ocr_engine": "none",
+    "tables_found": 1,
+    "text_length": 1096,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": true,
+        "totals_consistent": true
+      },
+      "line_item_count": 2
+    }
+  }
+}

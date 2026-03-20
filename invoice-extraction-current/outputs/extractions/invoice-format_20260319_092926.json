@@ -1,0 +1,192 @@
+{
+  "invoice_number": null,
+  "invoice_date": null,
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "Sleek Bill",
+    "address": null,
+    "email": "Total@o.25",
+    "phone": null,
+    "tax_id": null,
+    "website": null
+  },
+  "bill_to": {
+    "name": "Rajat More",
+    "address": null,
+    "email": null,
+    "tax_id": null
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "Compaq Laptop",
+      "hsn_sac": "123486",
+      "quantity": 1.0,
+      "unit_price": 30075.0,
+      "line_total": 30075.0,
+      "item_code": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null
+    },
+    {
+      "line_number": 2,
+      "description": "HP Laptop - tS inches PCS: a4 ot",
+      "hsn_sac": "123456",
+      "quantity": 1.0,
+      "unit_price": 35400.0,
+      "line_total": 35400.0,
+      "item_code": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null
+    },
+    {
+      "line_number": 3,
+      "description": "Dell Laptop",
+      "hsn_sac": "123456",
+      "quantity": 1.0,
+      "unit_price": 41300.0,
+      "line_total": 41300.0,
+      "item_code": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null
+    },
+    {
+      "line_number": 4,
+      "description": "Lenovo's Laptop",
+      "quantity": 123456.0,
+      "unit_price": 1.0,
+      "line_total": 35000.0,
+      "item_code": null,
+      "hsn_sac": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null
+    },
+    {
+      "line_number": 5,
+      "description": "Total@o.25% - UPL IO: Total Taxable Value ¥1,30,000.00",
+      "quantity": 30000.0,
+      "unit_price": 37.5,
+      "line_total": 37.5,
+      "item_code": null,
+      "hsn_sac": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null
+    }
+  ],
+  "subtotal": null,
+  "discount": null,
+  "tax_rate": null,
+  "tax_amount": null,
+  "shipping": null,
+  "total_amount": null,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "USD",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": null,
+  "notes": null,
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "MISSING_REQUIRED_FIELD: 'invoice_number' is null",
+      "MISSING_REQUIRED_FIELD: 'total_amount' is null",
+      "LINE_ITEM_MATH_ERROR: Line 4 qty×price mismatch — Expected 123456.0, got 35000.0 (diff: 88456.00)",
+      "LINE_ITEM_MATH_ERROR: Line 5 qty×price mismatch — Expected 1125000.0, got 37.5 (diff: 1124962.50)"
+    ],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 3,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 4,
+          "ok": false,
+          "note": "Expected 123456.0, got 35000.0 (diff: 88456.00)"
+        },
+        {
+          "line_number": 5,
+          "ok": false,
+          "note": "Expected 1125000.0, got 37.5 (diff: 1124962.50)"
+        }
+      ],
+      "line_items_sum_to_subtotal": null,
+      "totals_consistent": null
+    },
+    "line_item_count": 5
+  },
+  "metadata": {
+    "source_file": "invoice-format.png",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\IMAGES\\invoice-format.png",
+    "extraction_time": "2026-03-19T09:29:26.754685",
+    "processing_seconds": 40.51,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 1110,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "MISSING_REQUIRED_FIELD: 'invoice_number' is null",
+        "MISSING_REQUIRED_FIELD: 'total_amount' is null",
+        "LINE_ITEM_MATH_ERROR: Line 4 qty×price mismatch — Expected 123456.0, got 35000.0 (diff: 88456.00)",
+        "LINE_ITEM_MATH_ERROR: Line 5 qty×price mismatch — Expected 1125000.0, got 37.5 (diff: 1124962.50)"
+      ],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 3,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 4,
+            "ok": false,
+            "note": "Expected 123456.0, got 35000.0 (diff: 88456.00)"
+          },
+          {
+            "line_number": 5,
+            "ok": false,
+            "note": "Expected 1125000.0, got 37.5 (diff: 1124962.50)"
+          }
+        ],
+        "line_items_sum_to_subtotal": null,
+        "totals_consistent": null
+      },
+      "line_item_count": 5
+    }
+  }
+}

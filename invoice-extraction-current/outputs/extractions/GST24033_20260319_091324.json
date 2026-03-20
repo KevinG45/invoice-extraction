@@ -1,0 +1,172 @@
+{
+  "invoice_number": "GST/24/033",
+  "invoice_date": "2024-11-30",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "NIREL DIGITALS",
+    "address": "Plot No. G1, H.No. 6-264/13/A/5, HAL Raghvendra Colony, Quthubullapur, Mandal Medchal Dist - Hyderabad- Telangana- 500055",
+    "email": "nireldigitals@gmail.com",
+    "phone": "9866272837",
+    "tax_id": "36ARKPC6820F1ZZ",
+    "website": null
+  },
+  "bill_to": {
+    "name": "ENVEDA THERAPEUTICS INDIA PRIVATE LIMITED",
+    "address": "Forest Range Office, 3rd floor E401 W401, Lalgadi Malakpet Village, Genome Valley, Unnamed Road, Shamirpet Mandal, Hyderabad, Medchal Malkajgiri, Telangana",
+    "email": null,
+    "tax_id": "36AAFCE5951N1Z5"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "ID Card",
+      "quantity": 13.0,
+      "unit": "Nos",
+      "unit_price": 50.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 650.0
+    },
+    {
+      "line_number": 2,
+      "description": "Designing Charges - ID Card Designing Charges",
+      "quantity": 1.0,
+      "unit": "NOS",
+      "unit_price": 500.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 500.0
+    },
+    {
+      "line_number": 3,
+      "description": "Business Cards",
+      "quantity": 600.0,
+      "unit": "NOS",
+      "unit_price": 3.5,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 2100.0
+    },
+    {
+      "line_number": 4,
+      "description": "Letterhead - Letterhead Printed on Bound Paper",
+      "quantity": 200.0,
+      "unit": "NOS",
+      "unit_price": 7.5,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 1500.0
+    },
+    {
+      "line_number": 5,
+      "description": "Stciker (PVC)",
+      "quantity": 8.0,
+      "unit": "NOS",
+      "unit_price": 30.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 240.0
+    }
+  ],
+  "subtotal": 4990.0,
+  "discount": null,
+  "tax_rate": 9.0,
+  "tax_amount": 898.2,
+  "shipping": null,
+  "total_amount": 5888.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": "NIREL DIGITALS\nBank A/C: 5267528699\nFor, NIREL DIGITALS\nBank IFSC: CBIN0285113\nBank Name: CENTRAL BANK OF INDIA\nBranch: BALA NAGAR Branch",
+  "notes": null,
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 3,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 4,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 5,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": true,
+      "totals_consistent": true
+    },
+    "line_item_count": 5
+  },
+  "metadata": {
+    "source_file": "GST24033.pdf",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\PDF\\GST24033.pdf",
+    "extraction_time": "2026-03-19T09:13:24.723583",
+    "processing_seconds": 25.86,
+    "pdf_type": "digital",
+    "page_count": 1,
+    "ocr_engine": "none",
+    "tables_found": 1,
+    "text_length": 1433,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 3,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 4,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 5,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": true,
+        "totals_consistent": true
+      },
+      "line_item_count": 5
+    }
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "invoice_number": "SLT21-22/0001",
+  "invoice_date": "2021-03-03",
+  "due_date": "2021-03-17",
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "SS Traders",
+    "address": "In Okhla Industrial Area, New Delhi-110020, Uttar Pradesh",
+    "email": "example@mail.com",
+    "phone": "9999999999",
+    "tax_id": "898989898989",
+    "website": null
+  },
+  "bill_to": {
+    "name": "TechGuruPlus",
+    "address": null,
+    "email": null,
+    "tax_id": null
+  },
+  "ship_to": {
+    "name": "TechGuruPlus",
+    "address": "Sector-200, Noida, Uttar Pradesh"
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "ITEM NAME 4 Rs. - ITEM NAME 5 Rs. 5,375.00)",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 28130.0,
+      "item_code": null
+    },
+    {
+      "line_number": 2,
+      "description": "Rs.",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 77035.52,
+      "item_code": null
+    },
+    {
+      "line_number": 3,
+      "description": "PAYABLE AMOUNT Rs.",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 95524.0,
+      "item_code": null
+    }
+  ],
+  "subtotal": 77035.52,
+  "discount": 0.0,
+  "tax_rate": 12.0,
+  "tax_amount": 8464.22,
+  "shipping": null,
+  "total_amount": 95524.0,
+  "amount_paid": null,
+  "amount_due": 95524.0,
+  "currency": "INR",
+  "payment_terms": "Total payment due in 14 days.",
+  "payment_method": null,
+  "bank_details": null,
+  "notes": "Please inclue Include the Invoice number in your payment notes.",
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "TOTAL_MISMATCH: Expected total 85499.74 (subtotal+tax-discount+shipping), but got 95524.00 (diff: 10024.26)"
+    ],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 3,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": null,
+      "totals_consistent": false
+    },
+    "line_item_count": 3
+  },
+  "metadata": {
+    "source_file": "Colourful-GST-Invoice-Format-in-Excel-Download.jpg",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\IMAGES\\Colourful-GST-Invoice-Format-in-Excel-Download.jpg",
+    "extraction_time": "2026-03-19T09:24:40.531152",
+    "processing_seconds": 24.2,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 949,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "TOTAL_MISMATCH: Expected total 85499.74 (subtotal+tax-discount+shipping), but got 95524.00 (diff: 10024.26)"
+      ],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 3,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": null,
+        "totals_consistent": false
+      },
+      "line_item_count": 3
+    }
+  }
+}

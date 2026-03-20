@@ -52,6 +52,19 @@ def clean_ocr_number(raw: str) -> str:
     return cleaned
 
 
+def _back_calc_unit_price(line_total: float, qty: float, tax_rate: Optional[float]) -> float:
+    """Back-calculate unit_price from line_total and qty.
+
+    For Indian GST invoices, line_total often includes GST (e.g. 18%).
+    If tax_rate is known, remove it first so the unit_price is pre-tax.
+    """
+    if tax_rate and tax_rate > 0:
+        taxable = line_total / (1 + tax_rate / 100.0)
+    else:
+        taxable = line_total
+    return round(taxable / qty, 2)
+
+
 # ── Column header keyword mapping ──────────────────────────────────────────
 COLUMN_KEYWORDS = {
     "serial": ["s.no", "sl.no", "sr.no", "sno", "sl", "#", "no.", "serial"],
@@ -67,6 +80,81 @@ COLUMN_KEYWORDS = {
     "amount": ["amount", "total", "value", "net amount", "line total", "total amount"],
 }
 
+
+# ── Line-item extraction regex patterns (module-level for reuse & cache stability) ──
+_UNITS = (r'NOS|KGS|PCS|NOS\.|MTR|LTR|BOX|SET|PKT|BAG|UNIT|PAIR|DOZ|DOZENS?'
+          r'|KG|GM|ML|SQFT|SQF|RFT|CFT|ROLL|LOT|EA|EACH|REAM|SHEETS?|BUNDLE')
+
+_GST_PATTERN = re.compile(
+    r'^\s*(\d+)\s+'                           # serial number
+    r'(.+?)\s+'                                # description (non-greedy)
+    r'(?:(\d{4,8})\s+)?'                       # optional HSN/SAC code (4-8 digits)
+    r'([\d,]+(?:\.\d+)?)\s+'                   # quantity
+    r'(?:' + _UNITS + r')\s+'                  # unit
+    r'(?:₹\s*)?'                               # optional ₹ symbol
+    r'([\d,]+(?:\.\d+)?)\s+'                   # unit price
+    r'(?:(\d+(?:\.\d+)?)\s*%?\s+)?'            # optional tax rate %
+    r'(?:₹\s*)?'                               # optional ₹ symbol
+    r'([\d,]+(?:\.\d+)?)',                     # amount/total
+    re.IGNORECASE,
+)
+
+_NO_SERIAL_PATTERN = re.compile(
+    r'^\s*([A-Za-z].+?)\s+'                    # description (starts with letter)
+    r'(?:(\d{4,8})\s+)?'                       # optional HSN/SAC code
+    r'([\d,]+(?:\.\d+)?)\s+'                   # quantity
+    r'(?:' + _UNITS + r')\s+'                  # unit
+    r'(?:₹\s*)?'                               # optional ₹ symbol
+    r'([\d,]+(?:\.\d+)?)\s+'                   # unit price
+    r'(?:(\d+(?:\.\d+)?)\s*%?\s+)?'            # optional tax rate %
+    r'(?:₹\s*)?'                               # optional ₹ symbol
+    r'([\d,]+(?:\.\d+)?)\s*$',                 # amount/total
+    re.IGNORECASE,
+)
+
+_SIMPLE_PATTERN = re.compile(
+    r'^\s*(\d+)\s+'                            # serial number
+    r'(.+?)\s+'                                # description
+    r'([\d,]+\.?\d*)\s+'                       # number 1 (qty or price)
+    r'([\d,]+\.?\d*)\s*'                       # number 2
+    r'([\d,]+\.?\d*)?',                        # number 3 (optional)
+    re.IGNORECASE,
+)
+
+_OCR_SERIAL_MULTI_NUM = re.compile(
+    r'^\s*(\d+)\s+'                            # serial number
+    r'([A-Za-z][\w\s!.,\-()]*?)\s+'           # description (starts with letter, non-greedy)
+    r'(?:(\d{3,8})\s+)?'                       # optional HSN/SAC code (3-8 digits)
+    r'([\d,]+\.?\d*)\s+'                       # number 1 (quantity)
+    r'([\d,]+\.?\d*)\s+'                       # number 2 (unit price)
+    r'(?:[\d,]+\.?\d*\s+)*'                    # skip intermediate numbers
+    r'([\d,]+\.?\d*)\s*$',                     # LAST number = line total
+    re.IGNORECASE,
+)
+
+_OCR_PIPE_PATTERN = re.compile(
+    r'^\s*([A-Za-z][\w\s!.,\-()]+?)\s+'       # description (starts with letter)
+    r'(?:(\d{4,8})\s+)?'                       # optional HSN/SAC code
+    r'([\d,]+(?:\.\d+)?)\s+'                   # number 1 (MRP / unit_price)
+    r'([\d,]+(?:\.\d+)?)\s+'                   # number 2 (taxable value)
+    r'([\d,]+(?:\.\d+)?)\s+'                   # number 3 (tax amount)
+    r'([\d,]+(?:\.\d+)?)\s*$',                 # number 4 (line total / amount)
+    re.IGNORECASE,
+)
+
+_OCR_SHORT_PATTERN = re.compile(
+    r'^\s*([A-Za-z][\w\s!.,\-()]+?)\s+'       # description
+    r'(?:(\d{4,8})\s+)?'                       # optional HSN/SAC
+    r'([\d,]+(?:\.\d+)?)\s+'                   # number 1
+    r'([\d,]+(?:\.\d+)?)\s*$',                 # number 2 (line total)
+    re.IGNORECASE,
+)
+
+_OCR_DESC_AMOUNT_PATTERN = re.compile(
+    r'^\s*([A-Za-z][\w\s!.,\-()]+?)\s+'       # description (non-greedy)
+    r'([\d,]+\.\d{2})\s*$',                    # amount with exactly 2 decimal places
+    re.IGNORECASE,
+)
 
 # ═══════════════════════════════════════════════════════════════════════════
 # PUBLIC API
@@ -532,83 +620,14 @@ def extract_line_items_from_text(text: str) -> List[Dict[str, Any]]:
     text = _normalize_subscript_digits(text)
     line_items = []
 
-    # Pattern for GST invoices: serial description [HSN] qty [unit] [₹] price [gst%] [₹] amount
-    gst_pattern = re.compile(
-        r'^\s*(\d+)\s+'                           # serial number
-        r'(.+?)\s+'                                # description (non-greedy)
-        r'(?:(\d{4,8})\s+)?'                       # optional HSN/SAC code (4-8 digits)
-        r'([\d,]+(?:\.\d+)?)\s+'                   # quantity
-        r'(?:NOS|KGS|PCS|NOS\.|MTR|LTR|BOX|SET|PKT|BAG|UNIT|PAIR|DOZ|DOZENS?|KG|GM|ML|SQFT|SQF|RFT|CFT|ROLL|LOT|EA|EACH|REAM|SHEETS?|BUNDLE)\s+'  # unit
-        r'(?:₹\s*)?'                               # optional ₹ symbol
-        r'([\d,]+(?:\.\d+)?)\s+'                   # unit price
-        r'(?:(\d+(?:\.\d+)?)\s*%?\s+)?'            # optional tax rate %
-        r'(?:₹\s*)?'                               # optional ₹ symbol
-        r'([\d,]+(?:\.\d+)?)'                      # amount/total
-    , re.IGNORECASE)
-
-    # Pattern for lines WITHOUT a leading serial number:
-    # description [HSN] qty [unit] price amount
-    no_serial_pattern = re.compile(
-        r'^\s*([A-Za-z].+?)\s+'                    # description (starts with letter)
-        r'(?:(\d{4,8})\s+)?'                       # optional HSN/SAC code
-        r'([\d,]+(?:\.\d+)?)\s+'                    # quantity
-        r'(?:NOS|KGS|PCS|NOS\.|MTR|LTR|BOX|SET|PKT|BAG|UNIT|PAIR|DOZ|DOZENS?|KG|GM|ML|SQFT|SQF|RFT|CFT|ROLL|LOT|EA|EACH|REAM|SHEETS?|BUNDLE)\s+'  # unit
-        r'(?:₹\s*)?'                               # optional ₹ symbol
-        r'([\d,]+(?:\.\d+)?)\s+'                    # unit price
-        r'(?:(\d+(?:\.\d+)?)\s*%?\s+)?'            # optional tax rate %
-        r'(?:₹\s*)?'                               # optional ₹ symbol
-        r'([\d,]+(?:\.\d+)?)\s*$'                   # amount/total
-    , re.IGNORECASE)
-
-    # Simpler fallback pattern: serial description numbers...
-    simple_pattern = re.compile(
-        r'^\s*(\d+)\s+'                            # serial number
-        r'(.+?)\s+'                                # description
-        r'([\d,]+\.?\d*)\s+'                       # number 1 (qty or price)
-        r'([\d,]+\.?\d*)\s*'                       # number 2
-        r'([\d,]+\.?\d*)?'                         # number 3 (optional)
-    , re.IGNORECASE)
-
-    # OCR-aware pattern for serial + description + HSN + multiple numeric columns
-    # Matches: "1 solvent 345 23.00 200.00 524.40 21 8.50 4,894.40"
-    # Takes the LAST number as line_total, handles variable number of intermediate columns
-    ocr_serial_multi_num = re.compile(
-        r'^\s*(\d+)\s+'                            # serial number
-        r'([A-Za-z][\w\s!.,\-()]*?)\s+'           # description (starts with letter, non-greedy)
-        r'(?:(\d{3,8})\s+)?'                       # optional HSN/SAC code (3-8 digits)
-        r'([\d,]+\.?\d*)\s+'                       # number 1 (quantity)
-        r'([\d,]+\.?\d*)\s+'                       # number 2 (unit price)
-        r'(?:[\d,]+\.?\d*\s+)*'                    # skip intermediate numbers (taxable, tax etc.)
-        r'([\d,]+\.?\d*)\s*$'                      # LAST number = line total
-    , re.IGNORECASE)
-
-    # ── OCR-aware patterns for image invoices ────────────────────────────
-    # Pattern for pipe-separated OCR lines (image invoices with table borders):
-    # description [HSN] | [symbol] number [number...] | [symbol] amount
-    # Works on cleaned text (after stripping |, €, ©, &, % artifacts)
-    ocr_pipe_pattern = re.compile(
-        r'^\s*([A-Za-z][\w\s!.,\-()]+?)\s+'           # description (starts with letter)
-        r'(?:(\d{4,8})\s+)?'                           # optional HSN/SAC code
-        r'([\d,]+(?:\.\d+)?)\s+'                       # number 1 (MRP / unit_price)
-        r'([\d,]+(?:\.\d+)?)\s+'                       # number 2 (taxable value)
-        r'([\d,]+(?:\.\d+)?)\s+'                       # number 3 (tax amount)
-        r'([\d,]+(?:\.\d+)?)\s*$'                      # number 4 (line total / amount)
-    , re.IGNORECASE)
-
-    # Simpler OCR pattern: description followed by fewer numbers (no tax breakdown)
-    ocr_short_pattern = re.compile(
-        r'^\s*([A-Za-z][\w\s!.,\-()]+?)\s+'           # description
-        r'(?:(\d{4,8})\s+)?'                           # optional HSN/SAC
-        r'([\d,]+(?:\.\d+)?)\s+'                       # number 1
-        r'([\d,]+(?:\.\d+)?)\s*$'                      # number 2 (line total)
-    , re.IGNORECASE)
-
-    # Minimal OCR pattern: description followed by a single amount
-    # For lines like "Bosch All-in-One Metal Hand Tool Kit 2,535.00"
-    ocr_desc_amount_pattern = re.compile(
-        r'^\s*([A-Za-z][\w\s!.,\-()]+?)\s+'           # description (non-greedy)
-        r'([\d,]+\.\d{2})\s*$'                         # amount with exactly 2 decimal places
-    , re.IGNORECASE)
+    # Use module-level compiled patterns (avoids recompilation per call)
+    gst_pattern = _GST_PATTERN
+    no_serial_pattern = _NO_SERIAL_PATTERN
+    simple_pattern = _SIMPLE_PATTERN
+    ocr_serial_multi_num = _OCR_SERIAL_MULTI_NUM
+    ocr_pipe_pattern = _OCR_PIPE_PATTERN
+    ocr_short_pattern = _OCR_SHORT_PATTERN
+    ocr_desc_amount_pattern = _OCR_DESC_AMOUNT_PATTERN
 
     lines = text.split('\n')
     row_num = 0
@@ -676,11 +695,12 @@ def extract_line_items_from_text(text: str) -> List[Dict[str, Any]]:
                 "tax_amount": None,
             }
             # Back-calculate unit_price if math doesn't work
-            # (handles corrupted subscript digits in source)
+            # Uses tax_rate to remove GST before dividing (avoids 18%-inflated prices)
             if item["quantity"] and item["line_total"] and item["quantity"] > 0:
                 expected = item["quantity"] * (item["unit_price"] or 0)
                 if item["unit_price"] is None or abs(expected - item["line_total"]) > 0.50:
-                    item["unit_price"] = round(item["line_total"] / item["quantity"], 2)
+                    item["unit_price"] = _back_calc_unit_price(
+                        item["line_total"], item["quantity"], item.get("tax_rate"))
             line_items.append(item)
             prev_item_idx = len(line_items) - 1
             continue
@@ -705,7 +725,8 @@ def extract_line_items_from_text(text: str) -> List[Dict[str, Any]]:
             if item["quantity"] and item["line_total"] and item["quantity"] > 0:
                 expected = item["quantity"] * (item["unit_price"] or 0)
                 if item["unit_price"] is None or abs(expected - item["line_total"]) > 0.50:
-                    item["unit_price"] = round(item["line_total"] / item["quantity"], 2)
+                    item["unit_price"] = _back_calc_unit_price(
+                        item["line_total"], item["quantity"], item.get("tax_rate"))
             line_items.append(item)
             prev_item_idx = len(line_items) - 1
             continue
@@ -731,7 +752,8 @@ def extract_line_items_from_text(text: str) -> List[Dict[str, Any]]:
             if item["quantity"] and item["line_total"] and item["quantity"] > 0:
                 expected = item["quantity"] * (item["unit_price"] or 0)
                 if item["unit_price"] is None or abs(expected - item["line_total"]) > 0.50:
-                    item["unit_price"] = round(item["line_total"] / item["quantity"], 2)
+                    item["unit_price"] = _back_calc_unit_price(
+                        item["line_total"], item["quantity"], item.get("tax_rate"))
             line_items.append(item)
             prev_item_idx = len(line_items) - 1
             continue

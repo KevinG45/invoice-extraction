@@ -1,0 +1,193 @@
+{
+  "invoice_number": "IN-15",
+  "invoice_date": "2025-01-23",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "Cash Sales, Pune, MH (27)",
+    "address": "Nirmal Vijay, Panchshil Square, Tapovan Road, Camp, Amravati, 444602, IN",
+    "email": "sales@sleekbill.in",
+    "phone": "+911234567890"
+  },
+  "bill_to": {
+    "name": "Panchshil Square, Tapovan Road, Camp, Amravati, 444602, IN",
+    "address": null,
+    "tax_id": "27AAFCV2449G1Z7"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "448.00",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 448.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 448.0
+    },
+    {
+      "line_number": 2,
+      "description": "105.00",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 105.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 105.0
+    },
+    {
+      "line_number": 3,
+      "description": "103.00",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 103.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 103.0
+    },
+    {
+      "line_number": 4,
+      "description": "150.00",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 150.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 150.0
+    },
+    {
+      "line_number": 5,
+      "description": "50.00",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 50.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 50.0
+    },
+    {
+      "line_number": 6,
+      "description": "112.00",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 112.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 112.0
+    }
+  ],
+  "subtotal": 968.0,
+  "discount": null,
+  "tax_rate": null,
+  "tax_amount": 268.0,
+  "shipping": null,
+  "total_amount": 968.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": null,
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": null,
+  "notes": "This is Computer generated Invoice no signature is required.",
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "TOTAL_MISMATCH: Expected total 1236.00 (subtotal+tax-discount+shipping), but got 968.00 (diff: 268.00)"
+    ],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 3,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 4,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 5,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 6,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": null,
+      "totals_consistent": false
+    },
+    "line_item_count": 6
+  },
+  "metadata": {
+    "source_file": "invoice-format-A6.png",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\IMAGES\\invoice-format-A6.png",
+    "extraction_time": "2026-03-19T09:28:20.021537",
+    "processing_seconds": 30.32,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 806,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "TOTAL_MISMATCH: Expected total 1236.00 (subtotal+tax-discount+shipping), but got 968.00 (diff: 268.00)"
+      ],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 3,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 4,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 5,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 6,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": null,
+        "totals_consistent": false
+      },
+      "line_item_count": 6
+    }
+  }
+}

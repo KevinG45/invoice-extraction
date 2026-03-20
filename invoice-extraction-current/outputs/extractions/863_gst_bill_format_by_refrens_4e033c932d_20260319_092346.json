@@ -1,0 +1,138 @@
+{
+  "invoice_number": null,
+  "invoice_date": "2024-01-30",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "Refrens Internet Pvt. Ltd.",
+    "address": "1D-606, SESNA Divyasree Elan, Besides Fire Station Sarjapur Road, Bengaluru, Karnataka 560035",
+    "email": null,
+    "phone": "+919104043036",
+    "tax_id": "28AAJCR7259L1Z1",
+    "website": null
+  },
+  "bill_to": {
+    "name": "MOHIT JAIN MOHIT JAIN",
+    "address": "301/302, 3rd Floor, InstaOffice, Saket Callipolis 301/302, 3rd Floor, InstaOffice, Saket Bengaluru, Karnataka, India - 560035",
+    "email": null,
+    "tax_id": "07PDUJS4678K124"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "LED LIGHTS 85013410 50 pes",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 25000.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 25000.0
+    },
+    {
+      "line_number": 2,
+      "description": "LED LIGHTS 85013410 50 pes",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 25000.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 25000.0
+    },
+    {
+      "line_number": 3,
+      "description": "Bulbs 85013420 20 Dozens",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 46000.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 46000.0
+    }
+  ],
+  "subtotal": 113600.0,
+  "discount": 28400.0,
+  "tax_rate": null,
+  "tax_amount": 18.0,
+  "shipping": null,
+  "total_amount": 134048.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": null,
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": null,
+  "notes": "Please make cheques in favor of \"Refrens™",
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "MISSING_REQUIRED_FIELD: 'invoice_number' is null",
+      "TOTAL_MISMATCH: Expected total 113618.00 (subtotal+tax+shipping, discount pre-applied), but got 134048.00 (diff: 20430.00)"
+    ],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 3,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": null,
+      "totals_consistent": false
+    },
+    "line_item_count": 3
+  },
+  "metadata": {
+    "source_file": "863_gst_bill_format_by_refrens_4e033c932d.jpg",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\IMAGES\\863_gst_bill_format_by_refrens_4e033c932d.jpg",
+    "extraction_time": "2026-03-19T09:23:46.392460",
+    "processing_seconds": 45.28,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 888,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "MISSING_REQUIRED_FIELD: 'invoice_number' is null",
+        "TOTAL_MISMATCH: Expected total 113618.00 (subtotal+tax+shipping, discount pre-applied), but got 134048.00 (diff: 20430.00)"
+      ],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 3,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": null,
+        "totals_consistent": false
+      },
+      "line_item_count": 3
+    }
+  }
+}

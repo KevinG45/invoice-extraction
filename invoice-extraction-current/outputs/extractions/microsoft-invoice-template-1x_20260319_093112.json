@@ -1,0 +1,228 @@
+{
+  "invoice_number": "INV-OO0OO001",
+  "invoice_date": "05 Aug 2024",
+  "due_date": "2024-08-05",
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "Zylker",
+    "address": "7455 Drew Court, White City, KS 66872",
+    "email": null,
+    "phone": null,
+    "tax_id": null,
+    "website": null
+  },
+  "bill_to": {
+    "name": "Jeff J. Ritchie",
+    "address": "4779 Highland View Drive, Sacramento, CA 95815"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "Brochure Design",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": 0.0,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 300.0,
+      "item_code": null
+    },
+    {
+      "line_number": 2,
+      "description": "Brochure Design Single Sided Color 100 x 300.00",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 300.0,
+      "item_code": null
+    },
+    {
+      "line_number": 3,
+      "description": "Web Design Packages(Template) Basic",
+      "quantity": 0.0,
+      "unit_price": 250.0,
+      "line_total": null,
+      "item_code": null,
+      "hsn_sac": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null
+    },
+    {
+      "line_number": 4,
+      "description": "Custom Themes for your business. Invlusive of 100",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": 100.0,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 250.0,
+      "item_code": null
+    },
+    {
+      "line_number": 5,
+      "description": "x Print Ad Basic Color",
+      "quantity": 0.0,
+      "unit_price": 80.0,
+      "line_total": null,
+      "item_code": null,
+      "hsn_sac": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null
+    },
+    {
+      "line_number": 6,
+      "description": "Print Ad 18 size Color - Thanks for your business. Sub Total 630.00 - Sample Tax1 11.75 - Sample Tax2 21.00",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": 100.0,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 80.0,
+      "item_code": null
+    },
+    {
+      "line_number": 7,
+      "description": "Balance Due - Payment Option PoyPel | gB",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 662.75,
+      "item_code": null
+    }
+  ],
+  "subtotal": 630.0,
+  "discount": 300.0,
+  "tax_rate": 4.7,
+  "tax_amount": 11.75,
+  "shipping": 80.0,
+  "total_amount": 662.75,
+  "amount_paid": null,
+  "amount_due": 662.75,
+  "currency": "USD",
+  "payment_terms": "Terms Due on Receipt",
+  "payment_method": "PoyPel | gB",
+  "bank_details": null,
+  "notes": "Thanks for your business.",
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "TOTAL_MISMATCH: Expected total 721.75 (subtotal+tax+shipping, discount pre-applied), but got 662.75 (diff: 59.00)"
+    ],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 3,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 4,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 5,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 6,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 7,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": null,
+      "totals_consistent": false
+    },
+    "line_item_count": 7
+  },
+  "metadata": {
+    "source_file": "microsoft-invoice-template-1x.png",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\IMAGES\\microsoft-invoice-template-1x.png",
+    "extraction_time": "2026-03-19T09:31:12.022853",
+    "processing_seconds": 28.63,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 849,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "TOTAL_MISMATCH: Expected total 721.75 (subtotal+tax+shipping, discount pre-applied), but got 662.75 (diff: 59.00)"
+      ],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 3,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 4,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 5,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 6,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 7,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": null,
+        "totals_consistent": false
+      },
+      "line_item_count": 7
+    }
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "invoice_number": null,
+  "invoice_date": null,
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "Company",
+    "address": null,
+    "email": null,
+    "phone": null,
+    "tax_id": null,
+    "website": null
+  },
+  "bill_to": {
+    "name": "Keicle",
+    "address": null,
+    "email": null,
+    "tax_id": null
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "Only faulty goods can be exchanged in 10 days after sale",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 2500.0,
+      "discount": null,
+      "tax_rate": 5.0,
+      "total": 1275.0
+    },
+    {
+      "line_number": 2,
+      "description": "Tax Rate 5.00%",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 3000.0,
+      "discount": null,
+      "tax_rate": 5.0,
+      "total": 1500.0
+    },
+    {
+      "line_number": 3,
+      "description": "Shipping Charge",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 18400.0,
+      "discount": null,
+      "tax_rate": 5.0,
+      "total": 920.0
+    },
+    {
+      "line_number": 4,
+      "description": "30,000.00",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 30000.0,
+      "discount": null,
+      "tax_rate": 5.0,
+      "total": 15000.0
+    }
+  ],
+  "subtotal": 28475.0,
+  "discount": null,
+  "tax_rate": 5.0,
+  "tax_amount": 1423.75,
+  "shipping_charge": 2500.0,
+  "total_bill": 59095.0,
+  "currency": null,
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": null,
+  "notes": "Please include the bill number in your payment notes.",
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "MISSING_REQUIRED_FIELD: 'invoice_number' is null",
+      "MISSING_REQUIRED_FIELD: 'total_amount' is null"
+    ],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 3,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 4,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": null,
+      "totals_consistent": null
+    },
+    "line_item_count": 4
+  },
+  "metadata": {
+    "source_file": "Tally-Sales-Invoice-in-Excel-Format-13.jpg",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\IMAGES\\Tally-Sales-Invoice-in-Excel-Format-13.jpg",
+    "extraction_time": "2026-03-19T09:32:37.414796",
+    "processing_seconds": 37.06,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 686,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "MISSING_REQUIRED_FIELD: 'invoice_number' is null",
+        "MISSING_REQUIRED_FIELD: 'total_amount' is null"
+      ],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 3,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 4,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": null,
+        "totals_consistent": null
+      },
+      "line_item_count": 4
+    }
+  }
+}

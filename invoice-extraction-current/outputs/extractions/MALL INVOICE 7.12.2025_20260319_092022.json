@@ -1,0 +1,98 @@
+{
+  "invoice_number": "ASI/25-26/112",
+  "invoice_date": "27.12.2025",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "AS INDUSTRIES PROCESS PLANT FABRICATION &ERECTION",
+    "address": "PLOT.No.07-621/1/NR, Subhash Nagar, IDA, Jeedimetla, Hyd - 055 GSTIN:36CHBPG8372B1ZK",
+    "email": null,
+    "phone": null,
+    "tax_id": "36CHBPG8372B1ZK",
+    "website": null
+  },
+  "bill_to": {
+    "name": "APARNA CONSTRUCTIONS AND ESTATES PVT. LTD.",
+    "address": "Astral Heights, D.No. 6-3-352, Road No.1, Banjara Hills, PO date : 11.11.2025",
+    "email": null,
+    "tax_id": "36AADCA1031D1ZH"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "Materila supply for Hanmakonda Mall",
+      "quantity": 64800.0,
+      "unit": "TNS",
+      "unit_price": 17970.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 1164240.0
+    }
+  ],
+  "subtotal": 1164240.0,
+  "discount": null,
+  "tax_rate": 9.0,
+  "tax_amount": 209602.0,
+  "shipping": null,
+  "total_amount": 1301624.2,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": "Bank A/C: 0888102000019947 For AS INDUSTRIES Bank IFSC: IBKL0000888 Authorised signatory",
+  "notes": null,
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "LINE_ITEM_MATH_ERROR: Line 1 qty×price mismatch — Expected 1164456000.0, got 1164240.0 (diff: 1163291760.00)",
+      "TOTAL_MISMATCH: Expected total 1373842.00 (subtotal+tax-discount+shipping), but got 1301624.20 (diff: 72217.80)"
+    ],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": false,
+          "note": "Expected 1164456000.0, got 1164240.0 (diff: 1163291760.00)"
+        }
+      ],
+      "line_items_sum_to_subtotal": true,
+      "totals_consistent": false
+    },
+    "line_item_count": 1
+  },
+  "metadata": {
+    "source_file": "MALL INVOICE 7.12.2025.pdf",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\PDF\\MALL INVOICE 7.12.2025.pdf",
+    "extraction_time": "2026-03-19T09:20:22.530321",
+    "processing_seconds": 20.01,
+    "pdf_type": "digital",
+    "page_count": 1,
+    "ocr_engine": "none",
+    "tables_found": 1,
+    "text_length": 1062,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "LINE_ITEM_MATH_ERROR: Line 1 qty×price mismatch — Expected 1164456000.0, got 1164240.0 (diff: 1163291760.00)",
+        "TOTAL_MISMATCH: Expected total 1373842.00 (subtotal+tax-discount+shipping), but got 1301624.20 (diff: 72217.80)"
+      ],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": false,
+            "note": "Expected 1164456000.0, got 1164240.0 (diff: 1163291760.00)"
+          }
+        ],
+        "line_items_sum_to_subtotal": true,
+        "totals_consistent": false
+      },
+      "line_item_count": 1
+    }
+  }
+}

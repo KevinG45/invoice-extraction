@@ -1,0 +1,156 @@
+{
+  "invoice_number": null,
+  "invoice_date": null,
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "Zylker Electronics Hub",
+    "address": "148, Northern Street\nGreater South Avenue | NVOI CE\nNew York New York 10001,\nUSA",
+    "email": null,
+    "phone": null,
+    "tax_id": null,
+    "website": null
+  },
+  "bill_to": {
+    "name": "Ms. Mary D. Dunton",
+    "address": "1324 Hinkle Lake Road\nNeedham 02192 Maine,\nUSA",
+    "email": null,
+    "tax_id": null
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "Camera - OSLR camera with advanced shooting capabilities",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 899.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 899.0
+    },
+    {
+      "line_number": 2,
+      "description": "Fitness Tracker - Activity tracker wiih heart rate monitoring",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 129.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 129.0
+    },
+    {
+      "line_number": 3,
+      "description": "Laptop - Lightweight Japtop with a powerful processor - Tax Rate - Thanks for your business,",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 999.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 999.0
+    },
+    {
+      "line_number": 4,
+      "description": "Laptop",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 2027.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 2027.0
+    }
+  ],
+  "subtotal": 3964.0,
+  "discount": null,
+  "tax_rate": null,
+  "tax_amount": null,
+  "shipping": null,
+  "total_amount": 3964.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "USD",
+  "payment_terms": "Full payment is due upon receipt of this invoice. Late payments may incur additional charges as per the applicable laws.",
+  "payment_method": null,
+  "bank_details": null,
+  "notes": null,
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "MISSING_REQUIRED_FIELD: 'invoice_number' is null"
+    ],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 3,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 4,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": null,
+      "totals_consistent": true
+    },
+    "line_item_count": 4
+  },
+  "metadata": {
+    "source_file": "excel-invoice-template-1x.jpg",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\IMAGES\\excel-invoice-template-1x.jpg",
+    "extraction_time": "2026-03-19T09:25:02.831311",
+    "processing_seconds": 22.3,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 699,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "MISSING_REQUIRED_FIELD: 'invoice_number' is null"
+      ],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 3,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 4,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": null,
+        "totals_consistent": true
+      },
+      "line_item_count": 4
+    }
+  }
+}

@@ -172,11 +172,29 @@ def validate_invoice(data: dict) -> dict:
     math_checks["line_item_math"] = line_item_checks
 
     # ── Check 4: Line items sum to subtotal ───────────────────────────────
+    # Surcharges (shipping, packing, freight) are often excluded from the formal
+    # subtotal but included in line_items. Separate them out before comparing.
+    _SURCHARGE_PATTERN = re.compile(
+        r'(?:ship|pack|freight|courier|handling|delivery|carriage|transport)',
+        re.IGNORECASE,
+    )
+    surcharge_sum = 0.0
+    for item in data.get("line_items", []):
+        desc = item.get("description") or ""
+        hsn = item.get("hsn_sac")
+        item_total = item.get("total") or item.get("line_total") or 0.0
+        if _SURCHARGE_PATTERN.search(desc) and not hsn:
+            val = _parse_amount(item_total)
+            if val:
+                surcharge_sum += val
+
     subtotal = _parse_amount(data.get("subtotal"))
     if has_line_totals and subtotal is not None:
         diff = abs(computed_sum - subtotal)
         tolerance = abs(subtotal) * MATH_TOLERANCE + 0.02
-        ok = diff <= tolerance
+        # Also check without surcharges (they may be excluded from formal subtotal)
+        diff_no_surcharge = abs((computed_sum - surcharge_sum) - subtotal)
+        ok = diff <= tolerance or diff_no_surcharge <= tolerance
         math_checks["line_items_sum_to_subtotal"] = ok
         if not ok:
             warnings.append(

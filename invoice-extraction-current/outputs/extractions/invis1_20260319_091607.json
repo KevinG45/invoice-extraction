@@ -1,0 +1,159 @@
+{
+  "invoice_number": "X33",
+  "invoice_date": "2018-02-21",
+  "due_date": "2018-03-03",
+  "purchase_order_number": "02",
+  "vendor": {
+    "name": null,
+    "address": null,
+    "email": "sorina@sleekbill.in",
+    "phone": "+919873421098",
+    "tax_id": "O9AAMFCO376K12Z4",
+    "website": null
+  },
+  "bill_to": {
+    "name": "Long Baharam, 34-38, B Building Ab Company Waybill No: 234\nMadurai, Tamil Nadu (TN 33), India",
+    "address": "Hope Street no. 26, Building B LR No: B256\nMumbai, Maharashtra (MH 27), Delivery Note: 05\nIndia",
+    "email": null,
+    "tax_id": null
+  },
+  "ship_to": {
+    "name": null,
+    "address": "Place of Supply: MH (27)\nSorina TEST 123 Bill to:\nLong Baharam, 34-38, B Building Ab Company Waybill No: 234\nMadurai, Tamil Nadu (TN 33), India"
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "solvent",
+      "quantity": 23.0,
+      "unit": "unit",
+      "unit_price": 212.8,
+      "discount": 5.0,
+      "tax_rate": 18.0,
+      "total": 4894.4,
+      "hsn_sac": "345"
+    },
+    {
+      "line_number": 2,
+      "description": "detergent",
+      "quantity": 3.0,
+      "unit": "unit",
+      "unit_price": 2360.0,
+      "discount": 12.0,
+      "tax_rate": 18.0,
+      "total": 7080.0,
+      "hsn_sac": "1296"
+    },
+    {
+      "line_number": 3,
+      "description": "poly cloth",
+      "quantity": 100.0,
+      "unit": "unit",
+      "unit_price": 151.2,
+      "discount": 12.0,
+      "tax_rate": 18.0,
+      "total": 15120.0,
+      "hsn_sac": "3455"
+    },
+    {
+      "line_number": 4,
+      "description": "Shipping & Packaging",
+      "quantity": null,
+      "unit": "%",
+      "unit_price": 12.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 2144.4
+    }
+  ],
+  "subtotal": 23970.0,
+  "discount": 12.0,
+  "tax_rate": 18.0,
+  "tax_amount": 3454.9,
+  "shipping": 112.0,
+  "total_amount": 27094.4,
+  "amount_paid": null,
+  "amount_due": 27425.0,
+  "currency": "€",
+  "payment_terms": null,
+  "payment_method": "Pay Now with PayPal",
+  "bank_details": null,
+  "notes": "Please note that all products are fragile and need to be transported with caution. If invoice has not been paid in 5 days after due date, a tax of 10% of total value is applied to each day of delay.",
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "SUBTOTAL_MISMATCH: Sum of line items is 27094.40, but subtotal is 23970.00 (diff: 3124.40)"
+    ],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 3,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 4,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": false,
+      "totals_consistent": true
+    },
+    "line_item_count": 4
+  },
+  "metadata": {
+    "source_file": "invis1.jpg",
+    "source_path": "C:\\Users\\kmgs4\\AppData\\Local\\Temp\\tmpub_b3fq7.jpg",
+    "extraction_time": "2026-03-19T09:16:07.967322",
+    "processing_seconds": 55.39,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 1542,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "SUBTOTAL_MISMATCH: Sum of line items is 27094.40, but subtotal is 23970.00 (diff: 3124.40)"
+      ],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 3,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 4,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": false,
+        "totals_consistent": true
+      },
+      "line_item_count": 4
+    }
+  }
+}

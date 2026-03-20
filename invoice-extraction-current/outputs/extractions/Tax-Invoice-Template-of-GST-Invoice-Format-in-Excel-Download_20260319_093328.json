@@ -1,0 +1,94 @@
+{
+  "invoice_number": "Sector-200",
+  "invoice_date": "14-03-2021",
+  "due_date": "21-03-2021",
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "INVOCE DATE",
+    "address": null,
+    "email": null,
+    "phone": "88888888838",
+    "tax_id": null,
+    "website": null
+  },
+  "bill_to": {
+    "name": "TechGuruPlus",
+    "address": null,
+    "email": null,
+    "tax_id": null
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "PAYABLE AMOUNT Rs. - interest charge per month on late invoices.",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 129296.0,
+      "item_code": null
+    }
+  ],
+  "subtotal": 107517.33,
+  "discount": null,
+  "tax_rate": null,
+  "tax_amount": 21778.67,
+  "shipping": null,
+  "total_amount": 129296.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": null,
+  "notes": null,
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": null,
+      "totals_consistent": true
+    },
+    "line_item_count": 1
+  },
+  "metadata": {
+    "source_file": "Tax-Invoice-Template-of-GST-Invoice-Format-in-Excel-Download.png",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\IMAGES\\Tax-Invoice-Template-of-GST-Invoice-Format-in-Excel-Download.png",
+    "extraction_time": "2026-03-19T09:33:28.980029",
+    "processing_seconds": 51.56,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 1003,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": null,
+        "totals_consistent": true
+      },
+      "line_item_count": 1
+    }
+  }
+}

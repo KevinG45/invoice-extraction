@@ -1,0 +1,152 @@
+{
+  "invoice_number": "GST/25/043",
+  "invoice_date": "2025-02-27",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "NIREL DIGITALS",
+    "address": "Plot No. G1, H.No. 6-264/13/A/5, HAL Raghvendra Colony, Quthubullapur, Mandal Medchal Dist - Hyderabad- Telangana- 500055",
+    "email": "nireldigitals@gmail.com",
+    "phone": "9866272837",
+    "tax_id": "36ARKPC6820F1ZZ",
+    "website": null
+  },
+  "bill_to": {
+    "name": "VISION ALLIED CROP SCIENCES",
+    "address": "PLOT NO A-2/, PRAGHAVENDRA COLONY, QUTHBULLAPUR MANDAL",
+    "email": null,
+    "tax_id": "36BYAPA4685C1ZR"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "Digital Print Out - Printed on 130gsm",
+      "quantity": 391.0,
+      "unit": "NOS",
+      "unit_price": 11.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 4301.0
+    },
+    {
+      "line_number": 2,
+      "description": "Cutting",
+      "quantity": 11.0,
+      "unit": "NOS",
+      "unit_price": 50.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 550.0
+    },
+    {
+      "line_number": 3,
+      "description": "Lamination - Glossy",
+      "quantity": 50.0,
+      "unit": "NOS",
+      "unit_price": 7.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 350.0
+    },
+    {
+      "line_number": 4,
+      "description": "Designing Charges",
+      "quantity": 1.0,
+      "unit": "NOS",
+      "unit_price": 300.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 300.0
+    }
+  ],
+  "subtotal": 5501.0,
+  "discount": null,
+  "tax_rate": 9.0,
+  "tax_amount": 990.18,
+  "shipping": null,
+  "total_amount": 6491.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": "NIREL DIGITALS\nBank A/C: 5267528699\nFor, NIREL DIGITALS\nBank IFSC: CBIN0285113\nBank Name: CENTRAL BANK OF INDIA\nBranch: BALA NAGAR",
+  "notes": null,
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 3,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 4,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": true,
+      "totals_consistent": true
+    },
+    "line_item_count": 4
+  },
+  "metadata": {
+    "source_file": "GST25043.pdf",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\PDF\\GST25043.pdf",
+    "extraction_time": "2026-03-19T09:17:09.340280",
+    "processing_seconds": 24.15,
+    "pdf_type": "digital",
+    "page_count": 1,
+    "ocr_engine": "none",
+    "tables_found": 1,
+    "text_length": 1238,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 3,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 4,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": true,
+        "totals_consistent": true
+      },
+      "line_item_count": 4
+    }
+  }
+}

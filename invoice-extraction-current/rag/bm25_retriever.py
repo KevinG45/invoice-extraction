@@ -73,6 +73,37 @@ class BM25Retriever:
         self.metadata = store["metadata"]
         self.bm25 = BM25Okapi(self.corpus)
 
+    # ── Incremental update ─────────────────────────────────────────────────
+
+    def add_document(self, data: dict, source_filename: str) -> None:
+        """Add a single extraction result to the index without re-reading all files.
+
+        Appends the document to the in-memory corpus, re-instantiates BM25Okapi
+        (rank_bm25 has no incremental API), and persists the updated index.
+
+        Args:
+            data: The extraction result dict.
+            source_filename: Original filename (used in metadata).
+        """
+        doc_text = self._build_document_string(data)
+        tokens = self._tokenise(doc_text)
+        if not tokens:
+            return
+
+        self.corpus.append(tokens)
+        self.metadata.append({
+            "source_file": source_filename,
+            "invoice_id": data.get("invoice_number"),
+            "vendor_name": (data.get("vendor") or {}).get("name"),
+            "invoice_date": data.get("invoice_date"),
+            "total_amount": data.get("total_amount"),
+        })
+        self.bm25 = BM25Okapi(self.corpus)
+
+        self.index_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(self.index_path, "wb") as f:
+            pickle.dump({"corpus": self.corpus, "metadata": self.metadata}, f)
+
     # ── Search ────────────────────────────────────────────────────────────
 
     def search(self, query: str, top_k: int = 5) -> list[dict]:

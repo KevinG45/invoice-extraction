@@ -114,14 +114,18 @@ def _process_single_file(tmp_path: str, filename: str) -> dict:
     except Exception as e:
         logger.warning("[api] ChromaDB index failed for %s: %s", filename, e)
 
-    # Rebuild BM25 index
+    # Incrementally update BM25 index (load existing + add one doc; avoids O(n) re-read)
     try:
         from rag.bm25_retriever import BM25Retriever
         bm25 = BM25Retriever(index_path=str(BM25_INDEX_PATH))
-        bm25.build_index(str(OUTPUTS_DIR))
-        logger.info("[api] BM25 rebuild OK")
+        if BM25_INDEX_PATH.exists():
+            bm25.load_index()
+        else:
+            bm25.build_index(str(OUTPUTS_DIR))  # first run: build from scratch
+        bm25.add_document(result, filename)
+        logger.info("[api] BM25 incremental update OK")
     except Exception as e:
-        logger.warning("[api] BM25 rebuild failed: %s", e)
+        logger.warning("[api] BM25 update failed: %s", e)
 
     return result
 

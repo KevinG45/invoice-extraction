@@ -1,0 +1,92 @@
+{
+  "invoice_number": "GST/25/039",
+  "invoice_date": "2025-01-18",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "NIREL DIGITALS",
+    "address": "Plot No. G1, H.No. 6-264/13/A/5, HAL Raghvendra Colony, Quthubullapur, Mandal Medchal Dist - Hyderabad- Telangana- 500055",
+    "email": "nireldigitals@gmail.com",
+    "phone": "9866272837",
+    "tax_id": "36ARKPC6820F1ZZ",
+    "website": null
+  },
+  "bill_to": {
+    "name": "ENVEDA THERAPEUTICS INDIA PRIVATE LIMITED",
+    "address": "Forest Range Office, 3rd floor E401 W401, Lalgadi Malakpet Village, Genome Valley, Unnamed Road, Shamirpet Mandal, Hyderabad, Medchal Malkajgiri, Telangana",
+    "email": null,
+    "tax_id": "36AAFCE5951N1Z5"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "Letterhead",
+      "quantity": 100.0,
+      "unit": "NOS",
+      "unit_price": 7.5,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 750.0
+    }
+  ],
+  "subtotal": 750.0,
+  "discount": null,
+  "tax_rate": 19.0,
+  "tax_amount": 135.0,
+  "shipping": null,
+  "total_amount": 885.0,
+  "amount_paid": null,
+  "amount_due": 885.0,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": "NIREL DIGITALS\nBank A/C: 5267528699\nFor, NIREL DIGITALS\nBank IFSC: CBIN0285113\nBank Name: CENTRAL BANK OF INDIA\nBranch: BALA NAGAR",
+  "notes": null,
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": true,
+      "totals_consistent": true
+    },
+    "line_item_count": 1
+  },
+  "metadata": {
+    "source_file": "GST25039.pdf",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\PDF\\GST25039.pdf",
+    "extraction_time": "2026-03-19T09:15:22.520699",
+    "processing_seconds": 18.65,
+    "pdf_type": "digital",
+    "page_count": 1,
+    "ocr_engine": "none",
+    "tables_found": 1,
+    "text_length": 1155,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": true,
+        "totals_consistent": true
+      },
+      "line_item_count": 1
+    }
+  }
+}

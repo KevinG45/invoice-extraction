@@ -1,0 +1,252 @@
+{
+  "invoice_number": null,
+  "invoice_date": "10-01-25",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "SUNRISE ENTERPRISE",
+    "address": "S-50, 3rd PTC Building, I.T. Estate, New Dethi-1358XX",
+    "email": null,
+    "phone": "+91-98458XXX38",
+    "tax_id": "HYBADAXX456",
+    "website": null
+  },
+  "bill_to": {
+    "name": "Rajiv Gupta",
+    "address": "#S-50, 3rd PTC Building, I.T. Estate, Delhi-1358XX"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "Power Bank 10000mAh 570.00 5130.00 12 . - Sub-Total: 32898 5127.84 38025.84",
+      "quantity": 2.0,
+      "unit": "units",
+      "unit_price": 2872.8,
+      "discount": null,
+      "tax_rate": 12.0,
+      "total": 5745.6
+    },
+    {
+      "line_number": 2,
+      "description": "Executive Diary",
+      "quantity": 590.0,
+      "unit": "units",
+      "unit_price": 4720.0,
+      "discount": null,
+      "tax_rate": 12.0,
+      "total": 566.4
+    },
+    {
+      "line_number": 3,
+      "description": "Leather Portfolio Folder",
+      "quantity": 630.0,
+      "unit": "units",
+      "unit_price": 1260.0,
+      "discount": null,
+      "tax_rate": 12.0,
+      "total": 151.2
+    },
+    {
+      "line_number": 4,
+      "description": "Wireless Mouse",
+      "quantity": 520.0,
+      "unit": "units",
+      "unit_price": 4680.0,
+      "discount": null,
+      "tax_rate": 14.0,
+      "total": 842.4
+    },
+    {
+      "line_number": 5,
+      "description": "A4 Document File",
+      "quantity": 420.0,
+      "unit": "units",
+      "unit_price": 2100.0,
+      "discount": null,
+      "tax_rate": 12.0,
+      "total": 252.0
+    },
+    {
+      "line_number": 6,
+      "description": "Power Bank 10000mAh",
+      "quantity": 570.0,
+      "unit": "units",
+      "unit_price": 5130.0,
+      "discount": null,
+      "tax_rate": 12.0,
+      "total": 615.6
+    },
+    {
+      "line_number": 7,
+      "description": "USB Flash Drive",
+      "quantity": 999.0,
+      "unit": "units",
+      "unit_price": 11988.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 2157.84
+    },
+    {
+      "line_number": 8,
+      "description": "Bluetooth Keyboard",
+      "quantity": 750.0,
+      "unit": "units",
+      "unit_price": 3000.0,
+      "discount": null,
+      "tax_rate": 14.0,
+      "total": 3540.0
+    }
+  ],
+  "subtotal": 32898.0,
+  "discount": null,
+  "tax_rate": 12.0,
+  "tax_amount": 2563.92,
+  "shipping": null,
+  "total_amount": 38025.84,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": "UPI",
+  "bank_details": null,
+  "notes": null,
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "MISSING_REQUIRED_FIELD: 'invoice_number' is null",
+      "LINE_ITEM_MATH_ERROR: Line 2 qty×price mismatch — Expected 2784800.0, got 566.4 (diff: 2784233.60)",
+      "LINE_ITEM_MATH_ERROR: Line 3 qty×price mismatch — Expected 793800.0, got 151.2 (diff: 793648.80)",
+      "LINE_ITEM_MATH_ERROR: Line 4 qty×price mismatch — Expected 2433600.0, got 842.4 (diff: 2432757.60)",
+      "LINE_ITEM_MATH_ERROR: Line 5 qty×price mismatch — Expected 882000.0, got 252.0 (diff: 881748.00)",
+      "LINE_ITEM_MATH_ERROR: Line 6 qty×price mismatch — Expected 2924100.0, got 615.6 (diff: 2923484.40)",
+      "LINE_ITEM_MATH_ERROR: Line 7 qty×price mismatch — Expected 11976012.0, got 2157.84 (diff: 11973854.16)",
+      "LINE_ITEM_MATH_ERROR: Line 8 qty×price mismatch — Expected 2250000.0, got 3540.0 (diff: 2246460.00)",
+      "SUBTOTAL_MISMATCH: Sum of line items is 13871.04, but subtotal is 32898.00 (diff: 19026.96)",
+      "TOTAL_MISMATCH: Expected total 35461.92 (subtotal+tax-discount+shipping), but got 38025.84 (diff: 2563.92)"
+    ],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": false,
+          "note": "Expected 2784800.0, got 566.4 (diff: 2784233.60)"
+        },
+        {
+          "line_number": 3,
+          "ok": false,
+          "note": "Expected 793800.0, got 151.2 (diff: 793648.80)"
+        },
+        {
+          "line_number": 4,
+          "ok": false,
+          "note": "Expected 2433600.0, got 842.4 (diff: 2432757.60)"
+        },
+        {
+          "line_number": 5,
+          "ok": false,
+          "note": "Expected 882000.0, got 252.0 (diff: 881748.00)"
+        },
+        {
+          "line_number": 6,
+          "ok": false,
+          "note": "Expected 2924100.0, got 615.6 (diff: 2923484.40)"
+        },
+        {
+          "line_number": 7,
+          "ok": false,
+          "note": "Expected 11976012.0, got 2157.84 (diff: 11973854.16)"
+        },
+        {
+          "line_number": 8,
+          "ok": false,
+          "note": "Expected 2250000.0, got 3540.0 (diff: 2246460.00)"
+        }
+      ],
+      "line_items_sum_to_subtotal": false,
+      "totals_consistent": false
+    },
+    "line_item_count": 8
+  },
+  "metadata": {
+    "source_file": "gst-invoice-bill-format-2.png",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\IMAGES\\gst-invoice-bill-format-2.png",
+    "extraction_time": "2026-03-19T09:25:35.745983",
+    "processing_seconds": 32.91,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 1806,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "MISSING_REQUIRED_FIELD: 'invoice_number' is null",
+        "LINE_ITEM_MATH_ERROR: Line 2 qty×price mismatch — Expected 2784800.0, got 566.4 (diff: 2784233.60)",
+        "LINE_ITEM_MATH_ERROR: Line 3 qty×price mismatch — Expected 793800.0, got 151.2 (diff: 793648.80)",
+        "LINE_ITEM_MATH_ERROR: Line 4 qty×price mismatch — Expected 2433600.0, got 842.4 (diff: 2432757.60)",
+        "LINE_ITEM_MATH_ERROR: Line 5 qty×price mismatch — Expected 882000.0, got 252.0 (diff: 881748.00)",
+        "LINE_ITEM_MATH_ERROR: Line 6 qty×price mismatch — Expected 2924100.0, got 615.6 (diff: 2923484.40)",
+        "LINE_ITEM_MATH_ERROR: Line 7 qty×price mismatch — Expected 11976012.0, got 2157.84 (diff: 11973854.16)",
+        "LINE_ITEM_MATH_ERROR: Line 8 qty×price mismatch — Expected 2250000.0, got 3540.0 (diff: 2246460.00)",
+        "SUBTOTAL_MISMATCH: Sum of line items is 13871.04, but subtotal is 32898.00 (diff: 19026.96)",
+        "TOTAL_MISMATCH: Expected total 35461.92 (subtotal+tax-discount+shipping), but got 38025.84 (diff: 2563.92)"
+      ],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": false,
+            "note": "Expected 2784800.0, got 566.4 (diff: 2784233.60)"
+          },
+          {
+            "line_number": 3,
+            "ok": false,
+            "note": "Expected 793800.0, got 151.2 (diff: 793648.80)"
+          },
+          {
+            "line_number": 4,
+            "ok": false,
+            "note": "Expected 2433600.0, got 842.4 (diff: 2432757.60)"
+          },
+          {
+            "line_number": 5,
+            "ok": false,
+            "note": "Expected 882000.0, got 252.0 (diff: 881748.00)"
+          },
+          {
+            "line_number": 6,
+            "ok": false,
+            "note": "Expected 2924100.0, got 615.6 (diff: 2923484.40)"
+          },
+          {
+            "line_number": 7,
+            "ok": false,
+            "note": "Expected 11976012.0, got 2157.84 (diff: 11973854.16)"
+          },
+          {
+            "line_number": 8,
+            "ok": false,
+            "note": "Expected 2250000.0, got 3540.0 (diff: 2246460.00)"
+          }
+        ],
+        "line_items_sum_to_subtotal": false,
+        "totals_consistent": false
+      },
+      "line_item_count": 8
+    }
+  }
+}

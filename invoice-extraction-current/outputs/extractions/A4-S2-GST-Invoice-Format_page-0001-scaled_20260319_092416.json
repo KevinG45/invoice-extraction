@@ -1,0 +1,112 @@
+{
+  "invoice_number": "GST-3425-26",
+  "invoice_date": "2025-07-23",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "GUJARAT FREIGHT TOOLS",
+    "address": "Plot No A 64, Road No 21, Waghle Indl Estate, Mumbai, Maharashtra - 400604, Web : wwwlogobuld.com LOGOTEXT, PAN : 26CORPP3939N1, GSTIN : 32AABBA7890B1ZB",
+    "email": "info@oft.com",
+    "phone": "02225820309, 9878789878",
+    "tax_id": "32AABBA7890B1ZB",
+    "website": "wwwlogobuld.com, info@oft.com"
+  },
+  "bill_to": {
+    "name": "Shiv Engineering",
+    "address": null,
+    "email": null,
+    "tax_id": "24ABSFS0321B2ZL"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "8302",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 2935.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 3476.75
+    },
+    {
+      "line_number": 2,
+      "description": "8302",
+      "quantity": null,
+      "unit": null,
+      "unit_price": 1270.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 1649.5
+    }
+  ],
+  "subtotal": 5126.25,
+  "discount": null,
+  "tax_rate": 18.0,
+  "tax_amount": 923.07,
+  "shipping": null,
+  "total_amount": 6049.32,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": "Name icici For Gujarat Freight Tools, Branch Surate, Acc. Number 2715500356, IFSC ICICO45F, UPI ID ifox@icici",
+  "notes": null,
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": null,
+      "totals_consistent": true
+    },
+    "line_item_count": 2
+  },
+  "metadata": {
+    "source_file": "A4-S2-GST-Invoice-Format_page-0001-scaled.jpg",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\IMAGES\\A4-S2-GST-Invoice-Format_page-0001-scaled.jpg",
+    "extraction_time": "2026-03-19T09:24:16.328575",
+    "processing_seconds": 29.93,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 1221,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": null,
+        "totals_consistent": true
+      },
+      "line_item_count": 2
+    }
+  }
+}

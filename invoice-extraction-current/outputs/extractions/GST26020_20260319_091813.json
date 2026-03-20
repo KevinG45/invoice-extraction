@@ -1,0 +1,92 @@
+{
+  "invoice_number": "BILL GST/26/020",
+  "invoice_date": "2025-11-07",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "CANAA CREATECH",
+    "address": "#306, Vijayalakshmi Arcade, Spring Fields Colony, Jeedimetla SIMULATOR DEVELOPMENT DIVISION, Village, Secunderabad - 500 067, Telangana TRIMULGHERRY, SECUNDERABAD - 500 015",
+    "email": "infocanaagroup@gmail.com",
+    "phone": "9849498797",
+    "tax_id": "36AALFC0295J1Z8",
+    "website": null
+  },
+  "bill_to": {
+    "name": "CANAA CREATECH",
+    "address": "#306, Vijayalakshmi Arcade, Spring Fields Colony, Jeedimetla SIMULATOR DEVELOPMENT DIVISION, Village, Secunderabad - 500 067, Telangana TRIMULGHERRY, SECUNDERABAD - 500 015",
+    "email": null,
+    "tax_id": null
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "Production Work",
+      "quantity": 1.0,
+      "unit": "NOS",
+      "unit_price": 9000.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 9000.0
+    }
+  ],
+  "subtotal": 9000.0,
+  "discount": null,
+  "tax_rate": null,
+  "tax_amount": null,
+  "shipping": null,
+  "total_amount": 9000.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": "Bank A/C: 0888102000005289\nBank IFSC: IBKL0000888\nBank Name: IDBI Bank\nFor, CANAA CREATECH\nBranch: Qutubullapur Branch",
+  "notes": null,
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": true,
+      "totals_consistent": true
+    },
+    "line_item_count": 1
+  },
+  "metadata": {
+    "source_file": "GST26020.pdf",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\PDF\\GST26020.pdf",
+    "extraction_time": "2026-03-19T09:18:13.556622",
+    "processing_seconds": 17.67,
+    "pdf_type": "digital",
+    "page_count": 1,
+    "ocr_engine": "none",
+    "tables_found": 0,
+    "text_length": 944,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": true,
+        "totals_consistent": true
+      },
+      "line_item_count": 1
+    }
+  }
+}

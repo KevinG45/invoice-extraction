@@ -1,0 +1,132 @@
+{
+  "invoice_number": "GST-004",
+  "invoice_date": "2023-12-06",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "NIREL DIGITALS",
+    "address": "Plot No. G1, H.No. 6-264/13/A/5, HAL Raghvendra Colony, Quthubullapur, Mandal Medchal Dist - Hyderabad- Telangana- 500055",
+    "email": "nireldigitals@gmail.com",
+    "phone": "9866272837",
+    "tax_id": "36ARKPC6820F1ZZ",
+    "website": null
+  },
+  "bill_to": {
+    "name": "YASH EXPORTS, UNIT - II",
+    "address": "Plot no.32/AROAD NO.84",
+    "email": null,
+    "tax_id": "36AAAFY6995N1Z6"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "VINYL - (8nos), 6ft x 4ft (2nos), 4ft x 8ft (1nos),",
+      "quantity": 702.0,
+      "unit": "SQF",
+      "unit_price": 38.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 26676.0
+    },
+    {
+      "line_number": 2,
+      "description": "Vinyl Pasting Charges - Per Sft Charges",
+      "quantity": 702.0,
+      "unit": "NOS",
+      "unit_price": 8.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 5616.0
+    },
+    {
+      "line_number": 3,
+      "description": "Foam Board Sheets 5MM - Size 4ft x 8ft (4nos) per sft (Rs. 45/-) Total Sft 128",
+      "quantity": 128.0,
+      "unit": "SQF",
+      "unit_price": 45.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 5760.0
+    }
+  ],
+  "subtotal": 38052.0,
+  "discount": null,
+  "tax_rate": 18.0,
+  "tax_amount": 6849.36,
+  "shipping": null,
+  "total_amount": 44901.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": "NIREL DIGITALS\nBank A/C: 5267528699\nFor, NIREL DIGITALS\nBank IFSC: CBIN0285113\nBank Name: CENTRAL BANK OF INDIA\nBranch: BALA NAGAR",
+  "notes": null,
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 3,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": true,
+      "totals_consistent": true
+    },
+    "line_item_count": 3
+  },
+  "metadata": {
+    "source_file": "GST004.pdf",
+    "source_path": "C:\\Users\\kmgs4\\Documents\\Christ Uni\\invoice-extraction\\invoice-extraction-current\\data\\input\\INVOICES\\PDF\\GST004.pdf",
+    "extraction_time": "2026-03-19T08:58:31.584180",
+    "processing_seconds": 22.4,
+    "pdf_type": "digital",
+    "page_count": 1,
+    "ocr_engine": "none",
+    "tables_found": 1,
+    "text_length": 1401,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 3,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": true,
+        "totals_consistent": true
+      },
+      "line_item_count": 3
+    }
+  }
+}
