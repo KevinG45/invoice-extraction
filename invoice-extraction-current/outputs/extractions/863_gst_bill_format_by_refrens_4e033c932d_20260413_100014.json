@@ -1,0 +1,97 @@
+{
+  "invoice_number": "387/2023-24",
+  "invoice_date": "6-Nov-23",
+  "due_date": null,
+  "purchase_order_number": null,
+  "currency": "INR",
+  "subtotal": 113600.0,
+  "discount": 28400.0,
+  "tax_amount": 18.0,
+  "shipping": null,
+  "total_amount": 134048.0,
+  "amount_paid": null,
+  "amount_due": 134048.0,
+  "tax_rate": null,
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": null,
+  "notes": "Note-Please make cheques in favor of \\",
+  "vendor": {
+    "name": "Refrens Internet Pvt. Ltd.",
+    "address": "1D-606, SESNA Divyasree Elan, Besides Fire StationSarjapur Road, Kaikondrahalli, Bengaluru, Karnataka - 560035",
+    "email": null,
+    "phone": "9104043036",
+    "tax_id": "29AAJCR7259L1Z1"
+  },
+  "bill_to": {
+    "name": "GST Tin No",
+    "address": null,
+    "email": null,
+    "tax_id": "07PDUJS4678K1Z4"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "description:": "LED LIGHTS 85013410 pcs 25000 Bulbs 85013420 Dozens 46000",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "total": 134048.0
+    }
+  ],
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "SUBTOTAL_MISMATCH: Sum of line items is 134048.00, but subtotal is 113600.00 (diff: 20448.00)",
+      "TOTAL_MISMATCH: Expected total 113618.00 (subtotal+tax+shipping, discount pre-applied), but got 134048.00 (diff: 20430.00)"
+    ],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": false,
+      "totals_consistent": false
+    },
+    "line_item_count": 1
+  },
+  "metadata": {
+    "source_file": "863_gst_bill_format_by_refrens_4e033c932d.jpg",
+    "source_path": "C:\\Users\\kmgs4\\AppData\\Local\\Temp\\tmpaypx0y4e.jpg",
+    "extraction_time": "2026-04-13T10:00:14.569679",
+    "processing_seconds": 39.53,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 875,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "SUBTOTAL_MISMATCH: Sum of line items is 134048.00, but subtotal is 113600.00 (diff: 20448.00)",
+        "TOTAL_MISMATCH: Expected total 113618.00 (subtotal+tax+shipping, discount pre-applied), but got 134048.00 (diff: 20430.00)"
+      ],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": false,
+        "totals_consistent": false
+      },
+      "line_item_count": 1
+    }
+  }
+}

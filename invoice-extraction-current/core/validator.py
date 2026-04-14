@@ -146,26 +146,31 @@ def validate_invoice(data: dict) -> dict:
 
         item_check: Dict[str, Any] = {"line_number": i, "ok": True, "note": ""}
 
-        if all(v is not None for v in [qty, unit_price, item_total]):
-            qty = _parse_amount(qty) if not isinstance(qty, (int, float)) else float(qty)
-            unit_price = _parse_amount(unit_price) if not isinstance(unit_price, (int, float)) else float(unit_price)
-            item_total = _parse_amount(item_total) if not isinstance(item_total, (int, float)) else float(item_total)
-
-            if qty is not None and unit_price is not None and item_total is not None:
+        # Parse item_total regardless of whether qty/unit_price are present.
+        # OCR invoices often have a total but missing qty or unit_price — those
+        # items must still count toward the subtotal sum.
+        if item_total is not None:
+            item_total_f = _parse_amount(item_total) if not isinstance(item_total, (int, float)) else float(item_total)
+            if item_total_f is not None:
                 has_line_totals = True
-                expected = round(qty * unit_price, 2)
-                actual = round(item_total, 2)
-                difference = abs(expected - actual)
-                tolerance_amount = abs(expected) * MATH_TOLERANCE
+                computed_sum += item_total_f
 
-                if difference > tolerance_amount and difference > 0.02:  # also ignore penny rounding
-                    item_check["ok"] = False
-                    item_check["note"] = f"Expected {expected}, got {actual} (diff: {difference:.2f})"
-                    warnings.append(
-                        f"LINE_ITEM_MATH_ERROR: Line {i} qty×price mismatch — {item_check['note']}"
-                    )
+                # Only cross-check qty×unit_price when all three values exist
+                if qty is not None and unit_price is not None:
+                    qty_f = _parse_amount(qty) if not isinstance(qty, (int, float)) else float(qty)
+                    price_f = _parse_amount(unit_price) if not isinstance(unit_price, (int, float)) else float(unit_price)
+                    if qty_f is not None and price_f is not None:
+                        expected = round(qty_f * price_f, 2)
+                        actual = round(item_total_f, 2)
+                        difference = abs(expected - actual)
+                        tolerance_amount = abs(expected) * MATH_TOLERANCE
 
-                computed_sum += item_total
+                        if difference > tolerance_amount and difference > 0.02:
+                            item_check["ok"] = False
+                            item_check["note"] = f"Expected {expected}, got {actual} (diff: {difference:.2f})"
+                            warnings.append(
+                                f"LINE_ITEM_MATH_ERROR: Line {i} qty×price mismatch — {item_check['note']}"
+                            )
 
         line_item_checks.append(item_check)
 
@@ -252,8 +257,11 @@ def validate_invoice(data: dict) -> dict:
                 d1 = datetime.strptime(d1_str, "%Y-%m-%d")
                 d2 = datetime.strptime(d2_str, "%Y-%m-%d")
                 if d2 < d1:
-                    warnings.append(
-                        f"DATE_WARNING: Due date ({due_date}) precedes invoice date ({inv_date})"
+                    # Dates are swapped — auto-correct by swapping them
+                    data["invoice_date"], data["due_date"] = data["due_date"], data["invoice_date"]
+                    logger.info(
+                        "[validator] Auto-corrected swapped dates: invoice_date=%s, due_date=%s",
+                        data["invoice_date"], data["due_date"]
                     )
         except ValueError:
             pass

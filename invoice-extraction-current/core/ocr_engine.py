@@ -174,7 +174,8 @@ def run_ocr_on_pdf(
     Returns:
         Same structure as ``extract_digital_pdf()`` for pipeline consistency::
 
-            {"full_text", "pages": [{page_number, text, blocks}], "page_count", "source_file"}
+            {"full_text", "pages": [{page_number, text, blocks}], "page_count", "source_file",
+             "mean_confidence", "ocr_quality"}
     """
     pdf_path = Path(pdf_path)
     logger.info("[ocr_engine] Converting PDF to images: %s at %d DPI", pdf_path.name, dpi)
@@ -190,11 +191,17 @@ def run_ocr_on_pdf(
         "source_file": str(pdf_path),
     }
     all_text_parts: List[str] = []
+    all_confidences: List[float] = []
 
     for page_num, image in enumerate(images, start=1):
         logger.info("[ocr_engine] OCR page %d/%d", page_num, len(images))
         blocks = run_ocr(image, engine=engine)
         page_text = " ".join(b["text"] for b in blocks if b["text"].strip())
+        
+        # FIXED: Bug #18 — Collect confidence scores
+        page_confidences = [b["confidence"] for b in blocks if "confidence" in b]
+        all_confidences.extend(page_confidences)
+        
         result["pages"].append({
             "page_number": page_num,
             "text": page_text,
@@ -203,7 +210,22 @@ def run_ocr_on_pdf(
         all_text_parts.append(f"--- Page {page_num} ---\n{page_text}")
 
     result["full_text"] = "\n\n".join(all_text_parts)
-    logger.info("[ocr_engine] OCR complete. Total chars: %d", len(result["full_text"]))
+    
+    # FIXED: Bug #18 — Calculate mean confidence and OCR quality flag
+    mean_confidence = sum(all_confidences) / len(all_confidences) if all_confidences else 0.0
+    result["mean_confidence"] = round(mean_confidence, 3)
+    
+    if mean_confidence < 0.30:
+        result["ocr_quality"] = "very_low"
+        logger.warning("[ocr_engine] Very low OCR quality (%.2f) for %s", mean_confidence, pdf_path.name)
+    elif mean_confidence < 0.50:
+        result["ocr_quality"] = "low"
+        logger.warning("[ocr_engine] Low OCR quality (%.2f) for %s", mean_confidence, pdf_path.name)
+    else:
+        result["ocr_quality"] = "normal"
+    
+    logger.info("[ocr_engine] OCR complete. Total chars: %d, Mean confidence: %.2f", 
+                len(result["full_text"]), mean_confidence)
     return result
 
 
@@ -220,11 +242,27 @@ def run_ocr_on_image_file(
     logger.info("[ocr_engine] OCR on image: %s", image_path.name)
     blocks = run_ocr(str(image_path), engine=engine)
     page_text = _reconstruct_text(blocks)
+    
+    # FIXED: Bug #18 — Calculate mean confidence and OCR quality flag
+    confidences = [b["confidence"] for b in blocks if "confidence" in b]
+    mean_confidence = sum(confidences) / len(confidences) if confidences else 0.0
+    
+    if mean_confidence < 0.30:
+        ocr_quality = "very_low"
+        logger.warning("[ocr_engine] Very low OCR quality (%.2f) for %s", mean_confidence, image_path.name)
+    elif mean_confidence < 0.50:
+        ocr_quality = "low"
+        logger.warning("[ocr_engine] Low OCR quality (%.2f) for %s", mean_confidence, image_path.name)
+    else:
+        ocr_quality = "normal"
+    
     return {
         "full_text": page_text,
         "pages": [{"page_number": 1, "text": page_text, "blocks": blocks}],
         "page_count": 1,
         "source_file": str(image_path),
+        "mean_confidence": round(mean_confidence, 3),
+        "ocr_quality": ocr_quality,
     }
 
 

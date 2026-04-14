@@ -1,0 +1,162 @@
+{
+  "invoice_number": "245625412",
+  "invoice_date": "03-03-2021",
+  "due_date": "17-03-2021",
+  "purchase_order_number": null,
+  "currency": "INR",
+  "subtotal": null,
+  "discount": null,
+  "tax_amount": null,
+  "shipping": null,
+  "total_amount": 95524.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "tax_rate": 12.0,
+  "payment_terms": "Total payment due in 14 days.",
+  "payment_method": null,
+  "bank_details": null,
+  "notes": "Note:\nTotal payment due in 14 days.\nPlease inclue Include the Invoice number in your payment notes.\nAuthorized Sign.\nIf you have any queries for this Invoice please contact\n[+91XXXXXXXXXX], example@mail.com",
+  "vendor": {
+    "name": "SS Traders",
+    "address": "Let's Work Together.\nAddress : INVOICE DATE : 03-03-2021\nOkhla Industrial Area, New Delhi-110020\nPhone : 9999999999\nGSTIN : 898989898989",
+    "email": "example@mail.com",
+    "phone": "9999999999",
+    "tax_id": "89BGBGB9898G5HI",
+    "website": null
+  },
+  "bill_to": {
+    "name": "TechGuruPlus",
+    "address": null,
+    "email": null,
+    "tax_id": "69GGGGG9696G696"
+  },
+  "ship_to": {
+    "name": "TechGuruPlus",
+    "address": "Sector-200, Noida, Uttar Pradesh\nUttar Pradesh\nPhone : 8888888888\nGSTIN : B9696969E9696969\nGSTIN ; 6969696969696969",
+    "email": null,
+    "tax_id": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "ITEM NAME 4 Rs.",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 28130.0,
+      "item_code": null
+    },
+    {
+      "line_number": 2,
+      "description": "ITEM NAME 5 Rs.",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 5375.0,
+      "item_code": null
+    },
+    {
+      "line_number": 3,
+      "description": "Rs.",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 77035.52,
+      "item_code": null
+    },
+    {
+      "line_number": 4,
+      "description": "PAYABLE AMOUNT Rs.",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 95524.0,
+      "item_code": null
+    }
+  ],
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 3,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 4,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": null,
+      "totals_consistent": null
+    },
+    "line_item_count": 4
+  },
+  "metadata": {
+    "source_file": "Colourful-GST-Invoice-Format-in-Excel-Download.jpg",
+    "source_path": "C:\\Users\\kmgs4\\AppData\\Local\\Temp\\tmpe_t63brq.jpg",
+    "extraction_time": "2026-04-13T09:58:35.810427",
+    "processing_seconds": 103.01,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 921,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 3,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 4,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": null,
+        "totals_consistent": null
+      },
+      "line_item_count": 4
+    }
+  }
+}

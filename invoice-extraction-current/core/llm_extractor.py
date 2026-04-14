@@ -22,16 +22,144 @@ from core.config import LLM_MODEL, LLM_BASE_URL, LLM_TEMPERATURE, LLM_MAX_RETRIE
 
 logger = logging.getLogger(__name__)
 
+# FIXED: Bug #28 — Garbage invoice number validation
+GARBAGE_INV_NUMS = {
+    "e-Way", "e-way", "E-WAY", "Bill", "No", "Date", "the",
+    "Dated", "Buyer", "GSTIN", "Tax", "Invoice", "Page",
+    "Seller", "Total", "Amount", "Number", "Details"
+}
+
+_GSTIN_RE = re.compile(r"^\d{2}[A-Z]{5}\d{4}[A-Z]\d[A-Z\d]{2}$")
+
+
+def _normalize_gstin_candidate(raw: Any) -> Optional[str]:
+    """Normalize a noisy GSTIN-like token (OCR-safe) and return valid GSTIN if possible."""
+    if raw is None:
+        return None
+    s = str(raw).upper()
+    s = re.sub(r'^(?:GSTIN(?:\s*/\s*UIN)?|UIN|GST|TIN)\s*[/:\-]?\s*', '', s, flags=re.IGNORECASE).strip()
+    s = re.sub(r'[^A-Z0-9]', '', s)
+    if len(s) < 15:
+        return None
+    s = s[:15]
+
+    chars = list(s)
+
+    def _as_digit(ch: str) -> str:
+        return {
+            'O': '0', 'Q': '0', 'D': '0',
+            'I': '1', 'L': '1', 'T': '1',
+            'S': '5', 'B': '8',
+        }.get(ch, ch)
+
+    def _as_letter(ch: str) -> str:
+        return {
+            '0': 'O', '1': 'I', '2': 'Z', '3': 'B', '4': 'A',
+            '5': 'S', '6': 'G', '7': 'T', '8': 'B', '9': 'G',
+        }.get(ch, ch)
+
+    # GSTIN format positions: 2 digits + 5 letters + 4 digits + 1 letter + 1 digit + 2 alnum
+    for i in (0, 1, 7, 8, 9, 10, 12):
+        chars[i] = _as_digit(chars[i])
+
+    for i in (2, 3, 4, 5, 6, 11):
+        chars[i] = _as_letter(chars[i])
+
+    # FIXED: Bug P0-5 — Position 13 (14th character) should be digit, position 14 (15th) is alphanumeric check
+    # Position 13 (index 13): must be digit
+    chars[13] = _as_digit(chars[13])
+    
+    # Position 14 (index 14): check digit/letter - keep as-is (can be alphanumeric)
+    # Don't normalize - let the actual character through for proper validation
+    # chars[14] stays as-is
+
+    candidate = ''.join(chars)
+    return candidate if _GSTIN_RE.match(candidate) else None
+
+
+def _extract_gstins_from_text(text: str) -> list[str]:
+    """Extract valid GSTIN values from raw text, including OCR-corrupted forms."""
+    if not text:
+        return []
+
+    hits = []
+    seen = set()
+
+    # High-confidence explicit GSTIN labels first.
+    for m in re.finditer(r'(?:GSTIN|GSTIN/UIN|UIN|GST)\s*[.:\-]?\s*([A-Z0-9\-/\s]{10,30})', text, re.IGNORECASE):
+        norm = _normalize_gstin_candidate(m.group(1))
+        if norm and norm not in seen:
+            seen.add(norm)
+            hits.append(norm)
+
+    # Broader scan for contiguous alnum tokens likely to hold GSTIN values.
+    for m in re.finditer(r'\b[A-Z0-9][A-Z0-9\-/\s]{12,22}[A-Z0-9]\b', text.upper()):
+        norm = _normalize_gstin_candidate(m.group(0))
+        if norm and norm not in seen:
+            seen.add(norm)
+            hits.append(norm)
+
+    return hits
+
+
+def _is_valid_invoice_number(inv_num: str | None) -> bool:
+    """
+    Validate invoice number structure.
+    # FIXED: Bug #28
+    
+    A valid invoice number must:
+    - Contain at least one digit
+    - Be between 2 and 30 characters
+    - Not be purely alphabetic
+    - Not match any word in GARBAGE_INV_NUMS
+    
+    Args:
+        inv_num: Candidate invoice number string
+    
+    Returns:
+        True if valid, False otherwise
+    """
+    if not inv_num or not isinstance(inv_num, str):
+        return False
+    
+    inv_num = inv_num.strip()
+    
+    # Check length
+    if len(inv_num) < 2 or len(inv_num) > 30:
+        return False
+    
+    # Must contain at least one digit
+    if not re.search(r'\d', inv_num):
+        return False
+    
+    # Must not be purely numeric (likely page/qty)
+    if inv_num.isdigit() and len(inv_num) < 4:
+        return False
+    
+    # Check against garbage list (case-insensitive)
+    if inv_num.upper() in {g.upper() for g in GARBAGE_INV_NUMS}:
+        return False
+    
+    # Must not be purely alphabetic
+    if inv_num.isalpha():
+        return False
+    
+    return True
+
+
 # ── Invoice extraction JSON schema prompt ──────────────────────────────────
 EXTRACTION_PROMPT = """Extract all invoice fields from the text below. Return ONLY a JSON object — no markdown, no code blocks, no explanations. Start with {{ and end with }}.
 
 RULES:
 - Use null for any missing field — never omit fields
 - currency: use "INR" if you see ₹, Rs, GSTIN, or any GST%; otherwise match the symbol found
-- bill_to.name: the buyer company or person name ONLY — never include the address in this field
+- vendor.name: company name only | vendor.address: full vendor address (street, city, state, PIN) # FIXED: Bug #4
+- bill_to.name: buyer company name only | bill_to.address: full buyer address (street, city, state, PIN) # FIXED: Bug #4
+- ship_to.name: consignee name only | ship_to.address: full shipping address (street, city, state, PIN) # FIXED: Bug #4
 - All string values must be on a single line (no newlines inside strings)
 - line_items[].total is the line's total amount (qty × unit_price before or after tax)
 - For Indian GST invoices: tax_rate is typically 5, 12, 18, or 28 (percent)
+- IMPORTANT: Some invoices have the item name on one line and its description on the NEXT line (before the next item's numbers). Combine them: use the item name + description together as line_items[].description. Do NOT create a separate line item for a description-only line that has no quantity or amount.
 
 OUTPUT this exact structure (replace values, keep all keys, use null for missing):
 {{"invoice_number":null,"invoice_date":null,"due_date":null,"purchase_order_number":null,"currency":"INR","subtotal":null,"discount":null,"tax_amount":null,"shipping":null,"total_amount":null,"amount_paid":null,"amount_due":null,"tax_rate":null,"payment_terms":null,"payment_method":null,"bank_details":null,"notes":null,"vendor":{{"name":null,"address":null,"email":null,"phone":null,"tax_id":null,"website":null}},"bill_to":{{"name":null,"address":null,"email":null,"tax_id":null}},"ship_to":{{"name":null,"address":null}},"line_items":[{{"description":null,"hsn_sac":null,"quantity":null,"unit":null,"unit_price":null,"discount":null,"tax_rate":null,"total":null}}]}}
@@ -46,10 +174,71 @@ JSON:"""
 # PUBLIC API
 # ═══════════════════════════════════════════════════════════════════════════
 
+# ── Sliding Window Config (Bug #17 fix) ──
+WINDOW_SIZE = 6000       # Characters per window
+WINDOW_OVERLAP = 500     # Overlap between windows
+MAX_WINDOWS = 2          # Max windows (12K chars total) — 1 invoice rarely needs more
+MAX_INVOICE_CHARS = 12000  # Hard limit — reduces LLM call time significantly
+
+
+def _extract_window(text: str, window_num: int, is_first: bool) -> dict:
+    """Extract fields from a single window of text.
+    
+    First window: extract all fields (headers + line_items).
+    Subsequent windows: extract only line_items.
+    """
+    if is_first:
+        prompt = EXTRACTION_PROMPT.format(ocr_text=text)
+    else:
+        # For continuation windows, only extract line items
+        prompt = f"""Extract ONLY the line items from this invoice text (continuation from previous page).
+Return JSON with only the "line_items" array.
+
+Invoice text:
+{text}
+
+Return ONLY valid JSON like: {{"line_items": [{{"description": "...", "quantity": ..., "unit_price": ..., "total": ...}}]}}"""
+    
+    raw = ""
+    for attempt in range(1, LLM_MAX_RETRIES + 1):
+        try:
+            raw = _call_ollama(prompt, json_mode=True)
+            cleaned = _clean_llm_response(raw)
+            return json.loads(cleaned, strict=False)
+        except json.JSONDecodeError:
+            if attempt == LLM_MAX_RETRIES:
+                return {}
+        except Exception:
+            if attempt == LLM_MAX_RETRIES:
+                return {}
+    return {}
+
+
+def _dedupe_line_items(items: list) -> list:
+    """Deduplicate line items by (description, total) tuple."""
+    seen = set()
+    unique = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        desc = str(item.get("description", "")).strip().lower()
+        total = item.get("total", 0)
+        key = (desc, total)
+        if key not in seen and desc:
+            seen.add(key)
+            unique.append(item)
+    return unique
+
+
 def extract_invoice_fields(text: str) -> dict:
     """
     Use local Ollama LLM to extract invoice fields from text.
-    Retries up to LLM_MAX_RETRIES times on JSON parse failure.
+    
+    FIXED: Bug #17 — Uses sliding window for multi-page invoices.
+    - Window 1: Extract all header fields + line_items (6000 chars)
+    - Window 2+: Extract only line_items (continuation pages)
+    - Dedupe line_items by (description, total) to avoid duplicates
+    - Max 5 windows (30K chars total)
 
     Args:
         text: Raw OCR / extracted text from an invoice.
@@ -61,34 +250,88 @@ def extract_invoice_fields(text: str) -> dict:
         logger.warning("[llm_extractor] Input text is too short, returning empty result")
         return _empty_invoice()
 
-    prompt = EXTRACTION_PROMPT.format(ocr_text=text[:8000])  # Cap at 8k chars
-    raw = ""
+    # Truncate to hard limit
+    text = text[:MAX_INVOICE_CHARS]
+    
+    # Short documents: use original single-call approach for efficiency
+    if len(text) <= WINDOW_SIZE:
+        prompt = EXTRACTION_PROMPT.format(ocr_text=text)
+        raw = ""
 
-    for attempt in range(1, LLM_MAX_RETRIES + 1):
-        logger.info("[llm_extractor] Extraction attempt %d/%d", attempt, LLM_MAX_RETRIES)
-        try:
-            raw = _call_ollama(prompt, json_mode=True)
-            cleaned = _clean_llm_response(raw)
-            data = json.loads(cleaned, strict=False)
-            data = _normalize_numeric_fields(data)
-            data = _clean_extracted_fields(data)
-            data = _verify_tax_from_text(data, text)
-            logger.info("[llm_extractor] Extraction successful")
-            return data
+        for attempt in range(1, LLM_MAX_RETRIES + 1):
+            logger.info("[llm_extractor] Extraction attempt %d/%d", attempt, LLM_MAX_RETRIES)
+            try:
+                raw = _call_ollama(prompt, json_mode=True)
+                cleaned = _clean_llm_response(raw)
+                data = json.loads(cleaned, strict=False)
+                data = _normalize_numeric_fields(data)
+                data = _clean_extracted_fields(data, text=text)
+                data = _verify_tax_from_text(data, text)
+                logger.info("[llm_extractor] Extraction successful")
+                return data
 
-        except json.JSONDecodeError as e:
-            logger.warning("[llm_extractor] JSON parse failed on attempt %d: %s", attempt, e)
-            logger.debug("[llm_extractor] Raw LLM response was:\n%s", raw[:500])
-            if attempt == LLM_MAX_RETRIES:
-                logger.error("[llm_extractor] All retries exhausted. Running regex fallback.")
-                return _try_regex_fallback(text)
+            except json.JSONDecodeError as e:
+                logger.warning("[llm_extractor] JSON parse failed on attempt %d: %s", attempt, e)
+                logger.debug("[llm_extractor] Raw LLM response was:\n%s", raw[:500])
+                if attempt == LLM_MAX_RETRIES:
+                    logger.error("[llm_extractor] All retries exhausted. Running regex fallback.")
+                    return _try_regex_fallback(text)
 
-        except Exception as e:
-            logger.error("[llm_extractor] Unexpected error on attempt %d: %s", attempt, e)
-            if attempt == LLM_MAX_RETRIES:
-                return _empty_invoice()
+            except Exception as e:
+                logger.error("[llm_extractor] Unexpected error on attempt %d: %s", attempt, e)
+                if attempt == LLM_MAX_RETRIES:
+                    return _empty_invoice()
 
-    return _empty_invoice()
+        return _empty_invoice()
+    
+    # Long documents: sliding window approach
+    logger.info("[llm_extractor] Using sliding window for %d char document", len(text))
+    
+    # Calculate window positions
+    windows = []
+    pos = 0
+    while pos < len(text) and len(windows) < MAX_WINDOWS:
+        end = min(pos + WINDOW_SIZE, len(text))
+        windows.append((pos, end))
+        pos = end - WINDOW_OVERLAP
+        if end == len(text):
+            break
+    
+    logger.info("[llm_extractor] Processing %d windows", len(windows))
+    
+    # Process first window (full extraction)
+    start, end = windows[0]
+    logger.info("[llm_extractor] Window 1: chars %d-%d", start, end)
+    result = _extract_window(text[start:end], 1, is_first=True)
+    
+    if not result:
+        logger.warning("[llm_extractor] First window failed, using regex fallback")
+        return _try_regex_fallback(text)
+    
+    # Normalize the first window result
+    result = _normalize_numeric_fields(result)
+    result = _clean_extracted_fields(result, text=text)
+    all_line_items = list(result.get("line_items", []) or [])
+    
+    # Process subsequent windows (line_items only)
+    for i, (start, end) in enumerate(windows[1:], start=2):
+        logger.info("[llm_extractor] Window %d: chars %d-%d", i, start, end)
+        window_result = _extract_window(text[start:end], i, is_first=False)
+        
+        if window_result and "line_items" in window_result:
+            items = window_result.get("line_items", [])
+            if isinstance(items, list):
+                all_line_items.extend(items)
+    
+    # Dedupe and assign final line_items
+    result["line_items"] = _dedupe_line_items(all_line_items)
+    logger.info("[llm_extractor] Final: %d unique line items from %d windows", 
+                len(result["line_items"]), len(windows))
+    
+    # Verify tax from full text
+    result = _verify_tax_from_text(result, text)
+    
+    return result
 
 
 # ── Focused customer-name extraction (fallback when main extraction misses it) ──
@@ -295,6 +538,58 @@ def _extract_balanced_json(text: str) -> Optional[str]:
 
 
 # ═══════════════════════════════════════════════════════════════════════════
+# PRIVATE — CURRENCY NORMALIZATION
+# ═══════════════════════════════════════════════════════════════════════════
+
+def _normalize_currency(currency_str: str) -> str:
+    """
+    Normalize currency symbols to ISO codes.
+    FIXED: Bug P1-2 — Handle INR/Rs/₹, USD/$, EUR/€ variations
+    
+    Args:
+        currency_str: Raw currency string from extraction
+        
+    Returns:
+        Normalized ISO code (INR, USD, EUR, etc.)
+    """
+    if not currency_str:
+        return "INR"  # Default to INR for Indian invoices
+    
+    currency_str = str(currency_str).strip().upper()
+    
+    # Direct ISO code matches
+    if currency_str in ['INR', 'USD', 'EUR', 'GBP', 'JPY', 'CNY', 'AUD', 'CAD']:
+        return currency_str
+    
+    # INR variations
+    if currency_str in ['RS', 'RS.', 'RUPEES', 'RUPEE', 'INDIAN RUPEES', 'INDIAN RUPEE']:
+        return 'INR'
+    if '₹' in currency_str or 'INR' in currency_str:
+        return 'INR'
+    
+    # USD variations
+    if currency_str in ['$', 'DOLLAR', 'DOLLARS', 'US$', 'US DOLLAR']:
+        return 'USD'
+    if '$' in currency_str and 'USD' not in currency_str:
+        return 'USD'
+    
+    # EUR variations
+    if currency_str in ['€', 'EURO', 'EUROS']:
+        return 'EUR'
+    if '€' in currency_str:
+        return 'EUR'
+    
+    # GBP variations
+    if currency_str in ['£', 'GBP', 'POUND', 'POUNDS', 'STERLING']:
+        return 'GBP'
+    if '£' in currency_str:
+        return 'GBP'
+    
+    # Default to original if no match
+    return currency_str
+
+
+# ═══════════════════════════════════════════════════════════════════════════
 # PRIVATE — NUMERIC NORMALIZATION
 # ═══════════════════════════════════════════════════════════════════════════
 
@@ -335,18 +630,231 @@ def _normalize_numeric_fields(data: dict) -> dict:
     return data
 
 
-def _clean_extracted_fields(data: dict) -> dict:
+def _extract_vendor_address(text: str, vendor_name: str | None, vendor_gstin: str | None) -> str | None:
+    """
+    Extract vendor address from OCR text using context clues.
+    # FIXED: Bug #1
+    
+    Args:
+        text: Raw OCR text
+        vendor_name: Vendor company name (if known)
+        vendor_gstin: Vendor GSTIN (if known)
+    
+    Returns:
+        Normalized address string or None
+    """
+    if not text:
+        return None
+    
+    # Strategy: Find text block between vendor name (or start) and first GSTIN
+    # Vendor address typically appears at top of invoice before buyer info
+    
+    lines = text.split('\n')
+    address_lines = []
+    capture = False
+    vendor_found = False
+    
+    for i, line in enumerate(lines):
+        line_stripped = line.strip()
+        
+        # Start capturing after vendor name is found (or from beginning if no name)
+        if vendor_name and vendor_name.upper() in line.upper():
+            vendor_found = True
+            capture = True
+            continue  # Don't include the vendor name line itself
+        elif not vendor_name and i < 10:  # Start from beginning if no vendor name
+            vendor_found = True
+            capture = True
+        
+        if capture and vendor_found:
+            # Stop at GSTIN (marks end of vendor block)
+            if vendor_gstin and vendor_gstin in line:
+                break
+            if re.search(r'\b\d{2}[A-Z]{5}\d{4}[A-Z]\d[Z][A-Z\d]\b', line):
+                break
+            # Stop at common section markers
+            if re.search(r'\b(Bill\s*To|Sold\s*To|Customer|Consignee|Ship\s*To|Invoice\s*No|Date)\s*:', line, re.IGNORECASE):
+                break
+            # Skip obvious non-address lines
+            if re.search(r'^(Phone|Email|Website|PAN|CIN|GST)', line, re.IGNORECASE):
+                continue
+            # Capture address-like lines (contains numbers, commas, location keywords)
+            if line_stripped and (
+                re.search(r'\d', line) or  # Has numbers (street number, PIN)
+                ',' in line or  # Has commas (typical address separator)
+                re.search(r'\b(Road|Street|Avenue|Lane|Building|Floor|City|State|Bangalore|Hyderabad|Mumbai|Delhi|Chennai|Pune|Kolkata)\b', line, re.IGNORECASE)
+            ):
+                address_lines.append(line_stripped)
+            
+            # Stop after collecting reasonable amount
+            if len(address_lines) >= 5:
+                break
+    
+    if not address_lines:
+        return None
+    
+    # Normalize: join with commas, clean up spacing
+    address = ', '.join(address_lines)
+    address = re.sub(r'\s+', ' ', address).strip()
+    address = re.sub(r',\s*,', ',', address)  # Remove double commas
+    
+    # Validation: must have at least one digit (for PIN or street number)
+    if not re.search(r'\d', address):
+        return None
+    
+    return address[:500] if len(address) <= 500 else None  # Cap length
+
+
+def _extract_bill_to_address(text: str, bill_to_name: str | None) -> str | None:
+    """
+    Extract bill_to address from OCR text using section markers.
+    # FIXED: Bug #2
+    
+    Args:
+        text: Raw OCR text
+        bill_to_name: Buyer company name (if known)
+    
+    Returns:
+        Normalized address string or None
+    """
+    if not text:
+        return None
+    
+    # Strategy: Find "Bill To" / "Sold To" / "Customer" section, capture until next GSTIN or section marker
+    lines = text.split('\n')
+    address_lines = []
+    capture = False
+    
+    for i, line in enumerate(lines):
+        line_stripped = line.strip()
+        
+        # Start capturing after "Bill To" marker
+        if re.search(r'\b(Bill\s*To|Sold\s*To|Customer|Buyer)\s*:', line, re.IGNORECASE):
+            capture = True
+            # Check if address is on same line
+            remainder = re.sub(r'\b(Bill\s*To|Sold\s*To|Customer|Buyer)\s*:', '', line, flags=re.IGNORECASE).strip()
+            if remainder and not (bill_to_name and bill_to_name.upper() in remainder.upper()):
+                # Has content and it's not just the name
+                if re.search(r'\d|,', remainder):  # Looks like address
+                    address_lines.append(remainder)
+            continue
+        
+        if capture:
+            # Stop at GSTIN (marks boundary)
+            if re.search(r'\b\d{2}[A-Z]{5}\d{4}[A-Z]\d[Z][A-Z\d]\b', line):
+                break
+            # Stop at next section
+            if re.search(r'\b(Ship\s*To|Invoice\s*No|Date|Item|Description|HSN|Qty|Amount|GSTIN|State\s*Name)\s*:', line, re.IGNORECASE):
+                break
+            # Skip the bill_to name line itself if we know it
+            if bill_to_name and bill_to_name.upper() in line.upper():
+                continue
+            # Capture address-like content
+            if line_stripped and (
+                re.search(r'\d', line) or
+                ',' in line or
+                re.search(r'\b(Road|Street|Avenue|Lane|Building|Floor|City|State|PIN|Bangalore|Hyderabad|Mumbai|Delhi)\b', line, re.IGNORECASE)
+            ):
+                address_lines.append(line_stripped)
+            
+            if len(address_lines) >= 5:
+                break
+    
+    if not address_lines:
+        return None
+    
+    address = ', '.join(address_lines)
+    address = re.sub(r'\s+', ' ', address).strip()
+    address = re.sub(r',\s*,', ',', address)
+    
+    if not re.search(r'\d', address):
+        return None
+    
+    return address[:500] if len(address) <= 500 else None
+
+
+def _extract_ship_to_address(text: str) -> str | None:
+    """
+    Extract ship_to address from OCR text using section markers.
+    # FIXED: Bug #3
+    
+    Args:
+        text: Raw OCR text
+    
+    Returns:
+        Normalized address string or None
+    """
+    if not text:
+        return None
+    
+    # Strategy: Find "Ship To" / "Delivery Address" / "Consignee" section
+    lines = text.split('\n')
+    address_lines = []
+    capture = False
+    
+    for i, line in enumerate(lines):
+        line_stripped = line.strip()
+        
+        # Start capturing after "Ship To" marker
+        if re.search(r'\b(Ship\s*To|Delivery\s*Address|Consignee|Shipping\s*Address)\s*:', line, re.IGNORECASE):
+            capture = True
+            remainder = re.sub(r'\b(Ship\s*To|Delivery\s*Address|Consignee|Shipping\s*Address)\s*:', '', line, flags=re.IGNORECASE).strip()
+            if remainder and re.search(r'\d|,', remainder):
+                address_lines.append(remainder)
+            continue
+        
+        if capture:
+            # Stop at GSTIN or next section
+            if re.search(r'\b\d{2}[A-Z]{5}\d{4}[A-Z]\d[Z][A-Z\d]\b', line):
+                break
+            if re.search(r'\b(Invoice\s*No|Date|Item|Description|HSN|Qty|Amount|GSTIN|State\s*Name)\s*:', line, re.IGNORECASE):
+                break
+            # Capture address content
+            if line_stripped and (
+                re.search(r'\d', line) or
+                ',' in line or
+                re.search(r'\b(Road|Street|Avenue|Lane|Building|Floor|City|State|PIN|Bangalore|Hyderabad|Mumbai)\b', line, re.IGNORECASE)
+            ):
+                address_lines.append(line_stripped)
+            
+            if len(address_lines) >= 5:
+                break
+    
+    if not address_lines:
+        return None
+    
+    address = ', '.join(address_lines)
+    address = re.sub(r'\s+', ' ', address).strip()
+    address = re.sub(r',\s*,', ',', address)
+    
+    if not re.search(r'\d', address):
+        return None
+    
+    return address[:500] if len(address) <= 500 else None
+
+
+def _clean_extracted_fields(data: dict, text: str = "") -> dict:
     """Post-process LLM output to fix common formatting issues."""
-    # Clean tax_id: strip prefixes like "GSTIN/UIN:", "GSTIN:", etc.
+    gstins_in_text = _extract_gstins_from_text(text)
+
+    # FIXED: Bug #28 — Validate invoice_number before processing
+    if data.get("invoice_number"):
+        if not _is_valid_invoice_number(data["invoice_number"]):
+            logger.warning("[llm_extractor] Invalid invoice_number rejected: %r", data["invoice_number"])
+            data["invoice_number"] = None
+
+    # Clean vendor tax_id and backfill from text if missing/invalid.
     vendor = data.get("vendor") or {}
-    if isinstance(vendor, dict) and vendor.get("tax_id"):
-        tid = vendor["tax_id"]
-        if isinstance(tid, str):
-            tid = re.sub(r'^.*?(?:GSTIN|UIN|GST|TIN)\s*[/:]\s*', '', tid, flags=re.IGNORECASE).strip()
-            # Validate: GSTIN is exactly 15 alphanumeric chars
-            gstin_match = re.search(r'\b(\d{2}[A-Z]{5}\d{4}[A-Z]\d[A-Z\d]{2})\b', tid)
-            if gstin_match:
-                vendor["tax_id"] = gstin_match.group(1)
+    if isinstance(vendor, dict):
+        vendor_norm = _normalize_gstin_candidate(vendor.get("tax_id"))
+        if vendor_norm:
+            vendor["tax_id"] = vendor_norm
+        elif gstins_in_text:
+            vendor["tax_id"] = gstins_in_text[0]
+            logger.info("[llm_extractor] Backfilled vendor.tax_id from text: %s", gstins_in_text[0])
+        else:
+            vendor["tax_id"] = None
+        data["vendor"] = vendor
 
     # Fix bill_to.name: LLM sometimes stuffs the full address block into name.
     # Heuristics: split on first newline, or strip if too long, or contains PIN code / state.
@@ -371,6 +879,52 @@ def _clean_extracted_fields(data: dict) -> dict:
             name = None
         bill_to["name"] = name
         data["bill_to"] = bill_to
+
+    # Clean bill_to tax_id and backfill from text (prefer GSTIN different from vendor).
+    bill_to = data.get("bill_to") or {}
+    if not isinstance(bill_to, dict):
+        bill_to = {}
+    bill_norm = _normalize_gstin_candidate(bill_to.get("tax_id"))
+    if bill_norm:
+        bill_to["tax_id"] = bill_norm
+    else:
+        vendor_gstin = (data.get("vendor") or {}).get("tax_id")
+        replacement = None
+        for g in gstins_in_text:
+            if g != vendor_gstin:
+                replacement = g
+                break
+        bill_to["tax_id"] = replacement
+        if replacement:
+            logger.info("[llm_extractor] Backfilled bill_to.tax_id from text: %s", replacement)
+    data["bill_to"] = bill_to
+
+    # FIXED: Bug #1 — Backfill vendor.address from text if missing
+    vendor = data.get("vendor") or {}
+    if isinstance(vendor, dict) and not vendor.get("address") and text:
+        vendor_addr = _extract_vendor_address(text, vendor.get("name"), vendor.get("tax_id"))
+        if vendor_addr:
+            vendor["address"] = vendor_addr
+            logger.info("[llm_extractor] Backfilled vendor.address from text")
+        data["vendor"] = vendor
+
+    # FIXED: Bug #2 — Backfill bill_to.address from text if missing
+    bill_to = data.get("bill_to") or {}
+    if isinstance(bill_to, dict) and not bill_to.get("address") and text:
+        bill_to_addr = _extract_bill_to_address(text, bill_to.get("name"))
+        if bill_to_addr:
+            bill_to["address"] = bill_to_addr
+            logger.info("[llm_extractor] Backfilled bill_to.address from text")
+        data["bill_to"] = bill_to
+
+    # FIXED: Bug #3 — Backfill ship_to.address from text if missing
+    ship_to = data.get("ship_to") or {}
+    if isinstance(ship_to, dict) and not ship_to.get("address") and text:
+        ship_to_addr = _extract_ship_to_address(text)
+        if ship_to_addr:
+            ship_to["address"] = ship_to_addr
+            logger.info("[llm_extractor] Backfilled ship_to.address from text")
+        data["ship_to"] = ship_to
 
     return data
 
@@ -422,29 +976,16 @@ def _verify_tax_from_text(data: dict, text: str) -> dict:
                 )
                 data["tax_amount"] = total_tax
 
-    # Also clean bill_to tax_id the same way as vendor tax_id
-    bill_to = data.get("bill_to") or {}
-    if not isinstance(bill_to, dict):
-        bill_to = {}
-        data["bill_to"] = bill_to
-    if bill_to.get("tax_id"):
-        tid = bill_to["tax_id"]
-        if isinstance(tid, str):
-            tid = re.sub(r'^.*?(?:GSTIN|UIN|GST|TIN)\s*[/:]\s*', '', tid, flags=re.IGNORECASE).strip()
-            gstin_match = re.search(r'\b(\d{2}[A-Z]{5}\d{4}[A-Z]\d[A-Z\d]{2})\b', tid)
-            if gstin_match:
-                bill_to["tax_id"] = gstin_match.group(1)
+    # Re-validate tax IDs after all corrections.
+    vendor = data.get("vendor") or {}
+    if isinstance(vendor, dict):
+        vendor["tax_id"] = _normalize_gstin_candidate(vendor.get("tax_id"))
+        data["vendor"] = vendor
 
-    # Backfill missing bill_to.tax_id from raw text if vendor GSTIN is known
-    if not bill_to.get("tax_id"):
-        vendor = data.get("vendor") or {}
-        vendor_gstin = vendor.get("tax_id") if isinstance(vendor, dict) else None
-        all_gstins = re.findall(r'\b(\d{2}[A-Z]{5}\d{4}[A-Z]\d[A-Z\d]{2})\b', text)
-        for g in all_gstins:
-            if g != vendor_gstin:
-                bill_to["tax_id"] = g
-                logger.info("[llm_extractor] Backfilled bill_to.tax_id from text: %s", g)
-                break
+    bill_to = data.get("bill_to") or {}
+    if isinstance(bill_to, dict):
+        bill_to["tax_id"] = _normalize_gstin_candidate(bill_to.get("tax_id"))
+        data["bill_to"] = bill_to
 
     return data
 
@@ -473,27 +1014,43 @@ def extract_fields_with_regex(text: str) -> Dict[str, Any]:
     result = _empty_invoice()
 
     # Invoice number patterns — skip common false matches like "e-Way", "Bill"
+    # FIXED: Bug #28 — Extended garbage filter
+    GARBAGE_INV_NUMS = {
+        "e-Way", "e-way", "E-WAY", "Bill", "No", "Date", "the",
+        "Dated", "Buyer", "GSTIN", "Tax", "Invoice", "Page",
+        "Seller", "Total", "Amount", "Number", "Details"
+    }
+    
     inv_patterns = [
-        # Same-line match: "Invoice No. XXX" or "Inv #: XXX" (may have leading paren/bracket)
-        r'(?:invoice|inv)\s*(?:no|number|#|num)[\s.:]*\s*[:\s]?\s*[(\[]?\s*([A-Z0-9][\w\-/]+)',
-        # Tally-style: "Invoice No." header with value within next few lines (greedy to skip names/addresses)
-        r'(?:invoice|inv)\s*(?:no|number|#|num)[\s.:]*(?:.*\n){1,5}\s*[(\[]?\s*([A-Z0-9][\w\-/]+)',
+        # "Invoice No. XXX" / "Inv #: XXX" / "Bill No: XXX" / "Receipt No: XXX"
+        r'(?:invoice|inv|bill|receipt|ref|order)\s*(?:no\.?|number|#|num|id)[\s.:]*\s*[:\s]?\s*[(\[]?\s*([\w][\w\-/]{1,29})',
+        # "Invoice: XXX" or "Invoice # XXX" without the word "number/no"
+        r'(?:invoice|inv)\s*[:#]\s*([\w][\w\-/]{1,29})',
+        # Tally-style: "Invoice No." header with value within next few lines
+        r'(?:invoice|inv|bill)\s*(?:no\.?|number|#|num)[\s.:]*(?:.*\n){1,5}\s*[(\[]?\s*([\w][\w\-/]{1,29})',
     ]
     for pat in inv_patterns:
         matches = re.finditer(pat, text, re.IGNORECASE)
         for m in matches:
             candidate = m.group(1).strip()
-            # Skip false positives
-            if re.match(r'^(e[\-]?Way|Bill|No|Date|the|for|of|is|Dated|Buyer|GSTIN)$', candidate, re.IGNORECASE):
+            
+            # FIXED: Bug #28 — Structural validation
+            # Skip if in garbage list (case-insensitive)
+            if candidate.upper() in {g.upper() for g in GARBAGE_INV_NUMS}:
                 continue
-            if len(candidate) < 2:
+            # Must be 2-30 characters
+            if len(candidate) < 2 or len(candidate) > 30:
                 continue
             # Invoice numbers must contain at least one digit (skip pure-alpha like "MOHIT")
             if not re.search(r'\d', candidate):
                 continue
+            # Must not be purely numeric (likely page number or quantity)
+            if candidate.isdigit() and len(candidate) < 4:
+                continue
             # Skip if it looks like a street address (digit-digit-digit/digit)
             if re.match(r'^\d+-\d+-\d+', candidate):
                 continue
+            
             result["invoice_number"] = candidate
             break
         if result["invoice_number"]:
@@ -520,7 +1077,7 @@ def extract_fields_with_regex(text: str) -> Dict[str, Any]:
             result[field_name] = val
 
     # GSTIN pattern (15 alphanumeric)
-    gstin_matches = re.findall(r'\b(\d{2}[A-Z]{5}\d{4}[A-Z]\d[A-Z\d]{2})\b', text)
+    gstin_matches = _extract_gstins_from_text(text)
     if len(gstin_matches) >= 1:
         result["vendor"]["tax_id"] = gstin_matches[0]
 
@@ -545,6 +1102,11 @@ def extract_fields_with_regex(text: str) -> Dict[str, Any]:
         for_match = re.search(r'(?:for|declaration\s+for)\s+([A-Z][A-Z &.\-]+)', text)
         if for_match:
             result["vendor"]["name"] = for_match.group(1).strip()
+
+    # FIXED: Bug #1 — Extract vendor address using helper function
+    vendor_addr = _extract_vendor_address(text, result["vendor"].get("name"), result["vendor"].get("tax_id"))
+    if vendor_addr:
+        result["vendor"]["address"] = vendor_addr
 
     # Bill-to / Buyer name — look for name in the Buyer/Bill-to section
     # Strategy 1: Explicit headers (Buyer, Bill To, Sold To, Customer, Consignee, etc.)
@@ -731,14 +1293,23 @@ def extract_fields_with_regex(text: str) -> Dict[str, Any]:
             if amounts:
                 result["total_amount"] = max(amounts)
 
-    # Currency detection — GSTIN is India-only, so any invoice with one must be INR
+    # FIXED: Bug P1-2 — Currency normalization using dedicated function
+    # First, normalize any existing currency value from LLM
+    if result.get("currency"):
+        result["currency"] = _normalize_currency(result["currency"])
+    
+    # Then, override based on text analysis if needed
     gstin_found = bool(re.search(r'\b\d{2}[A-Z]{5}\d{4}[A-Z]\d[A-Z\d]{2}\b', text))
-    if gstin_found or '₹' in text or 'INR' in text or re.search(r'\bRs\.?\b', text):
+    if gstin_found or '₹' in text or re.search(r'\bRs\.?\s*\d', text):
         result["currency"] = "INR"
-    elif '$' in text or 'USD' in text:
-        result["currency"] = "USD"
-    elif '€' in text or 'EUR' in text:
-        result["currency"] = "EUR"
+    elif not result.get("currency"):
+        # Only detect from symbols if LLM didn't provide valid currency
+        if '$' in text or 'USD' in text:
+            result["currency"] = "USD"
+        elif '€' in text or 'EUR' in text:
+            result["currency"] = "EUR"
+        else:
+            result["currency"] = "INR"  # Default for Indian invoices
 
     return result
 

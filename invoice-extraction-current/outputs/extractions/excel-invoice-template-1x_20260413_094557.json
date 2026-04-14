@@ -1,0 +1,119 @@
+{
+  "invoice_number": null,
+  "invoice_date": "31 May 2023",
+  "due_date": "18 May 2023",
+  "purchase_order_number": null,
+  "currency": "INR",
+  "subtotal": 2499.0,
+  "discount": 212.835,
+  "tax_amount": null,
+  "shipping": null,
+  "total_amount": 2286.165,
+  "amount_paid": 2128.38,
+  "amount_due": 157.785,
+  "tax_rate": null,
+  "payment_terms": "Full payment b due upon receipt of this invoice. Late payments may incur addtional charges or interest as per the appacable laws.",
+  "payment_method": null,
+  "bank_details": null,
+  "notes": null,
+  "vendor": {
+    "name": "Zylker Electronics Hub",
+    "address": "148, Northern Street, Greater South Avenue\nNew York New York 10001",
+    "email": null,
+    "phone": null,
+    "tax_id": null
+  },
+  "bill_to": {
+    "name": "Mary Dunton",
+    "address": "1324 Hinkle Lake Road, Needham\nNeedham 02192 Maine",
+    "email": null,
+    "tax_id": null
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "description:": "OSLR camera with advanced shooting capabilities and Activity tracker with heart rate Monitoring",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit": null,
+      "unit_price": 129.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 129.0
+    },
+    {
+      "description": "Lightweight Laptop Laptop with a powerful processor _ ia - Thanks for your business.",
+      "hsn_sac": null,
+      "quantity": 1.0,
+      "unit": "piece",
+      "unit_price": 999.0,
+      "discount": null,
+      "tax_rate": null,
+      "total": 999.0
+    }
+  ],
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "MISSING_REQUIRED_FIELD: 'invoice_number' is null",
+      "SUBTOTAL_MISMATCH: Sum of line items is 999.00, but subtotal is 2499.00 (diff: 1500.00)",
+      "DATE_WARNING: Due date (18 May 2023) precedes invoice date (31 May 2023)"
+    ],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": false,
+      "totals_consistent": true
+    },
+    "line_item_count": 2
+  },
+  "metadata": {
+    "source_file": "excel-invoice-template-1x.jpg",
+    "source_path": "C:\\Users\\kmgs4\\AppData\\Local\\Temp\\tmps8tm4vw0.jpg",
+    "extraction_time": "2026-04-13T09:45:57.030410",
+    "processing_seconds": 54.68,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 730,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "MISSING_REQUIRED_FIELD: 'invoice_number' is null",
+        "SUBTOTAL_MISMATCH: Sum of line items is 999.00, but subtotal is 2499.00 (diff: 1500.00)",
+        "DATE_WARNING: Due date (18 May 2023) precedes invoice date (31 May 2023)"
+      ],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": false,
+        "totals_consistent": true
+      },
+      "line_item_count": 2
+    }
+  }
+}

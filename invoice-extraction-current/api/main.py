@@ -18,17 +18,44 @@ import zipfile
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, UploadFile, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+
+# FIXED: Bug #23 — Rate limiting
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 
 from core.config import (
     BM25_INDEX_PATH,
     OUTPUTS_DIR,
     SUPPORTED_EXTENSIONS,
     TEMP_DIR,
+    MAX_UPLOAD_SIZE_MB,
+    MAX_ZIP_EXTRACT_SIZE_MB,
+    ALLOWED_ORIGINS,
 )
+
+# FIXED: Bug P0-1 — Initialize limiter instance
+limiter = Limiter(key_func=get_remote_address)
+
+
+# ── Error Response Standardization ────────────────────────────────────────
+
+def _standardized_error(error_code: str, message: str, status_code: int = 500) -> JSONResponse:
+    """
+    FIXED: Security - Return standardized error responses without exposing internals.
+    """
+    return JSONResponse(
+        status_code=status_code,
+        content={
+            "error_code": error_code,
+            "message": message,
+            "status_code": status_code,
+        }
+    )
 
 # ── Logging ────────────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -36,6 +63,38 @@ logging.basicConfig(
     format="%(asctime)s  %(levelname)-8s  %(name)s  %(message)s",
 )
 logger = logging.getLogger(__name__)
+
+
+# ── Helper Functions ───────────────────────────────────────────────────────
+
+def _safe_extract_zip(zip_path: str, extract_dir: str) -> None:
+    """
+    Safely extract ZIP with bomb detection and path traversal prevention.
+    
+    FIXED: Security - Prevent ZIP bombs and path traversal attacks.
+    """
+    with zipfile.ZipFile(zip_path, 'r') as zf:
+        total_size = 0
+        for member in zf.infolist():
+            # Prevent path traversal
+            if '..' in member.filename or member.filename.startswith('/'):
+                raise ValueError(f"Unsafe path in ZIP: {member.filename}")
+            
+            # Prevent symbolic links
+            if member.is_symlink():
+                raise ValueError(f"Symbolic links not allowed: {member.filename}")
+            
+            # Check uncompressed size (ZIP bomb detection)
+            total_size += member.file_size
+            if total_size > MAX_ZIP_EXTRACT_SIZE_MB * 1024 * 1024:
+                raise ValueError(
+                    f"ZIP bomb detected: uncompressed size {total_size / 1024 / 1024:.1f}MB "
+                    f"exceeds {MAX_ZIP_EXTRACT_SIZE_MB}MB limit"
+                )
+        
+        # Safe to extract
+        zf.extractall(extract_dir)
+        logger.info("[api] Extracted ZIP: %d files, %.1f MB", len(zf.infolist()), total_size / 1024 / 1024)
 
 
 # ── Lazy singletons ───────────────────────────────────────────────────────
@@ -68,9 +127,13 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# FIXED: Bug #23 — Add rate limiter to app
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,  # FIXED: Security - Restrict origins from config
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -82,16 +145,42 @@ app.add_middleware(
 # ═══════════════════════════════════════════════════════════════════════════
 
 def _process_single_file(tmp_path: str, filename: str) -> dict:
-    """Run the full extraction pipeline on one file, persist everywhere."""
-    pipeline = _get_pipeline()
-    result = pipeline.run(tmp_path)
+    """
+    Run the full extraction pipeline on one file, persist everywhere.
+    FIXED: Bug P0-7 — Enhanced error handling with specific error types.
+    """
+    # Validate file exists and is readable
+    if not os.path.exists(tmp_path):
+        raise FileNotFoundError(f"Temporary file not found: {tmp_path}")
+    
+    if os.path.getsize(tmp_path) == 0:
+        raise ValueError("File is empty")
+    
+    try:
+        pipeline = _get_pipeline()
+        result = pipeline.run(tmp_path)
+    except Exception as e:
+        logger.error(f"[api] Pipeline failed for {filename}: {e}", exc_info=True)
+        raise RuntimeError(f"Extraction pipeline failed: {str(e)[:100]}")
+
+    # Document type guard — pipeline rejected this file as non-invoice
+    if result.get("error") == "unsupported_document_type":
+        return _standardized_error(
+            error_code="UNSUPPORTED_DOCUMENT_TYPE",
+            message=result.get("message", "This file does not appear to be an invoice."),
+            status_code=422,
+        )
 
     # Replace temp path with the original filename
     if "metadata" in result:
         result["metadata"]["source_file"] = filename
 
     # Save JSON to outputs/extractions/
-    pipeline.save_result(result)
+    try:
+        pipeline.save_result(result)
+    except Exception as e:
+        logger.warning("[api] JSON save failed for %s: %s", filename, e)
+        # Non-fatal: continue
 
     # Insert into SQLite
     try:
@@ -103,6 +192,7 @@ def _process_single_file(tmp_path: str, filename: str) -> dict:
             logger.info("[api] DB skip (already exists): %s", filename)
     except Exception as e:
         logger.warning("[api] DB insert failed for %s: %s", filename, e)
+        # Non-fatal: continue
 
     # Index into ChromaDB
     try:
@@ -113,6 +203,7 @@ def _process_single_file(tmp_path: str, filename: str) -> dict:
         logger.info("[api] ChromaDB index OK: %s (%d chunks)", filename, len(chunks))
     except Exception as e:
         logger.warning("[api] ChromaDB index failed for %s: %s", filename, e)
+        # Non-fatal: continue
 
     # Incrementally update BM25 index (load existing + add one doc; avoids O(n) re-read)
     try:
@@ -126,6 +217,7 @@ def _process_single_file(tmp_path: str, filename: str) -> dict:
         logger.info("[api] BM25 incremental update OK")
     except Exception as e:
         logger.warning("[api] BM25 update failed: %s", e)
+        # Non-fatal: continue
 
     return result
 
@@ -134,11 +226,46 @@ def _process_single_file(tmp_path: str, filename: str) -> dict:
 #  POST /extract
 # ═══════════════════════════════════════════════════════════════════════════
 
+# FIXED: Bug #23 — Rate limiting (10 requests per minute)
 @app.post("/extract")
-async def extract_invoice(file: UploadFile = File(...)):
+@limiter.limit("10/minute")
+async def extract_invoice(file: UploadFile = File(...), request: Request = None):
     """Upload a single invoice (PDF / image) and receive extracted fields."""
     filename = file.filename or "unknown"
+    
+    # FIXED: Bug P1-10 — Sanitize filename to prevent path traversal
+    # Remove any path components, only keep the base filename
+    filename = Path(filename).name  # Removes any directory path
+    if '..' in filename or filename.startswith('/') or filename.startswith('\\'):
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "INVALID_FILENAME",
+                "message": "Filename contains invalid characters",
+            },
+        )
+    
     ext = Path(filename).suffix.lower()
+
+    # FIXED: Security - File size validation
+    if file.size and file.size > MAX_UPLOAD_SIZE_MB * 1024 * 1024:
+        raise HTTPException(
+            status_code=413,
+            detail={
+                "error": "FILE_TOO_LARGE",
+                "message": f"File size exceeds {MAX_UPLOAD_SIZE_MB}MB limit",
+            },
+        )
+
+    # FIXED: Security - Empty file validation
+    if file.size == 0:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "EMPTY_FILE",
+                "message": "Uploaded file is empty",
+            },
+        )
 
     if ext not in SUPPORTED_EXTENSIONS:
         raise HTTPException(
@@ -162,9 +289,11 @@ async def extract_invoice(file: UploadFile = File(...)):
 
     except Exception as e:
         logger.error("[api] Extraction failed for %s: %s", filename, e, exc_info=True)
-        return JSONResponse(
-            status_code=500,
-            content={"error": str(e)},
+        # FIXED: Security - Don't expose internal errors to clients
+        return _standardized_error(
+            error_code="EXTRACTION_FAILED",
+            message="Failed to extract invoice. Please check the file format and try again.",
+            status_code=500
         )
     finally:
         if tmp_path and os.path.exists(tmp_path):
@@ -175,8 +304,10 @@ async def extract_invoice(file: UploadFile = File(...)):
 #  POST /extract/batch
 # ═══════════════════════════════════════════════════════════════════════════
 
+# FIXED: Bug #23 — Rate limiting (5 batch uploads per minute)
 @app.post("/extract/batch")
-async def extract_batch(file: UploadFile = File(...)):
+@limiter.limit("5/minute")
+async def extract_batch(request: Request, file: UploadFile = File(...)):
     """Upload a .zip archive of invoices and extract each one."""
     filename = file.filename or "upload.zip"
     if not filename.lower().endswith(".zip"):
@@ -192,8 +323,14 @@ async def extract_batch(file: UploadFile = File(...)):
 
         # Extract zip to a temp directory
         extract_dir = tempfile.mkdtemp(dir=str(TEMP_DIR))
-        with zipfile.ZipFile(tmp_zip, "r") as zf:
-            zf.extractall(extract_dir)
+        
+        # FIXED: Security - Safe ZIP extraction with bomb detection
+        try:
+            _safe_extract_zip(tmp_zip, extract_dir)
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=str(e))
+        except zipfile.BadZipFile:
+            raise HTTPException(status_code=400, detail="Invalid or corrupted ZIP file")
 
         # Find all supported files inside the extracted directory
         invoice_files = []
@@ -224,7 +361,12 @@ async def extract_batch(file: UploadFile = File(...)):
         raise
     except Exception as e:
         logger.error("[api] Batch extraction failed: %s", e, exc_info=True)
-        return JSONResponse(status_code=500, content={"error": str(e)})
+        # FIXED: Security - Don't expose internal errors
+        return _standardized_error(
+            error_code="BATCH_EXTRACTION_FAILED",
+            message="Batch extraction failed. Please check the ZIP file and try again.",
+            status_code=500
+        )
     finally:
         if tmp_zip and os.path.exists(tmp_zip):
             os.unlink(tmp_zip)
@@ -243,6 +385,10 @@ async def rag_index():
         # ChromaDB index_all
         from rag.indexer import index_all
         chroma_stats = index_all()
+        
+        # FIXED: Bug API-1 — Handle None return from index_all
+        if chroma_stats is None:
+            chroma_stats = {}
 
         # BM25 build_index
         from rag.bm25_retriever import BM25Retriever
@@ -258,7 +404,12 @@ async def rag_index():
         }
     except Exception as e:
         logger.error("[api] Index rebuild failed: %s", e, exc_info=True)
-        return JSONResponse(status_code=500, content={"error": str(e)})
+        # FIXED: Security - Don't expose internal errors
+        return _standardized_error(
+            error_code="INDEX_REBUILD_FAILED",
+            message="Failed to rebuild search indexes. Please try again later.",
+            status_code=500
+        )
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -269,21 +420,93 @@ class AskRequest(BaseModel):
     question: str
 
 
+# FIXED: Bug #23 — Rate limiting (10 questions per minute)
 @app.post("/ask")
-async def ask_question(request: AskRequest):
-    """Ask a natural-language question about indexed invoices."""
-    if not request.question.strip():
+@limiter.limit("10/minute")
+async def ask_question(ask_req: AskRequest, request: Request):
+    """Ask a natural-language question about indexed invoices.
+
+    Uses multi-strategy RAG with conversation memory:
+    - SQL for aggregation queries
+    - BM25 for keyword/exact lookup
+    - Vector (with HyDE) for semantic/vague questions
+    - Hybrid (RRF fusion) for general questions
+
+    Results are re-ranked before being sent to the LLM.
+    """
+    if not ask_req.question.strip():
         raise HTTPException(
             status_code=400,
             detail={"error": "EMPTY_QUESTION", "message": "Question cannot be empty"},
         )
     try:
         from rag.qa_chain import answer
-        result = answer(request.question)
+        result = answer(ask_req.question)
         return result
     except Exception as e:
         logger.error("[api] Q&A failed: %s", e, exc_info=True)
+        # FIXED: Security - Don't expose internal errors
+        return _standardized_error(
+            error_code="QA_FAILED",
+            message="Failed to process your question. Please try rephrasing or contact support.",
+            status_code=500
+        )
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  POST /ask/clear — Clear conversation memory
+# ═══════════════════════════════════════════════════════════════════════════
+
+@app.post("/ask/clear")
+async def clear_conversation():
+    """Clear the conversation memory so follow-up context resets."""
+    try:
+        from rag.qa_chain import get_memory
+        get_memory().clear()
+        return {"status": "ok", "message": "Conversation memory cleared."}
+    except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  POST /rag/evaluate — Run RAG evaluation suite
+# ═══════════════════════════════════════════════════════════════════════════
+
+@app.post("/rag/evaluate")
+async def rag_evaluate():
+    """Run the evaluation test suite and return metrics."""
+    try:
+        from rag.evaluator import run_evaluation
+        report = run_evaluation(verbose=False)
+        return report
+    except Exception as e:
+        logger.error("[api] Evaluation failed: %s", e, exc_info=True)
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  GET /rag/stats — Get RAG index statistics
+# ═══════════════════════════════════════════════════════════════════════════
+
+@app.get("/rag/stats")
+async def rag_stats():
+    """Return statistics about the current RAG indexes."""
+    stats = {}
+    try:
+        from rag.indexer import get_collection_stats
+        stats["chroma"] = get_collection_stats()
+    except Exception as e:
+        stats["chroma"] = {"error": str(e)}
+
+    try:
+        from rag.bm25_retriever import BM25Retriever
+        bm25 = BM25Retriever(index_path=str(BM25_INDEX_PATH))
+        bm25.load_index()
+        stats["bm25"] = {"documents": len(bm25.corpus)}
+    except Exception as e:
+        stats["bm25"] = {"error": str(e)}
+
+    return stats
 
 
 # ═══════════════════════════════════════════════════════════════════════════

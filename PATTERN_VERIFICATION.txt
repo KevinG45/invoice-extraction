@@ -1,0 +1,98 @@
+PATTERN MATCHING VERIFICATION REPORT
+=====================================
+
+Testing queries against BM25_SEARCH_PATTERNS from router.py
+
+PATTERNS:
+1. r"\bsearch\s+for\b" - Word-bounded "search for"
+2. r"\bfind\b\s+(the\s+)?invoice\s+(with\s+)?(GSTIN|number|#)" - "find invoice with GSTIN/number/#"
+3. r"\bdo we have\b.*\binvoices?\b.*\bfrom\b" - "do we have invoices from"
+4. r"\bare there any\b.*\bGSTIN\b" - "are there any GSTIN"
+5. r"\bis there an?\b.*\binvoice\s+(for|with|#)" - "is there an invoice for/with/#"
+6. r"\bshow\b\s+(me\s+)?invoice\s+(#|number)" - "show invoice #/number"
+7. r"\binvoices?\s+from\b\s+[A-Z]" - "invoices from [VENDOR]"
+8. r"\bfile\b.*\b\.pdf\b" - "file ... .pdf"
+9. r"\bfind\s+invoices?\s+(containing|with|that\s+have)\b" - "find invoices containing/with/that have"
+10. r"\b(which|what)\s+invoices?\s+(have|contain|include|with)\b" - "which/what invoices have/contain/include/with"
+11. r"\binvoices?\s+(containing|with|that\s+have|that\s+include)\b" - "invoices containing/with/that have/that include"
+12. r"\bshow.*\b(sticker|print|label|product|service|line\s+item)s?\b" - "show [items]"
+13. r"\bfind.*\b(sticker|print|label|product|service)s?\b" - "find [items]"
+14. r"\b(sticker|print|label)\s+(products?|services?|items?)\b" - "sticker/print/label products/services/items"
+
+TEST QUERIES (from test_router_line_items.py):
+
+Test 1: "Search for "Sticker" line items"
+- Pattern 1: r"\bsearch\s+for\b" 
+- Contains: "Search for" ✓ MATCHES (case-insensitive, word boundary)
+
+Test 2: "Find invoices containing label products"
+- Pattern 9: r"\bfind\s+invoices?\s+(containing|with|that\s+have)\b"
+- Contains: "Find invoices containing" ✓ MATCHES
+- Pattern 14: r"\b(sticker|print|label)\s+(products?|services?|items?)\b"
+- Contains: "label products" ✓ ALSO MATCHES
+
+Test 3: "Which invoices have printing services?"
+- Pattern 10: r"\b(which|what)\s+invoices?\s+(have|contain|include|with)\b"
+- Contains: "Which invoices have" ✓ MATCHES
+
+Test 4: "Find invoices with sticker products"
+- Pattern 9: r"\bfind\s+invoices?\s+(containing|with|that\s+have)\b"
+- Contains: "Find invoices with" ✓ MATCHES
+
+Test 5: "Show invoices containing print services"
+- Pattern 11: r"\binvoices?\s+(containing|with|that\s+have|that\s+include)\b"
+- Contains: "invoices containing" ✓ MATCHES (word boundary on 'S')
+
+Test 6: "Which invoices contain label items"
+- Pattern 10: r"\b(which|what)\s+invoices?\s+(have|contain|include|with)\b"
+- Contains: "Which invoices contain" ✓ MATCHES
+
+Test 7: "Find invoices that have printing"
+- Pattern 9: r"\bfind\s+invoices?\s+(containing|with|that\s+have)\b"
+- Contains: "Find invoices that have" ✓ MATCHES
+
+Test 8: "Show sticker products"
+- Pattern 12: r"\bshow.*\b(sticker|print|label|product|service|line\s+item)s?\b"
+- Contains: "Show" then "sticker" ✓ MATCHES
+- Pattern 14: r"\b(sticker|print|label)\s+(products?|services?|items?)\b"
+- Contains: "sticker products" ✓ ALSO MATCHES
+
+Test 9: "Find print services"
+- Pattern 13: r"\bfind.*\b(sticker|print|label|product|service)s?\b"
+- Contains: "Find" then "print services" ✓ MATCHES
+
+Test 10: "Invoices containing digital print"
+- Pattern 11: r"\binvoices?\s+(containing|with|that\s+have|that\s+include)\b"
+- Contains: "Invoices containing" ✓ MATCHES
+
+Test 11: "Show me invoice GST001"
+- This has invoice reference "GST001", routes via invoice number pattern (not BM25 search pattern)
+- Pattern 2: r"\bfind\b\s+(the\s+)?invoice\s+(with\s+)?(GSTIN|number|#)"
+- Does NOT match - this would need "find invoice with" not just "show me invoice"
+- BUT: Has invoice reference GST001 - routes via invoice number rule (line 265-274 in router.py)
+- Routes to BM25 with confidence 0.95 ✓
+
+Test 12: "Find invoice with GSTIN 36ARKPC6820F1ZZ"
+- Pattern 2: r"\bfind\b\s+(the\s+)?invoice\s+(with\s+)?(GSTIN|number|#)"
+- Contains: "Find invoice with GSTIN" ✓ MATCHES
+- Also has GSTIN reference - routes via GSTIN rule (line 300-309 in router.py)
+- Routes to BM25 with confidence 0.95 ✓
+
+SUMMARY OF VERIFICATION:
+========================
+All 12 test queries SHOULD match at least one BM25 pattern or route via specific reference rules.
+
+✅ Test 1: "Search for "Sticker" line items" - MATCHES Pattern 1
+✅ Test 2: "Find invoices containing label products" - MATCHES Patterns 9 & 14  
+✅ Test 3: "Which invoices have printing services?" - MATCHES Pattern 10
+✅ Test 4: "Find invoices with sticker products" - MATCHES Pattern 9
+✅ Test 5: "Show invoices containing print services" - MATCHES Pattern 11
+✅ Test 6: "Which invoices contain label items" - MATCHES Pattern 10
+✅ Test 7: "Find invoices that have printing" - MATCHES Pattern 9
+✅ Test 8: "Show sticker products" - MATCHES Patterns 12 & 14
+✅ Test 9: "Find print services" - MATCHES Pattern 13
+✅ Test 10: "Invoices containing digital print" - MATCHES Pattern 11
+✅ Test 11: "Show me invoice GST001" - Routes via invoice number rule
+✅ Test 12: "Find invoice with GSTIN 36ARKPC6820F1ZZ" - Routes via GSTIN rule
+
+EXPECTED RESULT: 100% routing to BM25 ✓

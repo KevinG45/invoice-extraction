@@ -1,0 +1,402 @@
+{
+  "invoice_number": null,
+  "invoice_date": null,
+  "due_date": null,
+  "purchase_order_number": null,
+  "currency": "INR",
+  "subtotal": null,
+  "discount": null,
+  "tax_amount": null,
+  "shipping": null,
+  "total_amount": 38777.4,
+  "amount_paid": null,
+  "amount_due": null,
+  "tax_rate": null,
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": null,
+  "notes": null,
+  "vendor": {
+    "name": "Shakti Hormann Private Limited",
+    "address": "Hyderabad",
+    "tax_id": "50IOOIZ3186A64N"
+  },
+  "bill_to": {
+    "name": null,
+    "address": null,
+    "tax_id": "10OBZZA1907B521"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "line_number": 1,
+      "description": "Basic DA 17,379.00 Ee PF contribution - House Rent Allowance 13,311.90 Prof Tax - split period 200.00",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 1800.0,
+      "item_code": null
+    },
+    {
+      "line_number": 2,
+      "description": "Conveyance Allowance",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 900.0,
+      "item_code": null
+    },
+    {
+      "line_number": 3,
+      "description": "Other allowance",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 3263.4,
+      "item_code": null
+    },
+    {
+      "line_number": 4,
+      "description": "Special Conv allowance",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 675.0,
+      "item_code": null
+    },
+    {
+      "line_number": 5,
+      "description": "LTA",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 1448.1,
+      "item_code": null
+    },
+    {
+      "line_number": 6,
+      "description": "Site allowance",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 1800.0,
+      "item_code": null
+    },
+    {
+      "line_number": 7,
+      "description": "Earned Leave Balance",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 12.0,
+      "item_code": null
+    },
+    {
+      "line_number": 8,
+      "description": "Balance",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 521366.0,
+      "item_code": null
+    },
+    {
+      "line_number": 9,
+      "description": "Sick Leave Balance",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 4.0,
+      "item_code": null
+    },
+    {
+      "line_number": 10,
+      "description": "Std Deduction",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 50000.0,
+      "item_code": null
+    },
+    {
+      "line_number": 11,
+      "description": "Casual Leave Balance - Empmnt tax (Prof Tax) 2,400.00",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 1.0,
+      "item_code": null
+    },
+    {
+      "line_number": 12,
+      "description": "Aggrg Deduction",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 52400.0,
+      "item_code": null
+    },
+    {
+      "line_number": 13,
+      "description": "Incm under Hd Salary",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 468966.0,
+      "item_code": null
+    },
+    {
+      "line_number": 14,
+      "description": "Gross Tot Income",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 468966.0,
+      "item_code": null
+    },
+    {
+      "line_number": 15,
+      "description": "Advance Details Agg of Chapter VI",
+      "hsn_sac": null,
+      "quantity": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "tax_amount": null,
+      "line_total": 21600.0,
+      "item_code": null
+    }
+  ],
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "MISSING_REQUIRED_FIELD: 'invoice_number' is null"
+    ],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 2,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 3,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 4,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 5,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 6,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 7,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 8,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 9,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 10,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 11,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 12,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 13,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 14,
+          "ok": true,
+          "note": ""
+        },
+        {
+          "line_number": 15,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": null,
+      "totals_consistent": null
+    },
+    "line_item_count": 15
+  },
+  "metadata": {
+    "source_file": "Nov2025_5066.pdf",
+    "source_path": "C:\\Users\\kmgs4\\AppData\\Local\\Temp\\tmpt5pso1t7.pdf",
+    "extraction_time": "2026-04-13T11:21:28.096178",
+    "processing_seconds": 37.02,
+    "pdf_type": "digital",
+    "page_count": 1,
+    "ocr_engine": "none",
+    "tables_found": 1,
+    "text_length": 1372,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "MISSING_REQUIRED_FIELD: 'invoice_number' is null"
+      ],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 2,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 3,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 4,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 5,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 6,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 7,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 8,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 9,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 10,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 11,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 12,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 13,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 14,
+            "ok": true,
+            "note": ""
+          },
+          {
+            "line_number": 15,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": null,
+        "totals_consistent": null
+      },
+      "line_item_count": 15
+    }
+  }
+}

@@ -21,16 +21,23 @@ pytesseract>=0.3.10
 # paddlepaddle has NO wheel for Python 3.13+ as of 2026-03.
 easyocr>=1.7.0  # logo-based vendor name fallback
 
+# HTTP and API dependencies
+# Pin urllib3 to avoid RequestsDependencyWarning with requests
+urllib3>=1.26.0,<2.0.0
 requests>=2.31.0
+chardet>=5.0.0,<6.0.0
+charset-normalizer>=3.0.0,<4.0.0
 ollama>=0.4.0
 
 fastapi>=0.109.0
 uvicorn[standard]>=0.27.0
 python-multipart>=0.0.6
 pydantic>=2.5.0
+slowapi>=0.1.9
 
 streamlit>=1.30.0
 openpyxl>=3.1.0
+plotly>=5.0.0
 
 SQLAlchemy>=2.0.0
 

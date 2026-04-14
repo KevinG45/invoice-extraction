@@ -1,0 +1,73 @@
+{
+  "invoice_number": "387/2023-24",
+  "invoice_date": "6-Nov-23",
+  "due_date": null,
+  "purchase_order_number": null,
+  "vendor": {
+    "name": "Refrens Internet Pvt. Ltd.",
+    "address": null,
+    "email": null,
+    "phone": null,
+    "tax_id": null,
+    "website": null
+  },
+  "bill_to": {
+    "name": "GST Tin No",
+    "address": null,
+    "email": null,
+    "tax_id": null
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [],
+  "subtotal": 113600.0,
+  "discount": null,
+  "tax_rate": null,
+  "tax_amount": null,
+  "shipping": null,
+  "total_amount": null,
+  "amount_paid": null,
+  "amount_due": null,
+  "currency": "INR",
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": null,
+  "notes": null,
+  "validation": {
+    "passed": false,
+    "warnings": [
+      "MISSING_REQUIRED_FIELD: 'total_amount' is null"
+    ],
+    "math_checks": {
+      "line_item_math": [],
+      "line_items_sum_to_subtotal": null,
+      "totals_consistent": null
+    },
+    "line_item_count": 0
+  },
+  "metadata": {
+    "source_file": "863_gst_bill_format_by_refrens_4e033c932d.jpg",
+    "source_path": "C:\\Users\\kmgs4\\AppData\\Local\\Temp\\tmpt5q_lf50.jpg",
+    "extraction_time": "2026-04-13T10:36:26.982742",
+    "processing_seconds": 248.01,
+    "pdf_type": "image",
+    "page_count": 1,
+    "ocr_engine": "tesseract",
+    "tables_found": 0,
+    "text_length": 875,
+    "validation": {
+      "passed": false,
+      "warnings": [
+        "MISSING_REQUIRED_FIELD: 'total_amount' is null"
+      ],
+      "math_checks": {
+        "line_item_math": [],
+        "line_items_sum_to_subtotal": null,
+        "totals_consistent": null
+      },
+      "line_item_count": 0
+    }
+  }
+}

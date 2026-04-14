@@ -9,8 +9,10 @@ No paid API calls — everything runs on-device.
 import hashlib
 import json
 import logging
+import concurrent.futures
+from functools import lru_cache
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 import chromadb
 from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
@@ -19,6 +21,40 @@ from core.config import CHROMA_DIR, CHROMA_COLLECTION, EMBEDDING_MODEL, OUTPUTS_
 from rag.chunker import chunk_invoice
 
 logger = logging.getLogger(__name__)
+
+# FIXED: Bug #13, #35 — Timeouts and caching configuration
+VECTOR_QUERY_TIMEOUT_SEC = 15  # Hard 15s limit on vector queries
+
+
+# ── Query embedding cache (Bug #13, #35) ────────────────────────────────────
+_embedding_model = None
+
+def _get_raw_embedding_model():
+    """Get the raw sentence-transformers model for caching."""
+    global _embedding_model
+    if _embedding_model is None:
+        from sentence_transformers import SentenceTransformer
+        _embedding_model = SentenceTransformer(EMBEDDING_MODEL)
+        logger.info("Loaded raw embedding model for caching: %s", EMBEDDING_MODEL)
+    return _embedding_model
+
+
+@lru_cache(maxsize=200)
+def _embed_query_cached(query_text: str) -> Tuple[float, ...]:
+    """
+    FIXED: Bug #13, #35 — LRU-cached embedding generation.
+    
+    Returns embedding as tuple (hashable for lru_cache).
+    Cache eliminates re-embedding for repeated/similar queries.
+    """
+    # Safety check for None
+    if not query_text:
+        return tuple()
+    model = _get_raw_embedding_model()
+    # Normalize for better cache hits
+    normalized = query_text.lower().strip()
+    embedding = model.encode(normalized)
+    return tuple(embedding.tolist())
 
 # ── Lazy singleton ─────────────────────────────────────────────────────────
 _client: Optional[chromadb.ClientAPI] = None
@@ -179,13 +215,16 @@ def index_all() -> Dict[str, int]:
     }
 
 
-def query_chunks(query_text: str, n_results: int = 5) -> List[Dict[str, Any]]:
+def query_chunks(query_text: str, n_results: int = 5, use_cache: bool = True) -> List[Dict[str, Any]]:
     """
     Query the ChromaDB collection for relevant chunks.
+    
+    FIXED: Bug #13, #35 — Added timeout guard and embedding cache.
 
     Args:
         query_text: Natural-language query.
         n_results: Max number of chunks to return.
+        use_cache: If True, use LRU-cached embeddings (default).
 
     Returns:
         List of dicts with 'text', 'metadata', and 'distance' keys,
@@ -197,21 +236,56 @@ def query_chunks(query_text: str, n_results: int = 5) -> List[Dict[str, Any]]:
         logger.warning("ChromaDB collection is empty — no invoices indexed yet")
         return []
 
-    results = collection.query(
-        query_texts=[query_text],
-        n_results=min(n_results, collection.count()),
-    )
+    def _do_query():
+        """Execute the query, optionally using cached embeddings."""
+        if use_cache:
+            # Use cached embedding
+            embedding = _embed_query_cached(query_text)
+            return collection.query(
+                query_embeddings=[list(embedding)],
+                n_results=min(n_results, collection.count()),
+            )
+        else:
+            # Use ChromaDB's built-in embedding
+            return collection.query(
+                query_texts=[query_text],
+                n_results=min(n_results, collection.count()),
+            )
+
+    # FIXED: Bug #13, #35 — Wrap query in timeout guard
+    try:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+            future = executor.submit(_do_query)
+            try:
+                results = future.result(timeout=VECTOR_QUERY_TIMEOUT_SEC)
+            except concurrent.futures.TimeoutError:
+                logger.error("ChromaDB query timed out after %ds", VECTOR_QUERY_TIMEOUT_SEC)
+                return []
+    except Exception as e:
+        logger.error("ChromaDB query failed: %s", e)
+        return []
 
     formatted = []
-    docs = results.get("documents", [[]])[0]
-    metas = results.get("metadatas", [[]])[0]
-    dists = results.get("distances", [[]])[0]
+    # FIXED: Bug IDX-1 — Safer unpacking with None checks
+    docs = (results.get("documents") or [[]])[0] if results.get("documents") else []
+    metas = (results.get("metadatas") or [[]])[0] if results.get("metadatas") else []
+    dists = (results.get("distances") or [[]])[0] if results.get("distances") else []
+    
+    # FIXED: Bug IDX-2 — Validate lengths before zip
+    if not (len(docs) == len(metas) == len(dists)):
+        logger.warning("ChromaDB returned unequal result lengths: docs=%d, metas=%d, dists=%d", 
+                       len(docs), len(metas), len(dists))
+        # Use shortest length to avoid index errors
+        min_len = min(len(docs), len(metas), len(dists))
+        docs = docs[:min_len]
+        metas = metas[:min_len]
+        dists = dists[:min_len]
 
     for doc, meta, dist in zip(docs, metas, dists):
         formatted.append({
             "text": doc,
-            "metadata": meta,
-            "distance": round(dist, 4),
+            "metadata": meta or {},
+            "distance": round(dist, 4) if dist else 0.0,
         })
 
     logger.info("Query returned %d chunks (query: '%.50s...')", len(formatted), query_text)

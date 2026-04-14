@@ -1,0 +1,92 @@
+{
+  "invoice_number": "GST/24/002",
+  "invoice_date": "22-04-2024",
+  "due_date": null,
+  "purchase_order_number": null,
+  "currency": "INR",
+  "subtotal": 11000.0,
+  "discount": null,
+  "tax_amount": 1980.0,
+  "shipping": null,
+  "total_amount": 12980.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "tax_rate": null,
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": null,
+  "notes": null,
+  "vendor": {
+    "name": "NIREL DIGITALS",
+    "address": null,
+    "email": "nireldigitals@gmail.com",
+    "phone": "9866272837",
+    "tax_id": null,
+    "website": null
+  },
+  "bill_to": {
+    "name": "HETERO LABS LIMITED (R&D)",
+    "address": "Sy. No. 180/14 & 15, IDA Kazipally, sangareddy (Dist) 502319 P.O. No. TELEPHONE",
+    "email": null,
+    "tax_id": "36AAACH5506R1Z8"
+  },
+  "ship_to": {
+    "name": null,
+    "address": null
+  },
+  "line_items": [
+    {
+      "description": "Photo Frame - on 8mm MDF, Frame 2in Boarder",
+      "hsn_sac": null,
+      "quantity": 2.0,
+      "unit": "NOS",
+      "unit_price": 5500.0,
+      "discount": null,
+      "tax_rate": 18.0,
+      "total": 11000.0
+    }
+  ],
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": true,
+      "totals_consistent": true
+    },
+    "line_item_count": 1
+  },
+  "metadata": {
+    "source_file": "GST24002.pdf",
+    "source_path": "C:\\Users\\kmgs4\\AppData\\Local\\Temp\\tmp1q12jw_6.pdf",
+    "extraction_time": "2026-03-30T07:54:24.985132",
+    "processing_seconds": 60.78,
+    "pdf_type": "digital",
+    "page_count": 1,
+    "ocr_engine": "none",
+    "tables_found": 1,
+    "text_length": 1182,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": true,
+        "totals_consistent": true
+      },
+      "line_item_count": 1
+    }
+  }
+}

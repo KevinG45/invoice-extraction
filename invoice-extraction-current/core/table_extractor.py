@@ -55,14 +55,11 @@ def clean_ocr_number(raw: str) -> str:
 def _back_calc_unit_price(line_total: float, qty: float, tax_rate: Optional[float]) -> float:
     """Back-calculate unit_price from line_total and qty.
 
-    For Indian GST invoices, line_total often includes GST (e.g. 18%).
-    If tax_rate is known, remove it first so the unit_price is pre-tax.
+    In standard Indian GST invoices, line_total is the pre-tax taxable value,
+    so we simply divide. Tax stripping is NOT applied here because line_total
+    does not include GST in the typical invoice format.
     """
-    if tax_rate and tax_rate > 0:
-        taxable = line_total / (1 + tax_rate / 100.0)
-    else:
-        taxable = line_total
-    return round(taxable / qty, 2)
+    return round(line_total / qty, 2)
 
 
 # ── Column header keyword mapping ──────────────────────────────────────────
@@ -153,6 +150,21 @@ _OCR_SHORT_PATTERN = re.compile(
 _OCR_DESC_AMOUNT_PATTERN = re.compile(
     r'^\s*([A-Za-z][\w\s!.,\-()]+?)\s+'       # description (non-greedy)
     r'([\d,]+\.\d{2})\s*$',                    # amount with exactly 2 decimal places
+    re.IGNORECASE,
+)
+
+# Unit-before-quantity pattern (common in image/scanned invoices):
+# e.g.  "LED LIGHTS 85013410 pcs 25000 5.36 18% 134048"
+#       "1 Sticker 49111090 NOS 500 5.90 18% 2950"
+_UNIT_BEFORE_QTY_PATTERN = re.compile(
+    r'^\s*(?:\d+\s+)?'                         # optional serial number
+    r'([A-Za-z][\w\s!.,\-()]{2,}?)\s+'        # description (non-greedy, starts with letter)
+    r'(?:(\d{4,8})\s+)?'                       # optional HSN/SAC code (4-8 digits)
+    r'(?:' + _UNITS + r')\s+'                  # unit FIRST (pcs, nos, kgs …)
+    r'([\d,]+(?:\.\d+)?)\s+'                   # quantity
+    r'(?:₹\s*)?([\d,]+(?:\.\d+)?)\s+'         # unit price
+    r'(?:(?:\d+(?:\.\d+)?)\s*%?\s+)?'          # optional tax rate (skip)
+    r'(?:₹\s*)?([\d,]+(?:\.\d+)?)\s*$',       # line total
     re.IGNORECASE,
 )
 
@@ -678,6 +690,19 @@ def extract_line_items_from_text(text: str) -> List[Dict[str, Any]]:
             prev_item_idx = -1  # Stop appending sub-descriptions after footer
             continue
 
+        # ── Early sub-description check for pure-text lines ───────────────
+        # If the line has NO digits at all AND a previous item exists, it is
+        # almost certainly a continuation description for that item — handle it
+        # before any pattern matching so it doesn't get misidentified as a new item.
+        if (prev_item_idx >= 0
+                and not re.search(r'\d', line)
+                and not re.search(r'[₹$€£%]', line)
+                and not re.match(r'^(?:[A-Z][A-Z\s&.]+(?:PVT|LTD|LLC|DIGITALS|SOLUTIONS|ENTERPRISES))', line)
+                and not re.search(r'(?:Bank|IFSC|A/C|Branch|GSTIN|Contact|Email|Phone|Jurisdiction)', line, re.IGNORECASE)):
+            existing = line_items[prev_item_idx]["description"] or ""
+            line_items[prev_item_idx]["description"] = (existing + " - " + line).strip(" -")
+            continue
+
         match = gst_pattern.match(line)
         if match:
             row_num += 1
@@ -737,6 +762,32 @@ def extract_line_items_from_text(text: str) -> List[Dict[str, Any]]:
         if match:
             serial, desc, hsn, qty_s, price_s, total_s = match.groups()
             row_num += 1
+            item = {
+                "line_number": row_num,
+                "description": desc.strip(),
+                "hsn_sac": hsn if hsn else None,
+                "quantity": _parse_number(clean_ocr_number(qty_s)),
+                "unit_price": _parse_number(clean_ocr_number(price_s)),
+                "line_total": _parse_number(clean_ocr_number(total_s)),
+                "item_code": None,
+                "discount": None,
+                "tax_rate": None,
+                "tax_amount": None,
+            }
+            if item["quantity"] and item["line_total"] and item["quantity"] > 0:
+                expected = item["quantity"] * (item["unit_price"] or 0)
+                if item["unit_price"] is None or abs(expected - item["line_total"]) > 0.50:
+                    item["unit_price"] = _back_calc_unit_price(
+                        item["line_total"], item["quantity"], item.get("tax_rate"))
+            line_items.append(item)
+            prev_item_idx = len(line_items) - 1
+            continue
+
+        # Try unit-before-quantity pattern (image invoices: "LED LIGHTS 85013410 pcs 25000 5.36 18% 134048")
+        match = _UNIT_BEFORE_QTY_PATTERN.match(line)
+        if match:
+            row_num += 1
+            desc, hsn, qty_s, price_s, total_s = match.groups()
             item = {
                 "line_number": row_num,
                 "description": desc.strip(),
@@ -859,10 +910,11 @@ def extract_line_items_from_text(text: str) -> List[Dict[str, Any]]:
                     continue
 
         # Check if this line is a sub-description for the previous item
+        # (fallback for lines that have some digits but didn't match any item pattern)
         if prev_item_idx >= 0 and not re.match(r'^\d', line):
             # Append to previous item's description if it looks like a continuation
-            # Must be short, no currency/percentage symbols, no company/address keywords
-            if (len(line) < 60
+            # Must be <= 150 chars, no currency/percentage symbols, no company/address keywords
+            if (len(line) <= 150
                     and not re.search(r'[₹$€£%]', line)
                     and not re.match(r'^(?:[A-Z][A-Z\s&.]+(?:PVT|LTD|LLC|DIGITALS|SOLUTIONS|ENTERPRISES))', line)
                     and not re.search(r'(?:Bank|IFSC|A/C|Branch|GSTIN|Contact|Email|Phone|Jurisdiction)', line, re.IGNORECASE)):

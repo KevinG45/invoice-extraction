@@ -21,6 +21,11 @@ def main():
     for r in retriever.search("lamination", top_k=3):
         print(f"  score={r['score']:.4f}  file={r['source_file']}  "
               f"vendor={r['vendor_name']}  total={r['total_amount']}")
+    
+    print("\n--- Test 3: GSTIN exact match '36ARKPC6820F1ZZ' ---")
+    for r in retriever.search("36ARKPC6820F1ZZ", top_k=5):
+        print(f"  score={r['score']:.4f}  file={r['source_file']}  "
+              f"vendor={r['vendor_name']}  vendor_gstin={r['vendor_gstin']}  bill_to_gstin={r['bill_to_gstin']}")
 
 
 if __name__ == "__main__":

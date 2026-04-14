@@ -1,0 +1,29 @@
+{
+  "total_invoices_analyzed": 99,
+  "field_extraction_rates": {
+    "invoice_number": 84.85,
+    "invoice_date": 93.94,
+    "due_date": 13.13,
+    "purchase_order_number": 5.05,
+    "vendor.name": 98.99,
+    "vendor.address": 88.89,
+    "vendor.email": 82.83,
+    "vendor.phone": 84.85,
+    "vendor.tax_id": 88.89,
+    "vendor.website": 4.04,
+    "bill_to.name": 97.98,
+    "bill_to.address": 80.81,
+    "bill_to.email": 2.02,
+    "bill_to.tax_id": 73.74,
+    "ship_to.name": 2.02,
+    "ship_to.address": 4.04,
+    "subtotal": 95.96,
+    "discount": 7.07,
+    "tax_rate": 87.88,
+    "tax_amount": 92.93,
+    "shipping": 5.05,
+    "total_amount": 96.97,
+    "payment_terms": 8.08,
+    "bank_details": 74.75
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "invoice_number": "PC-90-0175/GRP",
+  "invoice_date": "10-Nov-25",
+  "due_date": "15 Nov 2025",
+  "purchase_order_number": null,
+  "currency": "INR",
+  "subtotal": null,
+  "discount": null,
+  "tax_amount": null,
+  "shipping": null,
+  "total_amount": 572500.0,
+  "amount_paid": null,
+  "amount_due": null,
+  "tax_rate": null,
+  "payment_terms": null,
+  "payment_method": null,
+  "bank_details": {
+    "account_name": "Percepta Consulting",
+    "type": "Current",
+    "account_number": "9404922195",
+    "micr_code": "500485038",
+    "ifsc_code": "KKBK0007531",
+    "branch": "Trimulgherry"
+  },
+  "notes": null,
+  "vendor": {
+    "name": "Percepta Consulting",
+    "address": "B-302, Patels Brightview, Kowkoor, Secunderabad, Telangana - 500010",
+    "email": "BrigInderSethi@gmail.com",
+    "phone": null,
+    "tax_id": "36AEDPB7140R2Z9",
+    "website": null
+  },
+  "bill_to": {
+    "name": "GRP Leadership Catalyst Program - First Payment",
+    "address": "0, 0, 5,72,500/-, 0.00%, 0",
+    "email": null,
+    "tax_id": null
+  },
+  "ship_to": {
+    "name": "GRP Leadership Catalyst Program - First Payment",
+    "address": "GRP Leadership Catalyst Program - First Payment 1 5,72,500/- 5,72,500/-, 0, 0, 5,72,500/-, 0.00%",
+    "email": null
+  },
+  "line_items": [
+    {
+      "description": null,
+      "hsn_sac": null,
+      "quantity": null,
+      "unit": null,
+      "unit_price": null,
+      "discount": null,
+      "tax_rate": null,
+      "total": 572500.0
+    }
+  ],
+  "validation": {
+    "passed": true,
+    "warnings": [],
+    "math_checks": {
+      "line_item_math": [
+        {
+          "line_number": 1,
+          "ok": true,
+          "note": ""
+        }
+      ],
+      "line_items_sum_to_subtotal": null,
+      "totals_consistent": null
+    },
+    "line_item_count": 1
+  },
+  "metadata": {
+    "source_file": "Invoice 1.pdf",
+    "source_path": "C:\\Users\\kmgs4\\AppData\\Local\\Temp\\tmpa7niuqf8.pdf",
+    "extraction_time": "2026-04-13T09:30:43.619398",
+    "processing_seconds": 90.21,
+    "pdf_type": "digital",
+    "page_count": 1,
+    "ocr_engine": "none",
+    "tables_found": 1,
+    "text_length": 627,
+    "validation": {
+      "passed": true,
+      "warnings": [],
+      "math_checks": {
+        "line_item_math": [
+          {
+            "line_number": 1,
+            "ok": true,
+            "note": ""
+          }
+        ],
+        "line_items_sum_to_subtotal": null,
+        "totals_consistent": null
+      },
+      "line_item_count": 1
+    }
+  }
+}

@@ -30,8 +30,13 @@ logger = logging.getLogger(__name__)
 
 
 def check_prerequisites():
-    """Check if Ollama and Tesseract are installed."""
-    logger.info("🔍 Checking prerequisites...")
+    """
+    Check if Ollama and Tesseract are installed.
+    FIXED: Bug P0-4 - Exit with helpful message if prerequisites missing.
+    """
+    logger.info("Checking prerequisites...")
+    
+    errors = []
 
     # Check Tesseract
     try:
@@ -42,13 +47,14 @@ def check_prerequisites():
             timeout=5,
         )
         if result.returncode == 0:
-            logger.info("✅ Tesseract OCR found")
+            logger.info("  Tesseract OCR: OK")
         else:
-            logger.warning("⚠️  Tesseract not found. OCR may fail.")
+            errors.append("Tesseract OCR not working properly")
     except (FileNotFoundError, subprocess.TimeoutExpired):
-        logger.warning("⚠️  Tesseract not found. Install: https://github.com/tesseract-ocr/tesseract")
+        errors.append("Tesseract OCR not found")
 
     # Check Ollama
+    ollama_ok = False
     try:
         result = subprocess.run(
             ["ollama", "list"],
@@ -57,14 +63,40 @@ def check_prerequisites():
             timeout=5,
         )
         if result.returncode == 0:
-            if "qwen2.5:3b" in result.stdout:
-                logger.info("✅ Ollama found with qwen2.5:3b model")
+            ollama_ok = True
+            if "qwen2.5:3b" in result.stdout or "qwen" in result.stdout:
+                logger.info("  Ollama + qwen2.5:3b model: OK")
             else:
-                logger.warning("⚠️  Ollama found but qwen2.5:3b not installed. Run: ollama pull qwen2.5:3b")
+                errors.append("Ollama model 'qwen2.5:3b' not found")
         else:
-            logger.warning("⚠️  Ollama not responding")
+            errors.append("Ollama not responding")
     except (FileNotFoundError, subprocess.TimeoutExpired):
-        logger.warning("⚠️  Ollama not found. Install: https://ollama.com")
+        errors.append("Ollama not found")
+
+    # FIXED: Bug P0-4 - Show helpful error and exit if prerequisites missing
+    if errors:
+        logger.error("")
+        logger.error("=" * 60)
+        logger.error("PREREQUISITES MISSING")
+        logger.error("=" * 60)
+        for err in errors:
+            logger.error(f"  {err}")
+        logger.error("")
+        logger.error("Please install missing prerequisites:")
+        logger.error("")
+        if "Tesseract" in " ".join(errors):
+            logger.error("  Tesseract OCR:")
+            logger.error("    Windows: https://github.com/UB-Mannheim/tesseract/wiki")
+            logger.error("    Ubuntu:  sudo apt install tesseract-ocr")
+            logger.error("    macOS:   brew install tesseract")
+            logger.error("")
+        if "Ollama" in " ".join(errors):
+            logger.error("  Ollama:")
+            logger.error("    Install: https://ollama.com")
+            logger.error("    Then run: ollama pull qwen2.5:3b")
+            logger.error("")
+        logger.error("=" * 60)
+        sys.exit(1)
 
     logger.info("")
 
@@ -155,66 +187,96 @@ def run_batch_extraction():
         logger.info("   💡 You can still use the frontend to extract invoices manually.\n")
 
 
-def launch_frontend():
+def launch_frontend(api_port: int = 8000, frontend_port: int = 8501):
     """Launch API server in background, then Streamlit frontend."""
-    logger.info("🚀 Starting API server in background...")
+    import time
+    import requests
 
-    # Start API server as background process
+    logger.info("Starting API server in background on port %d...", api_port)
+
+    # Pass API_PORT via environment so config.py picks it up
+    env = os.environ.copy()
+    env["API_PORT"] = str(api_port)
+
+    api_log_path = f"api_{api_port}.log"
+    api_log = open(api_log_path, "w")
     api_process = subprocess.Popen(
         [sys.executable, "run_api.py"],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
+        stdout=api_log,
+        stderr=subprocess.STDOUT,
+        env=env,
     )
 
-    # Wait a bit for API to start
-    import time
-    time.sleep(3)
+    # Wait and verify API actually started
+    logger.info("   Waiting for API to initialize...")
+    api_ready = False
+    for attempt in range(15):
+        time.sleep(1)
+        try:
+            response = requests.get(f"http://localhost:{api_port}/health", timeout=2)
+            if response.status_code == 200:
+                api_ready = True
+                break
+        except requests.RequestException:
+            pass
 
-    logger.info("✅ API server running at http://localhost:8000")
-    logger.info("🚀 Launching frontend...")
-    logger.info("   Opening http://localhost:8501 in your browser...\n")
+    if not api_ready:
+        logger.error("API server failed to start! Check %s for errors", api_log_path)
+        api_process.terminate()
+        sys.exit(1)
+
+    logger.info("API server running at http://localhost:%d", api_port)
+    logger.info("Launching frontend on port %d...", frontend_port)
     logger.info("=" * 60)
-    logger.info("📌 Frontend + API running. Press Ctrl+C to stop both.")
+    logger.info("Frontend + API running. Press Ctrl+C to stop both.")
     logger.info("=" * 60)
     logger.info("")
 
     try:
         subprocess.run(
-            [sys.executable, "run_frontend.py"],
+            [
+                sys.executable, "-m", "streamlit", "run", "frontend/app.py",
+                "--server.port", str(frontend_port),
+                "--server.headless", "true",
+            ],
+            env={**env, "API_PORT": str(api_port), "API_URL": f"http://localhost:{api_port}"},
             check=True,
         )
     except KeyboardInterrupt:
-        logger.info("\n👋 Shutting down...")
+        logger.info("\nShutting down...")
     except Exception as e:
-        logger.error(f"❌ Failed to launch frontend: {e}")
+        logger.error("Failed to launch frontend: %s", e)
     finally:
-        # Stop API server
-        logger.info("🛑 Stopping API server...")
+        logger.info("Stopping API server...")
         api_process.terminate()
         try:
             api_process.wait(timeout=5)
         except subprocess.TimeoutExpired:
             api_process.kill()
+        api_log.close()
 
 
-def launch_api():
+def launch_api(api_port: int = 8000):
     """Launch FastAPI server."""
-    logger.info("🚀 Launching API server...")
-    logger.info("   Opening http://localhost:8000/docs in your browser...\n")
+    logger.info("Launching API server on port %d...", api_port)
     logger.info("=" * 60)
-    logger.info("📌 API running. Press Ctrl+C to stop.")
+    logger.info("API running. Press Ctrl+C to stop.")
     logger.info("=" * 60)
     logger.info("")
+
+    env = os.environ.copy()
+    env["API_PORT"] = str(api_port)
 
     try:
         subprocess.run(
             [sys.executable, "run_api.py"],
+            env=env,
             check=True,
         )
     except KeyboardInterrupt:
-        logger.info("\n👋 Shutting down...")
+        logger.info("\nShutting down...")
     except Exception as e:
-        logger.error(f"❌ Failed to launch API: {e}")
+        logger.error("Failed to launch API: %s", e)
 
 
 def main():
@@ -247,6 +309,18 @@ Examples:
         action="store_true",
         help="Run setup only (database + indexes), don't launch",
     )
+    parser.add_argument(
+        "--api-port",
+        type=int,
+        default=int(os.getenv("API_PORT", "8000")),
+        help="Port for the API server (default: 8000)",
+    )
+    parser.add_argument(
+        "--frontend-port",
+        type=int,
+        default=8501,
+        help="Port for the Streamlit frontend (default: 8501)",
+    )
 
     args = parser.parse_args()
 
@@ -278,9 +352,9 @@ Examples:
         return
 
     if args.api:
-        launch_api()
+        launch_api(api_port=args.api_port)
     else:
-        launch_frontend()
+        launch_frontend(api_port=args.api_port, frontend_port=args.frontend_port)
 
 
 if __name__ == "__main__":

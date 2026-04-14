@@ -33,6 +33,78 @@ from core.config import SUPPORTED_EXTENSIONS, OUTPUTS_DIR, OCR_ENGINE
 logger = logging.getLogger(__name__)
 
 
+def _is_suspicious_company_name(name: Any) -> bool:
+    """Heuristic check for company-name fields polluted with address/noise text."""
+    if not name:
+        return True
+    s = str(name).strip()
+    if not s:
+        return True
+    if len(s) > 80:
+        return True
+    if "\n" in s:
+        return True
+    if re.search(r"\b(?:address|street|road|lane|city|state|pin|zipcode|waybill|delivery)\b", s, re.IGNORECASE):
+        return True
+    digits = sum(ch.isdigit() for ch in s)
+    if digits >= 6 or (len(s) > 0 and (digits / len(s)) > 0.25):
+        return True
+    return False
+
+
+def _check_document_type(text: str) -> Optional[str]:
+    """
+    Heuristic check to reject clearly non-invoice documents before running
+    expensive LLM extraction. Returns an error message string if the document
+    is not an invoice, or None if it looks like a valid invoice.
+    """
+    if not text:
+        return None
+    sample = text[:3000].lower()
+
+    # Payslip / salary slip indicators
+    payslip_keywords = [
+        "pay slip", "payslip", "salary slip", "pay period", "net pay",
+        "basic da", "hra", "earned leave balance", "pf number", "uan number",
+        "esi number", "aadhar number", "emp id", "employee id",
+        "designation", "joining date", "gross salary", "std deduction",
+        "form 16", "tds deduction", "professional tax",
+    ]
+    payslip_hits = sum(1 for kw in payslip_keywords if kw in sample)
+    if payslip_hits >= 3:
+        return (
+            "This appears to be a payslip / salary document, not an invoice. "
+            "This system only processes invoices, purchase orders, and receipts."
+        )
+
+    # Bank statement indicators
+    bank_keywords = [
+        "account statement", "opening balance", "closing balance",
+        "transaction date", "cheque no", "withdrawal", "deposit",
+        "available balance", "mini statement",
+    ]
+    bank_hits = sum(1 for kw in bank_keywords if kw in sample)
+    if bank_hits >= 3:
+        return (
+            "This appears to be a bank statement, not an invoice. "
+            "This system only processes invoices, purchase orders, and receipts."
+        )
+
+    # Resume / CV indicators
+    resume_keywords = [
+        "curriculum vitae", "objective", "work experience", "education",
+        "references", "skills", "profile summary", "hobbies",
+    ]
+    resume_hits = sum(1 for kw in resume_keywords if kw in sample)
+    if resume_hits >= 3:
+        return (
+            "This appears to be a resume/CV, not an invoice. "
+            "This system only processes invoices, purchase orders, and receipts."
+        )
+
+    return None
+
+
 class InvoicePipeline:
     """
     Main orchestrator for invoice extraction.
@@ -90,6 +162,17 @@ class InvoicePipeline:
             len(full_text), page_count, time.time() - t,
         )
 
+        # ── Stage 2b: Document type guard ────────────────────────────────
+        doc_warning = _check_document_type(full_text)
+        if doc_warning:
+            logger.warning("[pipeline] Non-invoice document detected: %s", doc_warning)
+            return {
+                "error": "unsupported_document_type",
+                "message": doc_warning,
+                "source_file": Path(path).name,
+                "processing_seconds": round(time.time() - start_time, 2),
+            }
+
         # ── Stage 3: Extract tables ───────────────────────────────────────
         t = time.time()
         _t_stage = time.time()
@@ -130,7 +213,8 @@ class InvoicePipeline:
 
         # ── Stage 4d: Focused LLM fallback for bill_to.name ──────────────
         bill_to_obj = invoice_fields.get("bill_to") or {}
-        if not bill_to_obj.get("name"):
+        bill_to_name = bill_to_obj.get("name")
+        if _is_suspicious_company_name(bill_to_name) and pdf_type != "digital":
             from core.llm_extractor import extract_customer_name
             known_vendor = (invoice_fields.get("vendor") or {}).get("name")
             _t_stage = time.time()
@@ -160,6 +244,9 @@ class InvoicePipeline:
             "[pipeline] Stage 5b - Text enhancement: %d line items (%.2fs)",
             len(invoice_fields.get("line_items", [])), time.time() - t,
         )
+
+        # ── Stage 5c: Clean up embedded HSN codes / compute unit_price ────
+        invoice_fields = self._cleanup_line_item_descriptions(invoice_fields)
 
         # ── Stage 6: Validate ─────────────────────────────────────────────
         t = time.time()
@@ -199,6 +286,10 @@ class InvoicePipeline:
         from core.llm_extractor import extract_fields_with_regex
 
         regex_result = extract_fields_with_regex(text)
+        
+        # FIXED: Bug PIPE-1 — Handle None return from regex extraction
+        if regex_result is None:
+            regex_result = {}
 
         # Backfill null scalar fields
         for key in ("invoice_number", "invoice_date", "due_date",
@@ -242,6 +333,7 @@ class InvoicePipeline:
             if not vendor.get(key) and rx_vendor.get(key):
                 vendor[key] = rx_vendor[key]
                 logger.info("[pipeline] Regex backfill vendor.%s = %s", key, rx_vendor[key])
+        fields["vendor"] = vendor
 
         bill_to = fields.get("bill_to") or {}
         rx_bill = regex_result.get("bill_to") or {}
@@ -249,6 +341,7 @@ class InvoicePipeline:
             if not bill_to.get(key) and rx_bill.get(key):
                 bill_to[key] = rx_bill[key]
                 logger.info("[pipeline] Regex backfill bill_to.%s = %s", key, rx_bill[key])
+        fields["bill_to"] = bill_to
 
         return fields
 
@@ -472,14 +565,10 @@ class InvoicePipeline:
                 )
 
             # Fix unit_price using the corrected quantity
-            # Use tax_rate to strip GST before dividing (avoids 18%-inflated prices)
+            # In standard Indian GST invoices, line_total is the pre-tax taxable value,
+            # so we divide directly without stripping tax.
             if total and qty and qty > 0:
-                tax_rate = item.get("tax_rate")
-                if tax_rate and tax_rate > 0:
-                    taxable = total / (1 + tax_rate / 100.0)
-                else:
-                    taxable = total
-                expected_price = round(taxable / qty, 2)
+                expected_price = round(total / qty, 2)
                 current_price = item.get("unit_price")
                 if current_price is None or abs(qty * current_price - total) > 0.50:
                     item["unit_price"] = expected_price
@@ -529,6 +618,45 @@ class InvoicePipeline:
             llm_desc = item.get("description", "")
             if text_desc and " - " in text_desc and llm_desc and " - " not in llm_desc:
                 item["description"] = text_desc
+
+        return invoice
+
+    def _cleanup_line_item_descriptions(self, invoice: dict) -> dict:
+        """
+        Post-process line items to extract HSN codes and units embedded in
+        description strings (happens when _OCR_DESC_AMOUNT_PATTERN matched),
+        and back-calculate unit_price when qty + line_total are known.
+        """
+        import re
+        _HSN_RE = re.compile(r'\b(\d{4,8})\b')
+        _UNITS_RE = re.compile(
+            r'\b(NOS|KGS|PCS|NOS\.|MTR|LTR|BOX|SET|PKT|BAG|UNIT|PAIR|DOZ|'
+            r'KG|GM|ML|SQFT|SQF|RFT|CFT|ROLL|LOT|EA|EACH|REAM|SHEETS?|BUNDLE)\b',
+            re.IGNORECASE,
+        )
+
+        for item in invoice.get("line_items", []):
+            desc = item.get("description") or ""
+
+            # Extract HSN code from description if not already set
+            if not item.get("hsn_sac"):
+                hsn_match = _HSN_RE.search(desc)
+                if hsn_match:
+                    item["hsn_sac"] = hsn_match.group(1)
+                    # Remove the HSN code from description
+                    desc = _HSN_RE.sub("", desc, count=1).strip()
+
+            # Remove unit tokens from description
+            desc = _UNITS_RE.sub("", desc).strip()
+            # Clean up residual whitespace / punctuation
+            desc = re.sub(r'\s{2,}', ' ', desc).strip(" -,")
+            item["description"] = desc
+
+            # Back-calculate unit_price if qty and total are known
+            qty = item.get("quantity")
+            total = item.get("line_total") or item.get("total")
+            if qty and total and qty > 0 and not item.get("unit_price"):
+                item["unit_price"] = round(float(total) / float(qty), 2)
 
         return invoice
 

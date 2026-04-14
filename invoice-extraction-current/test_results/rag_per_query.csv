@@ -1,0 +1,100 @@
+question,category,strategy_used,reranked,strategy_match,hit_at_3,hit_at_5,mrr,answer_contains,numerical_accuracy,time_seconds
+How many invoices are in the system?,sql_aggregate,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,29.88
+What is the total tax amount across all invoices?,sql_aggregate,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,23.79
+Which vendor has the highest total invoice value?,sql_aggregate,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,24.73
+What is the average invoice amount?,sql_aggregate,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,23.63
+How many invoices have validation passed?,sql_aggregate,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,23.24
+Show me all invoices with tax greater than 500,sql_filter,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,34.61
+List vendors sorted by total invoice value,sql_aggregate,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,30.07
+Count invoices by month,sql_aggregate,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,34.47
+What is the total discount across all invoices?,sql_aggregate,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,23.98
+Show validation failure count,sql_aggregate,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,27.2
+What is the sum of all subtotals?,sql_aggregate,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,24.19
+Find the maximum invoice total,sql_aggregate,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,23.06
+How many invoices include shipping charges?,sql_filter,sql,False,1.0,1.0,1.0,1.0,0.0,1.0,23.71
+Count invoices above 10000 rupees,sql_filter,sql,False,1.0,1.0,1.0,1.0,0.0,1.0,23.28
+What is the average tax rate across invoices?,sql_aggregate,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,22.46
+Show me invoice GST001,bm25_lookup,bm25,True,1.0,1.0,1.0,0.5,1.0,1.0,31.31
+Find the invoice with GSTIN 36ARKPC6820F1ZZ,bm25_lookup,bm25,True,1.0,0.0,0.0,0.0,1.0,1.0,24.55
+"What are the details of ""NIREL DIGITALS"" invoices?",bm25_lookup,bm25,True,1.0,0.0,0.0,0.0,1.0,1.0,21.93
+Show invoice GST003,bm25_lookup,bm25,True,1.0,1.0,1.0,0.5,1.0,1.0,11.99
+Find invoice number INV-2026-001,bm25_lookup,bm25,True,1.0,1.0,1.0,1.0,1.0,1.0,26.13
+Search for ABC Corporation invoices,bm25_lookup,bm25,True,1.0,1.0,1.0,1.0,0.0,1.0,26.73
+"Show ""Net 30"" payment terms invoices",bm25_lookup,memory_direct,False,0.0,1.0,1.0,1.0,0.0,1.0,0.01
+Find BITRA BIO SOLUTIONS,bm25_lookup,bm25,True,1.0,1.0,1.0,1.0,1.0,1.0,22.03
+Show invoice #12345,bm25_lookup,bm25,True,1.0,1.0,1.0,1.0,0.0,1.0,25.52
+Find GSTIN 36BMZPC5477K1Z7,bm25_lookup,bm25,True,1.0,1.0,1.0,0.5,1.0,1.0,20.69
+"Search for ""Sticker"" line items",bm25_lookup,bm25,True,1.0,0.0,0.0,0.0,0.0,1.0,18.88
+Show invoices similar to printing services,vector_semantic,vector,True,1.0,1.0,1.0,1.0,1.0,1.0,52.23
+Describe the types of products sold across all invoices,vector_semantic,sql,False,0.0,1.0,1.0,1.0,1.0,1.0,38.83
+Find technology-related invoices,vector_semantic,vector,True,1.0,1.0,1.0,1.0,0.5,1.0,38.22
+Show construction materials purchases,vector_semantic,bm25,False,0.0,1.0,1.0,1.0,1.0,1.0,0.02
+Invoices related to international shipping,vector_semantic,vector,True,1.0,1.0,1.0,1.0,1.0,1.0,26.42
+Find bulk discount purchases,vector_semantic,sql,False,0.0,1.0,1.0,1.0,1.0,1.0,25.22
+Show emergency or urgent orders,vector_semantic,bm25,False,0.0,1.0,1.0,1.0,1.0,1.0,0.02
+Describe vendor payment reliability,vector_semantic,vector,True,1.0,1.0,1.0,1.0,0.5,1.0,12.57
+What kind of services were purchased?,vector_semantic,vector,True,1.0,1.0,1.0,1.0,1.0,1.0,16.33
+Find vendors similar to NIREL DIGITALS,vector_semantic,vector,True,1.0,1.0,1.0,1.0,1.0,1.0,14.21
+Tell me about the last invoice we processed,hybrid_general,hybrid,True,1.0,1.0,1.0,1.0,1.0,1.0,31.37
+What payment methods are used in our invoices?,hybrid_general,hybrid,True,1.0,1.0,1.0,1.0,1.0,1.0,29.84
+Show me the most recent invoice,hybrid_general,bm25,True,0.0,1.0,1.0,1.0,1.0,1.0,13.07
+Find high-value invoices from last month,hybrid_filter,hybrid,True,1.0,1.0,1.0,1.0,1.0,1.0,29.95
+Show unpaid invoices,hybrid_filter,bm25,True,0.0,1.0,1.0,1.0,0.5,1.0,12.32
+List vendors in Bangalore,hybrid_filter,hybrid,True,1.0,1.0,1.0,1.0,1.0,1.0,33.1
+What was delivered in September 2023?,hybrid_filter,bm25,True,0.0,1.0,1.0,1.0,0.5,1.0,19.25
+Show invoices with notes or special instructions,hybrid_filter,bm25,True,0.0,1.0,1.0,1.0,1.0,1.0,16.87
+Find recurring vendors,hybrid_general,hybrid,True,1.0,1.0,1.0,1.0,1.0,1.0,53.34
+What invoices have bank transfer details?,hybrid_filter,bm25,True,0.0,1.0,1.0,1.0,1.0,1.0,20.93
+Show invoices with email addresses,hybrid_filter,bm25,True,0.0,1.0,1.0,1.0,1.0,1.0,15.11
+Find invoices with multiple line items,hybrid_filter,hybrid,True,1.0,1.0,1.0,1.0,0.0,1.0,29.56
+Show me invoice GST001,memory_sequence_1a,bm25,True,1.0,1.0,1.0,0.5,1.0,1.0,13.51
+What is the vendor name?,memory_sequence_1b,memory_direct,False,0.0,0.0,0.0,0.0,0.0,1.0,0.01
+What is the total amount for GST001?,memory_sequence_2a,memory_direct,False,0.0,0.0,0.0,0.0,0.0,0.0,0.01
+What about the tax amount?,memory_sequence_2b,memory_direct,False,0.0,0.0,0.0,0.0,0.5,1.0,0.01
+What is their GSTIN?,memory_sequence_3b,memory_direct,False,0.0,0.0,0.0,0.0,0.0,1.0,0.01
+How many invoices are there?,memory_sequence_4a,bm25,True,0.0,1.0,1.0,1.0,1.0,1.0,8.19
+How many passed validation?,memory_sequence_4b,bm25,False,0.0,1.0,1.0,1.0,0.0,1.0,0.01
+What was the quantity?,memory_sequence_5b,bm25,False,0.0,0.0,0.0,0.0,0.0,0.0,0.02
+What is the meaning of life?,out_of_scope,bm25,False,0.0,1.0,1.0,1.0,0.0,1.0,0.02
+Show me invoice NONEXISTENT-999,edge_not_found,bm25,True,1.0,1.0,1.0,1.0,0.3333333333333333,1.0,8.44
+Find invoices with negative totals,edge_unusual_query,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,22.09
+What is the vendor's favorite color?,out_of_scope,bm25,True,0.0,1.0,1.0,1.0,0.0,1.0,7.88
+asdf jkl qwerty,edge_nonsense,hybrid,True,1.0,1.0,1.0,1.0,0.0,1.0,26.61
+Do we have any invoices from XYZ Corporation?,existence_negative,bm25,True,1.0,1.0,1.0,1.0,0.0,1.0,10.34
+Is there an invoice for purchase order PO-99999?,existence_negative,bm25,True,1.0,1.0,1.0,1.0,0.0,1.0,11.86
+How many invoices have we received from Fake Company Inc?,count_zero,sql,False,1.0,1.0,1.0,1.0,0.6666666666666666,1.0,25.17
+List all vendors in the system,list_all,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,25.78
+Which vendor has the most invoices?,comparison,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,25.19
+What is the total amount we owe to vendors?,action_oriented,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,24.91
+Show invoices that failed validation,action_oriented,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,42.22
+Show invoices from Hyderabad,bug_city_search,sql,False,0.0,1.0,1.0,1.0,1.0,1.0,34.32
+Which vendors are located in Mumbai?,bug_city_search,hybrid,True,1.0,1.0,1.0,1.0,1.0,1.0,32.74
+Find customers in Delhi,bug_city_search,hybrid,True,1.0,1.0,1.0,1.0,1.0,1.0,74.92
+Find invoice with GSTIN 36ARKPC6820F1ZZ,bug_gstin_exact,bm25,True,1.0,1.0,1.0,1.0,1.0,1.0,27.05
+Show me invoice number GST24001,bug_invoice_exact,bm25,True,1.0,1.0,1.0,1.0,1.0,1.0,17.13
+Find invoice GST24002,bug_invoice_exact,bm25,True,1.0,1.0,1.0,1.0,1.0,1.0,16.35
+Find invoices containing label products,bug_line_item_search,bm25,True,1.0,1.0,1.0,1.0,0.0,1.0,13.15
+Which invoices have printing services?,bug_line_item_search,bm25,True,1.0,1.0,1.0,1.0,1.0,1.0,27.71
+Show invoices from March 2026,bug_date_query,bm25,True,0.0,1.0,1.0,1.0,1.0,1.0,24.33
+How many invoices were issued in 2026?,bug_date_query,bm25,True,0.0,1.0,1.0,1.0,1.0,1.0,38.89
+Show all invoices in INR,bug_currency,bm25,True,0.0,1.0,1.0,1.0,1.0,1.0,33.33
+What is the total amount in rupees?,bug_currency,memory_direct,False,0.0,1.0,1.0,1.0,1.0,1.0,0.01
+How many invoices from each vendor?,bug_groupby,bm25,True,0.0,1.0,1.0,1.0,1.0,1.0,19.72
+Count invoices per month in 2026,bug_groupby,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,26.32
+Show invoices with total amount greater than 5000,bug_numeric_compare,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,34.73
+Find invoices with tax less than 100,bug_numeric_compare,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,25.02
+Search for complex semantic similarity across all product descriptions,performance_vector,bm25,True,0.0,1.0,1.0,1.0,1.0,1.0,13.16
+Find all invoices with any amount between 100 and 50000,performance_sql,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,35.13
+Show invoice GST24003,memory_followup_1,bm25,True,1.0,1.0,1.0,1.0,1.0,1.0,17.81
+What is the vendor address for that invoice?,memory_followup_2,hybrid,True,1.0,1.0,1.0,1.0,0.0,1.0,31.59
+And what are the line items?,memory_followup_3,hybrid,True,1.0,1.0,1.0,1.0,0.0,1.0,28.59
+What is the phone number of NIREL DIGITALS?,hallucination_test,bm25,True,1.0,1.0,1.0,1.0,1.0,1.0,11.39
+What is the email address of the vendor in GST001?,hallucination_test,bm25,True,1.0,1.0,1.0,1.0,1.0,1.0,9.77
+List the top 5 highest value invoices,formatting_multi,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,32.83
+Show all line items from invoice GST001,formatting_multi,bm25,True,1.0,1.0,1.0,1.0,1.0,1.0,13.85
+SELECT * FROM invoices; DROP TABLE invoices;,error_handling,bm25,True,0.0,1.0,1.0,1.0,1.0,1.0,12.34
+What is the vendor address in GST001?,address_extraction,bm25,True,1.0,1.0,1.0,1.0,1.0,1.0,9.3
+Show the billing address for NIREL DIGITALS invoices,address_extraction,bm25,True,1.0,1.0,1.0,1.0,1.0,1.0,22.88
+Find the invoice with the lowest tax amount,stress_specific,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,27.63
+What is the total CGST plus SGST across all invoices?,stress_specific,sql,False,1.0,1.0,1.0,1.0,1.0,1.0,27.04
+Calculate the percentage of invoices that passed validation,stress_specific,sql,False,1.0,1.0,1.0,1.0,0.5,1.0,25.15

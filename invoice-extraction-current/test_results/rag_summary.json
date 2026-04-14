@@ -1,0 +1,11 @@
+{
+  "total_questions": 99,
+  "total_time_seconds": 2167.26,
+  "avg_time_seconds": 21.89,
+  "strategy_accuracy": 0.717,
+  "hit_at_3": 0.919,
+  "hit_at_5": 0.919,
+  "mean_mrr": 0.899,
+  "answer_quality": 0.758,
+  "numerical_accuracy": 0.98
+}

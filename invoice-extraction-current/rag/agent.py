@@ -4,16 +4,16 @@ RAG Agent orchestration for invoice Q&A.
 This module wraps the lower-level QA chain and adds practical workflows:
 - Bulk indexing from exported JSON files
 - Single-question answering with source attribution
-- Interactive chat mode
+- Interactive chat mode with conversation memory
 """
 
 from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Tuple
 
-from rag.qa_chain import InvoiceQAChain
+from rag.qa_chain import InvoiceQAChain, get_memory
 
 
 class InvoiceRAGAgent:
@@ -82,9 +82,14 @@ class InvoiceRAGAgent:
         """Ask one question against the indexed invoice corpus."""
         return self.qa_chain.ask(question)
 
+    def clear_memory(self) -> None:
+        """Clear conversation memory."""
+        get_memory().clear()
+
     def interactive_chat(self) -> None:
         """Simple terminal chat loop for invoice RAG."""
-        print("Invoice RAG Agent ready. Type 'exit' to quit.")
+        print("Invoice RAG Agent ready (with conversation memory).")
+        print("Commands: 'exit' to quit, 'clear' to reset memory.")
         while True:
             question = input("\nYou: ").strip()
             if not question:
@@ -92,9 +97,21 @@ class InvoiceRAGAgent:
             if question.lower() in {"exit", "quit"}:
                 print("Bye.")
                 break
+            if question.lower() == "clear":
+                self.clear_memory()
+                print("Conversation memory cleared.")
+                continue
 
             result = self.ask(question)
-            print("\nAgent:", result.get("answer", ""))
+            print(f"\nAgent: {result.get('answer', '')}")
+
+            strategy = result.get("strategy", "?")
+            reranked = result.get("reranked", False)
             sources = result.get("sources", [])
+            meta = f"[{strategy}"
+            if reranked:
+                meta += ", re-ranked"
+            meta += "]"
             if sources:
-                print("Sources:", ", ".join(sources))
+                meta += f" Sources: {', '.join(sources)}"
+            print(f"  {meta}")
